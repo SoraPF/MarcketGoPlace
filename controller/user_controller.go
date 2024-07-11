@@ -24,19 +24,34 @@ func (controller *UserController) UserCreate(ctx *fiber.Ctx) error {
 	createUserRequest := request.CreateUserRequest{}
 	if err := ctx.BodyParser(&createUserRequest); err != nil {
 		return ctx.Status(fiber.StatusBadRequest).Render("layouts/login", fiber.Map{
-			"Title": "Login",
+			"Title": "create",
 			"Error": "Invalid request",
 		})
 	}
-	controller.UserService.Create(createUserRequest)
 
-	webResponse := response.Response{
-		Code:    200,
-		Status:  "ok",
-		Message: "Successfully created notes data!",
-		Data:    nil,
+	controller.UserService.Create(createUserRequest)
+	println("userCreated")
+
+	valid, user, err := controller.UserService.AuthenticateUser(createUserRequest.Email, createUserRequest.Password)
+	if err != nil || !valid {
+		return ctx.Status(fiber.StatusUnauthorized).Render("layouts/login", fiber.Map{
+			"Title": "create",
+			"Error": "Internal probleme",
+		})
 	}
-	return ctx.Status(fiber.StatusCreated).JSON(webResponse)
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"user_id": user.ID,
+		"exp":     time.Now().Add(time.Hour * 72).Unix(),
+	})
+	webResponse := map[string]interface{}{
+		"code":         200,
+		"status":       "ok",
+		"message":      "Login successful!",
+		"token":        token,
+		"redirect_url": "/", // URL de redirection après connexion
+	}
+	return ctx.Status(fiber.StatusOK).JSON(webResponse)
 }
 
 func (controller *UserController) UserUpdate(ctx *fiber.Ctx) error {
@@ -106,6 +121,7 @@ func (controller *UserController) UserFindAll(ctx *fiber.Ctx) error {
 
 func (uc *UserController) Login(ctx *fiber.Ctx) error {
 	req := request.LoginUser{}
+
 	if err := ctx.BodyParser(&req); err != nil {
 		return ctx.Status(fiber.StatusBadRequest).Render("layouts/login", fiber.Map{
 			"Title": "Login",
@@ -139,7 +155,14 @@ func (uc *UserController) Login(ctx *fiber.Ctx) error {
 		Value:   tokenString,
 		Expires: time.Now().Add(time.Hour * 72),
 	})
+	println("giveNeeded")
 
-	// Rediriger vers la page principale après une connexion réussie
-	return ctx.Redirect("/")
+	webResponse := map[string]interface{}{
+		"code":         200,
+		"status":       "ok",
+		"message":      "Login successful!",
+		"token":        token,
+		"redirect_url": "/", // URL de redirection après connexion
+	}
+	return ctx.Status(fiber.StatusOK).JSON(webResponse)
 }

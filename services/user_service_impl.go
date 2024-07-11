@@ -27,10 +27,13 @@ func NewUserServiceImpl(userRepository repository.UserRepository, validate *vali
 func (u *UserServiceImpl) Create(user request.CreateUserRequest) {
 	err := u.validate.Struct(user)
 	helper.ErrorPanic(err)
+	password, err := bcrypt.GenerateFromPassword([]byte(user.Password), 7)
+	helper.ErrorPanic(err)
+
 	objModel := entities.User{
 		Username: user.Username,
 		Email:    user.Email,
-		Password: user.Password,
+		Password: string(password),
 	}
 	u.userRepository.Save(objModel)
 }
@@ -67,11 +70,21 @@ func (u *UserServiceImpl) FindById(userId int) response.UserResponse {
 
 // Update implements UserService.
 func (u *UserServiceImpl) Update(user request.UpdateUserRequest) {
+
 	userData, err := u.userRepository.FindById(int(user.ID))
 	helper.ErrorPanic(err)
-	userData.Username = user.Username
-	userData.Email = user.Email
-	userData.Password = user.Password
+
+	if user.Username != "" {
+		userData.Username = user.Username
+	}
+	if user.Email != "" {
+		userData.Email = user.Email
+	}
+	if user.Password != "" {
+		password, err := bcrypt.GenerateFromPassword([]byte(user.Password), 7)
+		helper.ErrorPanic(err)
+		userData.Password = string(password)
+	}
 	u.userRepository.Update(userData)
 }
 

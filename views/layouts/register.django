@@ -1,5 +1,29 @@
 {% include "partials/header.django"%}
 
+<script>
+       async function createUser() {
+           const username = document.getElementById('username').value;
+           const email = document.getElementById('email').value;
+           const password = document.getElementById('password').value;
+           
+
+           const response = await fetch('api/authent/register', {
+               method: 'POST',
+               headers: {
+                   'Content-Type': 'application/json',
+               },
+               body: JSON.stringify({ username, email, password }),
+           });
+           const data = await response.json();
+           if (response.ok) {
+               // Rediriger l'utilisateur vers l'URL spécifiée dans la réponse
+               window.location.href = data.redirect_url;
+           } else {
+               alert(data.error);
+           }
+       }
+</script>
+
 <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
         <div class="sm:mx-auto sm:w-full sm:max-w-sm">
             <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Create your account</h2>
@@ -11,7 +35,7 @@
                 {{ Error }}
             </div>
             {% endif %}
-            <form class="space-y-6" action="/api/authent/register" method="POST">
+            <form class="space-y-6" onsubmit="event.preventDefault(); createUser();">
                 <div>
                     <label for="username" class="block text-sm font-medium leading-6 text-gray-900">Username</label>
                     <div class="mt-2">
