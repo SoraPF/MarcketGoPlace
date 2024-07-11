@@ -1,0 +1,4 @@
+<head>
+    <title>{{ lower(Title) }}</title>
+    <link href="/public/output.css" rel="stylesheet">
+</head>
