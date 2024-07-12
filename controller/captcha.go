@@ -12,7 +12,7 @@ var cap *captcha.Captcha
 
 func init() {
 	cap = captcha.New()
-	if err := cap.SetFont("Outwrite.ttf"); err != nil {
+	if err := cap.SetFont("controller/Outwrite.ttf"); err != nil {
 		panic(err)
 	}
 }
