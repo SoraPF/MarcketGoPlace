@@ -16,6 +16,8 @@ func Authentification(userController *controller.UserController) *fiber.App {
 	})
 
 	router.Get("/captcha", controller.Captcha)
+	router.Get("/generate-2fa/:id", userController.GetGenerate2FA)
+	router.Post("/validate-2fa", userController.GetValidate2FA)
 
 	return router
 }

@@ -13,4 +13,5 @@ type UserService interface {
 	FindById(userId int) response.UserResponse
 	FindAll() []response.UserResponse
 	AuthenticateUser(email, password string) (bool, *entities.User, error)
+	FindUser(userId int) *entities.User
 }

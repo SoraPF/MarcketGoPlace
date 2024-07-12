@@ -5,11 +5,16 @@ import (
 	"Marcketplace/data/response"
 	"Marcketplace/helper"
 	"Marcketplace/services"
+	"bytes"
+	"encoding/base64"
+	"fmt"
+	"image/png"
 	"strconv"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt"
+	"github.com/pquerna/otp/totp"
 )
 
 type UserController struct {
@@ -172,4 +177,68 @@ func (uc *UserController) Login(ctx *fiber.Ctx) error {
 		"redirect_url": "/",         // URL de redirection après connexion
 	}
 	return ctx.Status(fiber.StatusOK).JSON(webResponse)
+}
+
+func (uc *UserController) GetGenerate2FA(c *fiber.Ctx) error {
+	// Assuming you have a method to get user by ID
+	UserId := c.Params("objId")
+	id, err := strconv.Atoi(UserId)
+	helper.ErrorPanic(err)
+
+	user := uc.UserService.FindUser(id)
+
+	if services.IsNFA(user) {
+		return c.JSON(fiber.Map{
+			"secret": user.NFA.Secret,
+			"qr":     user.NFA.QRcode,
+		})
+	}
+
+	key, err := totp.Generate(totp.GenerateOpts{
+		Issuer:      "MarketplaceApp",
+		AccountName: user.Email,
+	})
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString("Error generating TOTP secret")
+	}
+
+	image, err := key.Image(200, 200)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString("Error generating QR code")
+	}
+
+	var buf bytes.Buffer
+	if err := png.Encode(&buf, image); err != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString("Error encoding QR code image")
+	}
+	qrCodeBase64 := base64.StdEncoding.EncodeToString(buf.Bytes())
+
+	user.NFA.Secret = key.Secret()
+	user.NFA.QRcode = fmt.Sprintf("data:image/png;base64,%s", qrCodeBase64)
+	// Assuming you have a method to update user
+	uc.UserUpdate(c)
+
+	return c.JSON(fiber.Map{
+		"secret": user.NFA.Secret,
+		"qr":     user.NFA.QRcode,
+	})
+}
+
+func (uc *UserController) GetValidate2FA(c *fiber.Ctx) error {
+	type Request struct {
+		Code   string `json:"code"`
+		Secret string `json:"secret"`
+	}
+
+	var req Request
+	if err := c.BodyParser(&req); err != nil {
+		return c.Status(fiber.StatusBadRequest).SendString("Invalid request")
+	}
+
+	valid := totp.Validate(req.Code, req.Secret)
+	if valid {
+		return c.SendString("2FA code is valid")
+	} else {
+		return c.Status(fiber.StatusUnauthorized).SendString("Invalid 2FA code")
+	}
 }

@@ -101,3 +101,17 @@ func (u *UserServiceImpl) AuthenticateUser(email, password string) (bool, *entit
 
 	return true, user, nil
 }
+func (u *UserServiceImpl) FindUser(userId int) *entities.User {
+	result, err := u.userRepository.FindById(userId)
+	helper.ErrorPanic(err)
+	user := entities.User{
+		Username: result.Username,
+		Email:    result.Email,
+		NFAID:    result.NFAID,
+	}
+	return &user
+}
+
+func IsNFA(u *entities.User) bool {
+	return u.NFAID != nil
+}
