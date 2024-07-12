@@ -129,6 +129,13 @@ func (uc *UserController) Login(ctx *fiber.Ctx) error {
 		})
 	}
 
+	captchaValue := ctx.Cookies("captcha")
+	if captchaValue == "" || req.Captcha != captchaValue {
+		return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"error": "Invalid CAPTCHA",
+		})
+	}
+
 	valid, user, err := uc.UserService.AuthenticateUser(req.Email, req.Password)
 	if err != nil || !valid {
 		return ctx.Status(fiber.StatusUnauthorized).Render("layouts/login", fiber.Map{
@@ -161,8 +168,8 @@ func (uc *UserController) Login(ctx *fiber.Ctx) error {
 		"code":         200,
 		"status":       "ok",
 		"message":      "Login successful!",
-		"token":        token,
-		"redirect_url": "/", // URL de redirection après connexion
+		"token":        tokenString, // Notez qu'on retourne le token sous forme de string
+		"redirect_url": "/",         // URL de redirection après connexion
 	}
 	return ctx.Status(fiber.StatusOK).JSON(webResponse)
 }

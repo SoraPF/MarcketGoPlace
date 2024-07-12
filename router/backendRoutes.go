@@ -15,5 +15,7 @@ func Authentification(userController *controller.UserController) *fiber.App {
 		//router.Get("/isLogin")
 	})
 
+	router.Get("/captcha", controller.Captcha)
+
 	return router
 }
