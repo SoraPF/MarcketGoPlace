@@ -8,3 +8,7 @@ type NFA struct {
 	QRcode string
 	Secret string
 }
+
+func (u *User) IsNFA() bool {
+	return u.NFA != nil && u.NFA.Secret != ""
+}

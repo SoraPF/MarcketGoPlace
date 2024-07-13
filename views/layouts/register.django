@@ -5,7 +5,7 @@
            const username = document.getElementById('username').value;
            const email = document.getElementById('email').value;
            const password = document.getElementById('password').value;
-           
+           const captcha = document.getElementById('captcha').value;
 
            const response = await fetch('api/authent/register', {
                method: 'POST',
@@ -14,7 +14,9 @@
                },
                body: JSON.stringify({ username, email, password }),
            });
+
            const data = await response.json();
+
            if (response.ok) {
                // Rediriger l'utilisateur vers l'URL spécifiée dans la réponse
                window.location.href = data.redirect_url;
@@ -22,6 +24,9 @@
                alert(data.error);
            }
        }
+    function refreshCaptcha() {
+        document.getElementById('captchaImage').src = '/api/captcha?' + new Date().getTime();
+    }
 </script>
 
 <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
@@ -58,6 +63,12 @@
                         <input id="password" name="password" type="password" autocomplete="new-password" required
                             class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                     </div>
+                </div>
+                <div>
+                    <img id="captchaImage" src="/api/captcha" alt="CAPTCHA" class="mb-4"/>
+                    <button type="button" onclick="refreshCaptcha()">Refresh CAPTCHA</button>
+                    <input id="captcha" name="captcha" type="text" autocomplete="off" required
+                        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                 </div>
 
                 <div>

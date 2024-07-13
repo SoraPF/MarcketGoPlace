@@ -16,11 +16,14 @@
 
         const data = await response.json();
 
-        if (response.ok) {
-            // Rediriger l'utilisateur vers l'URL spécifiée dans la réponse
-            window.location.href = data.redirect_url;
+       if (response.ok) {
+            if (data.redirect_url) {
+                window.location.href = data.redirect_url;
+            } else {
+                alert(data.message);
+            }
         } else {
-            alert(data.error);
+            alert(data.error || 'Login failed');
         }
     }
     

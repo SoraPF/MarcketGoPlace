@@ -45,8 +45,15 @@ func (controller *UserController) UserCreate(ctx *fiber.Ctx) error {
 		})
 	}
 
+	captchaValue := ctx.Cookies("captcha")
+	if captchaValue == "" || createUserRequest.Captcha != captchaValue {
+		return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"error": "Invalid CAPTCHA",
+		})
+	}
+
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"user_id": user.ID,
+		"user_id": user.Id,
 		"exp":     time.Now().Add(time.Hour * 72).Unix(),
 	})
 	webResponse := map[string]interface{}{
@@ -149,8 +156,19 @@ func (uc *UserController) Login(ctx *fiber.Ctx) error {
 		})
 	}
 
+	if user.IsNFA() {
+		// Rediriger vers la page de validation 2FA
+		webResponse := map[string]interface{}{
+			"code":         200,
+			"status":       "ok",
+			"message":      "2FA required",
+			"redirect_url": "/validate-2fa", // URL de redirection pour la validation 2FA
+		}
+		return ctx.Status(fiber.StatusOK).JSON(webResponse)
+	}
+
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"user_id": user.ID,
+		"user_id": user.Id,
 		"exp":     time.Now().Add(time.Hour * 72).Unix(),
 	})
 
@@ -180,8 +198,7 @@ func (uc *UserController) Login(ctx *fiber.Ctx) error {
 }
 
 func (uc *UserController) GetGenerate2FA(c *fiber.Ctx) error {
-	// Assuming you have a method to get user by ID
-	UserId := c.Params("objId")
+	UserId := c.Params("id")
 	id, err := strconv.Atoi(UserId)
 	helper.ErrorPanic(err)
 
@@ -227,7 +244,7 @@ func (uc *UserController) GetGenerate2FA(c *fiber.Ctx) error {
 func (uc *UserController) GetValidate2FA(c *fiber.Ctx) error {
 	type Request struct {
 		Code   string `json:"code"`
-		Secret string `json:"secret"`
+		UserId int    `json:"user_id"`
 	}
 
 	var req Request
@@ -235,7 +252,12 @@ func (uc *UserController) GetValidate2FA(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).SendString("Invalid request")
 	}
 
-	valid := totp.Validate(req.Code, req.Secret)
+	user := uc.UserService.FindUser(req.UserId)
+	if user == nil {
+		return c.Status(fiber.StatusNotFound).SendString("User not found")
+	}
+
+	valid := totp.Validate(req.Code, user.NFA.Secret)
 	if valid {
 		return c.SendString("2FA code is valid")
 	} else {

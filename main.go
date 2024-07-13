@@ -68,10 +68,11 @@ func main() {
 	userRoutes := router.UserRoute(userCon)
 
 	// Grouper les routes de l'API sous le préfixe "/api"
+	app.Mount("/", router.AuthentRoutes(userCon))
+
 	api := app.Group("/api")
 	api.Mount("/", objRoutes)
-	api.Mount("/", userRoutes)
-	app.Mount("/", router.AuthentRoutes(userCon))
+	api.Mount("/", userRoutes)	
 	api.Mount("/", router.Authentification(userCon))
 
 	// Lancer l'application sur le port 3000
