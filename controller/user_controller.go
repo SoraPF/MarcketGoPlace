@@ -162,12 +162,11 @@ func (uc *UserController) Login(ctx *fiber.Ctx) error {
 	}
 
 	if user.IsNFA() {
-		// Rediriger vers la page de validation 2FA
 		webResponse := map[string]interface{}{
 			"code":         200,
 			"status":       "ok",
 			"message":      "2FA required",
-			"redirect_url": "/validate-2fa", // URL de redirection pour la validation 2FA
+			"redirect_url": fmt.Sprintf("/TFA-validate/%d", user.Id),
 		}
 		return ctx.Status(fiber.StatusOK).JSON(webResponse)
 	}
@@ -190,7 +189,6 @@ func (uc *UserController) Login(ctx *fiber.Ctx) error {
 		Value:   tokenString,
 		Expires: time.Now().Add(time.Hour * 72),
 	})
-	println("giveNeeded")
 
 	webResponse := map[string]interface{}{
 		"code":         200,
@@ -266,24 +264,40 @@ func (uc *UserController) GetGenerate2FA(c *fiber.Ctx) error {
 		"qr":     nfa.QRcode,
 	})
 }
-
 func (uc *UserController) GetValidate2FA(c *fiber.Ctx) error {
 	type Request struct {
 		Code   string `json:"code"`
-		UserId int    `json:"user_id"`
+		UserId int    `json:"userId"`
+	}
+	userId := c.Params("id")
+	id, err := strconv.Atoi(userId)
+	if err != nil {
+		fmt.Println("Invalid user ID:", err)
+		return c.Status(fiber.StatusBadRequest).SendString("Invalid user ID")
 	}
 
 	var req Request
 	if err := c.BodyParser(&req); err != nil {
+		fmt.Println("Body parsing error:", err)
 		return c.Status(fiber.StatusBadRequest).SendString("Invalid request")
 	}
+	req.UserId = id
 
 	user := uc.UserService.FindUser(req.UserId)
 	if user == nil {
 		return c.Status(fiber.StatusNotFound).SendString("User not found")
 	}
 
-	valid := totp.Validate(req.Code, user.NFA.Secret)
+	if user.NFAID == nil {
+		return c.Status(fiber.StatusNotFound).SendString("NFA not found for user")
+	}
+
+	nfa, err := uc.UserService.FindNFA(user.NFAID)
+	if err != nil {
+		return c.Status(fiber.StatusNotFound).SendString("NFA not found")
+	}
+
+	valid := totp.Validate(req.Code, nfa.Secret)
 	if valid {
 		return c.SendString("2FA code is valid")
 	} else {

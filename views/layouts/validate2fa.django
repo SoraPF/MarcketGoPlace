@@ -25,14 +25,14 @@
 <script>
     async function validate2FA() {
         const code = document.getElementById('code').value;
-        const secret = "user-secret"; // Récupérez le secret de l'utilisateur d'une manière appropriée
+        const userId = window.location.pathname.split('/').pop();
 
-        const response = await fetch('/api/validate-2fa', {
+        const response = await fetch(`/api/validate-2fa/${userId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ code, secret }),
+            body: JSON.stringify({ code: code }),
         });
 
         if (response.ok) {

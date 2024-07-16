@@ -10,5 +10,5 @@ type NFA struct {
 }
 
 func (u *User) IsNFA() bool {
-	return u.NFA != nil && u.NFA.Secret != ""
+	return u.NFAID != nil
 }
