@@ -298,9 +298,34 @@ func (uc *UserController) GetValidate2FA(c *fiber.Ctx) error {
 	}
 
 	valid := totp.Validate(req.Code, nfa.Secret)
-	if valid {
-		return c.SendString("2FA code is valid")
-	} else {
+	if !valid {
 		return c.Status(fiber.StatusUnauthorized).SendString("Invalid 2FA code")
+	} else {
+		token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+			"user_id": user.Id,
+			"exp":     time.Now().Add(time.Hour * 72).Unix(),
+		})
+		tokenString, err := token.SignedString([]byte("secret"))
+		if err != nil {
+			return c.Status(fiber.StatusInternalServerError).Render("layouts/login", fiber.Map{
+				"Title": "Login",
+				"Error": "Internal server error",
+			})
+		}
+
+		c.Cookie(&fiber.Cookie{
+			Name:    "jwt",
+			Value:   tokenString,
+			Expires: time.Now().Add(time.Hour * 72),
+		})
+
+		webResponse := map[string]interface{}{
+			"code":         200,
+			"status":       "ok",
+			"message":      "Login successful!",
+			"token":        tokenString,
+			"redirect_url": "/",
+		}
+		return c.Status(fiber.StatusOK).JSON(webResponse)
 	}
 }
