@@ -10,4 +10,5 @@ type User struct {
 	Password string `gorm:"not null"`
 	NFAID    *uint
 	NFA      *NFA `gorm:"foreignKey:NFAID;references:ID"`
+	//Verified bool `gorm:"default:false"`
 }

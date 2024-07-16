@@ -171,10 +171,7 @@ func (uc *UserController) Login(ctx *fiber.Ctx) error {
 		return ctx.Status(fiber.StatusOK).JSON(webResponse)
 	}
 
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"user_id": user.Id,
-		"exp":     time.Now().Add(time.Hour * 72).Unix(),
-	})
+	token := CreateToken(*user)
 
 	tokenString, err := token.SignedString([]byte("secret"))
 	if err != nil {
@@ -301,10 +298,8 @@ func (uc *UserController) GetValidate2FA(c *fiber.Ctx) error {
 	if !valid {
 		return c.Status(fiber.StatusUnauthorized).SendString("Invalid 2FA code")
 	} else {
-		token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-			"user_id": user.Id,
-			"exp":     time.Now().Add(time.Hour * 72).Unix(),
-		})
+		token := CreateToken(*user)
+
 		tokenString, err := token.SignedString([]byte("secret"))
 		if err != nil {
 			return c.Status(fiber.StatusInternalServerError).Render("layouts/login", fiber.Map{
