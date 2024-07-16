@@ -4,6 +4,7 @@ import (
 	"Marcketplace/data/request"
 	"Marcketplace/data/response"
 	"Marcketplace/helper"
+	"Marcketplace/model/entities"
 	"Marcketplace/services"
 	"bytes"
 	"encoding/base64"
@@ -104,11 +105,15 @@ func (controller *UserController) UserDelete(ctx *fiber.Ctx) error {
 }
 
 func (controller *UserController) UserFindById(ctx *fiber.Ctx) error {
-	UserId := ctx.Params("objId")
+	UserId := ctx.Params("noteId")
 	id, err := strconv.Atoi(UserId)
 	helper.ErrorPanic(err)
+	uid := uint(id)
+	UserController := controller.UserService.FindById(uid)
 
-	UserController := controller.UserService.FindById(id)
+	if UserController.Email == "" {
+		return ctx.Status(fiber.StatusNotFound).SendString("utilisateur pas trouver")
+	}
 
 	webResponse := response.Response{
 		Code:    200,
@@ -116,7 +121,7 @@ func (controller *UserController) UserFindById(ctx *fiber.Ctx) error {
 		Message: "Successfully delete Users data!",
 		Data:    UserController,
 	}
-	return ctx.Status(fiber.StatusCreated).JSON(webResponse)
+	return ctx.Status(fiber.StatusFound).JSON(webResponse)
 }
 
 func (controller *UserController) UserFindAll(ctx *fiber.Ctx) error {
@@ -128,7 +133,7 @@ func (controller *UserController) UserFindAll(ctx *fiber.Ctx) error {
 		Message: "Successfully delete Users data!",
 		Data:    UserController,
 	}
-	return ctx.Status(fiber.StatusCreated).JSON(webResponse)
+	return ctx.Status(fiber.StatusFound).JSON(webResponse)
 }
 
 func (uc *UserController) Login(ctx *fiber.Ctx) error {
@@ -198,16 +203,23 @@ func (uc *UserController) Login(ctx *fiber.Ctx) error {
 }
 
 func (uc *UserController) GetGenerate2FA(c *fiber.Ctx) error {
-	UserId := c.Params("id")
-	id, err := strconv.Atoi(UserId)
+	userId := c.Params("id")
+	id, err := strconv.Atoi(userId)
 	helper.ErrorPanic(err)
 
 	user := uc.UserService.FindUser(id)
+	if user == nil {
+		return c.Status(fiber.StatusNotFound).SendString("User not found")
+	}
 
 	if services.IsNFA(user) {
+		nfa, err := uc.UserService.FindNFA(user.NFAID)
+		if err != nil {
+			return c.Status(fiber.StatusInternalServerError).SendString("internal corruption whene searching QRcode for double authentification")
+		}
 		return c.JSON(fiber.Map{
-			"secret": user.NFA.Secret,
-			"qr":     user.NFA.QRcode,
+			"secret": nfa.Secret,
+			"qr":     nfa.QRcode,
 		})
 	}
 
@@ -230,14 +242,28 @@ func (uc *UserController) GetGenerate2FA(c *fiber.Ctx) error {
 	}
 	qrCodeBase64 := base64.StdEncoding.EncodeToString(buf.Bytes())
 
-	user.NFA.Secret = key.Secret()
-	user.NFA.QRcode = fmt.Sprintf("data:image/png;base64,%s", qrCodeBase64)
-	// Assuming you have a method to update user
-	uc.UserUpdate(c)
+	nfa := &entities.NFA{
+		Secret: key.Secret(),
+		QRcode: fmt.Sprintf("data:image/png;base64,%s", qrCodeBase64),
+	}
+	err = uc.UserService.CreateNFA(nfa)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString("Error creating NFA")
+	}
+
+	user.NFAID = &nfa.ID
+	updateRequest := request.UpdateUserRequest{
+		ID:       user.Id,
+		Username: user.Username,
+		Email:    user.Email,
+		Password: user.Password, // Keep the existing password
+		NFAID:    &nfa.ID,
+	}
+	uc.UserService.Update(updateRequest)
 
 	return c.JSON(fiber.Map{
-		"secret": user.NFA.Secret,
-		"qr":     user.NFA.QRcode,
+		"secret": nfa.Secret,
+		"qr":     nfa.QRcode,
 	})
 }
 

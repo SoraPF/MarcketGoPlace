@@ -6,11 +6,9 @@ type UserRepository interface {
 	Save(user entities.User)
 	Update(user entities.User)
 	Delete(userId int)
-	FindById(userId int) (entities.User, error)
+	FindById(userId uint) (entities.User, error)
 	FindAll() []entities.User
 	FindByEmail(email string) (*entities.User, error)
-}
-
-type NFARepository interface {
-	FindById(NFAId uint) (entities.NFA, error)
+	CreateNFA(nfa *entities.NFA) error
+	FindNFA(nfa *uint) (*entities.NFA, error)
 }

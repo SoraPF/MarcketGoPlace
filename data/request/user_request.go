@@ -12,6 +12,7 @@ type UpdateUserRequest struct {
 	Username string `validate:"required,min=2,max=100" json:"username"`
 	Email    string `validate:"required" json:"email"`
 	Password string `validate:"required,min=2,max=255" json:"password"`
+	NFAID    *uint  `json:"nfaID"`
 }
 
 type LoginUser struct {

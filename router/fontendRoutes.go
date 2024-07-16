@@ -21,5 +21,16 @@ func AuthentRoutes(userController *controller.UserController) *fiber.App {
 		})
 	})
 
+	router.Get("/TFA-generate/:id", func(c *fiber.Ctx) error {
+		return c.Render("layouts/generate2fa", fiber.Map{
+			"Title": "double authentification generate",
+		})
+	})
+
+	router.Get("/TFA-validate/:id", func(c *fiber.Ctx) error {
+		return c.Render("layouts/validate2fa", fiber.Map{
+			"Title": "double authentification validate",
+		})
+	})
 	return router
 }

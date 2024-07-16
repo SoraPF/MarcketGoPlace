@@ -58,12 +58,14 @@ func (u *UserServiceImpl) FindAll() []response.UserResponse {
 }
 
 // FindById implements UserService.
-func (u *UserServiceImpl) FindById(userId int) response.UserResponse {
+func (u *UserServiceImpl) FindById(userId uint) response.UserResponse {
 	result, err := u.userRepository.FindById(userId)
 	helper.ErrorPanic(err)
 	user := response.UserResponse{
+		ID:       result.Id,
 		Username: result.Username,
 		Email:    result.Email,
+		NFAID:    result.NFAID,
 	}
 	return user
 }
@@ -71,7 +73,7 @@ func (u *UserServiceImpl) FindById(userId int) response.UserResponse {
 // Update implements UserService.
 func (u *UserServiceImpl) Update(user request.UpdateUserRequest) {
 
-	userData, err := u.userRepository.FindById(int(user.ID))
+	userData, err := u.userRepository.FindById(user.ID)
 	helper.ErrorPanic(err)
 
 	if user.Username != "" {
@@ -84,6 +86,9 @@ func (u *UserServiceImpl) Update(user request.UpdateUserRequest) {
 		password, err := bcrypt.GenerateFromPassword([]byte(user.Password), 7)
 		helper.ErrorPanic(err)
 		userData.Password = string(password)
+	}
+	if user.NFAID != nil {
+		userData.NFAID = user.NFAID
 	}
 	u.userRepository.Update(userData)
 }
@@ -102,9 +107,11 @@ func (u *UserServiceImpl) AuthenticateUser(email, password string) (bool, *entit
 	return true, user, nil
 }
 func (u *UserServiceImpl) FindUser(userId int) *entities.User {
-	result, err := u.userRepository.FindById(userId)
+	uid := uint(userId)
+	result, err := u.userRepository.FindById(uid)
 	helper.ErrorPanic(err)
 	user := entities.User{
+		Id:       result.Id,
 		Username: result.Username,
 		Email:    result.Email,
 		NFAID:    result.NFAID,
@@ -114,4 +121,12 @@ func (u *UserServiceImpl) FindUser(userId int) *entities.User {
 
 func IsNFA(u *entities.User) bool {
 	return u.NFAID != nil
+}
+
+func (u *UserServiceImpl) CreateNFA(nfa *entities.NFA) error {
+	return u.userRepository.CreateNFA(nfa)
+}
+
+func (u *UserServiceImpl) FindNFA(nfa *uint) (*entities.NFA, error) {
+	return u.userRepository.FindNFA(nfa)
 }

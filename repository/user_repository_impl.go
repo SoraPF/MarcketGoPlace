@@ -33,14 +33,16 @@ func (u *UserRepositoryImpl) FindAll() []entities.User {
 }
 
 // FindById implements userRepository.
-func (u *UserRepositoryImpl) FindById(userId int) (entities.User, error) {
-	var obj entities.User
-	result := u.Db.Find(&userId)
-	if result != nil {
-		return obj, nil
-	} else {
-		return obj, errors.New("note is not found")
+func (u *UserRepositoryImpl) FindById(userId uint) (entities.User, error) {
+	var user entities.User
+	err := u.Db.Debug().First(&user, userId).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return user, errors.New("user not found")
+		}
+		return user, err
 	}
+	return user, nil
 }
 
 // Save implements userRepository.
@@ -56,6 +58,7 @@ func (u *UserRepositoryImpl) Update(user entities.User) {
 		Username: user.Username,
 		Email:    user.Email,
 		Password: user.Password,
+		NFAID:    user.NFAID,
 	}
 	result := u.Db.Model(&user).Updates(updateUser)
 	helper.ErrorPanic(result.Error)
@@ -67,4 +70,16 @@ func (r *UserRepositoryImpl) FindByEmail(email string) (*entities.User, error) {
 		return nil, err
 	}
 	return &user, nil
+}
+
+func (r *UserRepositoryImpl) CreateNFA(nfa *entities.NFA) error {
+	return r.Db.Create(nfa).Error
+}
+
+func (r *UserRepositoryImpl) FindNFA(nfaId *uint) (*entities.NFA, error) {
+	var nfa entities.NFA
+	if err := r.Db.Where("id = ?", nfaId).First(&nfa).Error; err != nil {
+		return nil, err
+	}
+	return &nfa, nil
 }

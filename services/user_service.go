@@ -10,8 +10,10 @@ type UserService interface {
 	Create(user request.CreateUserRequest)
 	Update(user request.UpdateUserRequest)
 	Delete(userId int)
-	FindById(userId int) response.UserResponse
+	FindById(userId uint) response.UserResponse
 	FindAll() []response.UserResponse
 	AuthenticateUser(email, password string) (bool, *entities.User, error)
 	FindUser(userId int) *entities.User
+	CreateNFA(nfa *entities.NFA) error
+	FindNFA(nfa *uint) (*entities.NFA, error)
 }
