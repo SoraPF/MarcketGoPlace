@@ -19,7 +19,7 @@ var (
 )
 
 func init() {
-	err := godotenv.Load()
+	err := godotenv.Load("oauth.env")
 	if err != nil {
 		log.Fatalf("Error loading .env file")
 	}
