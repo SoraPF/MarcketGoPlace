@@ -80,7 +80,7 @@
                 class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">create you account</a>
         </p>
         <div class="mt-6">
-          <button onclick="window.location.href='/auth/google/login'"
+          <button onclick="window.location.href='/google/login'"
               class="flex w-full justify-center rounded-md bg-red-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500">Sign
               up with Google</button>
         </div>
