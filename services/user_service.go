@@ -17,3 +17,8 @@ type UserService interface {
 	CreateNFA(nfa *entities.NFA) error
 	FindNFA(nfa *uint) (*entities.NFA, error)
 }
+
+type Element interface {
+	FindAllCategories() (response.AllCategory, error)
+	FindAllTags() (response.AllTags, error)
+}

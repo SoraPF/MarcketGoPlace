@@ -1,6 +1,9 @@
 package repository
 
-import "Marcketplace/model/entities"
+import (
+	"Marcketplace/model/entities"
+	"Marcketplace/model/objets"
+)
 
 type UserRepository interface {
 	Save(user entities.User)
@@ -11,4 +14,9 @@ type UserRepository interface {
 	FindByEmail(email string) (*entities.User, error)
 	CreateNFA(nfa *entities.NFA) error
 	FindNFA(nfa *uint) (*entities.NFA, error)
+}
+
+type ElemRepository interface {
+	FindAllCategories() []objets.Categories
+	FindAllTags() []objets.Tags
 }

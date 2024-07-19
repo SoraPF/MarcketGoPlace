@@ -1,92 +1,111 @@
-{% include "partials/head.django"%}
+{% include "partials/head.django" %}
 
 <script>
-       async function createUser() {
-           const username = document.getElementById('username').value;
-           const email = document.getElementById('email').value;
-           const password = document.getElementById('password').value;
-           const captcha = document.getElementById('captcha').value;
+    async function createUser() {
+        const username = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const confirm = document.getElementById('confirm').value;
+        const captcha = document.getElementById('captcha').value;
 
-           const response = await fetch('api/authent/register', {
-               method: 'POST',
-               headers: {
-                   'Content-Type': 'application/json',
-               },
-               body: JSON.stringify({ username, email, password }),
-           });
+        if (password === confirm) {
+            const response = await fetch('/api/authent/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, email, password, captcha }),
+            });
+    
+            const data = await response.json();
+    
+            if (response.ok) {
+                // Rediriger l'utilisateur vers l'URL spécifiée dans la réponse
+                window.location.href = data.redirect_url;
+            } else {
+                alert(data.error);
+            }
+        } else {
+            alert("Passwords do not match");
+        }
+    }
 
-           const data = await response.json();
-
-           if (response.ok) {
-               // Rediriger l'utilisateur vers l'URL spécifiée dans la réponse
-               window.location.href = data.redirect_url;
-           } else {
-               alert(data.error);
-           }
-       }
     function refreshCaptcha() {
         document.getElementById('captchaImage').src = '/api/captcha?' + new Date().getTime();
     }
 </script>
-
-<div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-        <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-            <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Create your account</h2>
-        </div>
-
-        <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-            {% if Error %}
-            <div class="mb-4 text-center text-red-600">
-                {{ Error }}
-            </div>
-            {% endif %}
-            <form class="space-y-6" onsubmit="event.preventDefault(); createUser();">
-                <div>
-                    <label for="username" class="block text-sm font-medium leading-6 text-gray-900">Username</label>
-                    <div class="mt-2">
-                        <input id="username" name="username" type="text" autocomplete="username" required
-                            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+<body>
+    <!-- login -->
+    <div class="contain py-16">
+        <div class="max-w-lg mx-auto shadow px-6 py-7 rounded overflow-hidden">
+            <h2 class="text-2xl uppercase font-medium mb-1">Create an account</h2>
+            <p class="text-gray-600 mb-6 text-sm">
+                Register for new customer
+            </p>
+            <form onsubmit="event.preventDefault(); createUser();">
+                <div class="space-y-2">
+                    <div>
+                        <label for="name" class="text-gray-600 mb-2 block">Full Name</label>
+                        <input type="text" name="name" id="name"
+                            class="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
+                            placeholder="fulan fulana">
+                    </div>
+                    <div>
+                        <label for="email" class="text-gray-600 mb-2 block">Email address</label>
+                        <input type="email" name="email" id="email"
+                            class="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
+                            placeholder="youremail.@domain.com">
+                    </div>
+                    <div>
+                        <label for="password" class="text-gray-600 mb-2 block">Password</label>
+                        <input type="password" name="password" id="password"
+                            class="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
+                            placeholder="*******">
+                    </div>
+                    <div>
+                        <label for="confirm" class="text-gray-600 mb-2 block">Confirm password</label>
+                        <input type="password" name="confirm" id="confirm"
+                            class="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
+                            placeholder="*******">
+                    </div>
+                    <div>
+                        <label for="captcha" class="text-gray-600 mb-2 block">Captcha</label>
+                        <input type="text" name="captcha" id="captcha"
+                            class="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
+                            placeholder="Enter captcha">
+                        <img id="captchaImage" src="/api/captcha" alt="Captcha Image" class="mt-2">
+                        <button type="button" onclick="refreshCaptcha()" class="mt-2 px-4 py-2 bg-gray-200 rounded">Refresh Captcha</button>
                     </div>
                 </div>
-
-                <div>
-                    <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email address</label>
-                    <div class="mt-2">
-                        <input id="email" name="email" type="email" autocomplete="email" required
-                            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                <div class="mt-6">
+                    <div class="flex items-center">
+                        <input type="checkbox" name="agreement" id="agreement"
+                            class="text-primary focus:ring-0 rounded-sm cursor-pointer">
+                        <label for="agreement" class="text-gray-600 ml-3 cursor-pointer">I have read and agree to the <a
+                                href="#" class="text-primary">terms & conditions</a></label>
                     </div>
                 </div>
-
-                <div>
-                    <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Password</label>
-                    <div class="mt-2">
-                        <input id="password" name="password" type="password" autocomplete="new-password" required
-                            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
-                    </div>
-                </div>
-                <div>
-                    <img id="captchaImage" src="/api/captcha" alt="CAPTCHA" class="mb-4"/>
-                    <button type="button" onclick="refreshCaptcha()">Refresh CAPTCHA</button>
-                    <input id="captcha" name="captcha" type="text" autocomplete="off" required
-                        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
-                </div>
-
-                <div>
+                <div class="mt-4">
                     <button type="submit"
-                        class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Register</button>
+                    class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Create
+                        account</button>
                 </div>
             </form>
 
-            <p class="mt-10 text-center text-sm text-gray-500">
-                Already have an account?
-                <a href="/login"
-                    class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">Sign in</a>
-            </p>
-
-            <div class="mt-6">
-                <button onclick="window.location.href='/google/login'"
-                    class="flex w-full justify-center rounded-md bg-red-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500">Sign
-                    up with Google</button>
+            <!-- login with -->
+            <div class="mt-6 flex justify-center relative">
+                <div class="text-gray-600 uppercase px-3 bg-white z-10 relative">Or signup with</div>
+                <div class="absolute left-0 top-3 w-full border-b-2 border-gray-200"></div>
             </div>
+            <div class="mt-4 flex gap-4 justify-center">
+                <a href="#"
+                    class="w-1/2 py-2 text-center text-white bg-red-600 rounded uppercase font-roboto font-medium text-sm hover:bg-red-500">Google</a>
+            </div>
+            <!-- ./login with -->
+
+            <p class="mt-4 text-center text-gray-600">Already have an account? <a href="/login"
+                    class="text-primary">Login now</a></p>
         </div>
     </div>
+    <!-- ./login -->
+</body>

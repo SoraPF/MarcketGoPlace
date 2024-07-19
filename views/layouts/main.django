@@ -5,4 +5,5 @@
     {% include "partials/header.django" %}
     {{ embed }}
 </body>
-</html>
+
+{% include "partials/footer.django" %}
