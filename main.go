@@ -47,15 +47,12 @@ func main() {
 
 	app.Static("/public", "./public")
 
-	// Routes pour les templates
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.Render("index", fiber.Map{
-			"Title": "Marchet Go Place!",
-		})
-	})
-
 	fmt.Println("loading needs for routes and crud for user and items")
 	validate := validator.New()
+
+	eRepo := repository.NewElemRepositoryImpl(db)
+	eServ := services.NewEleServiceImpl(eRepo, validate)
+	eCon := controller.NewElemController(eServ)
 
 	ObjRepo := repository.NewObjRepositoryImpl(db)
 	ObjServ := services.NewObjServiceImpl(ObjRepo, validate)
@@ -66,6 +63,14 @@ func main() {
 	userServ := services.NewUserServiceImpl(userRpo, validate)
 	userCon := controller.NewuserController(userServ)
 	userRoutes := router.UserRoute(userCon)
+
+	// Routes pour les templates
+	app.Get("/", func(c *fiber.Ctx) error {
+		return c.Render("index", fiber.Map{
+			"Title":      "Marchet Go Place!",
+			"categories": eCon.GetCategories(),
+		})
+	})
 
 	// Grouper les routes de l'API sous le préfixe "/api"
 	app.Mount("/", router.AuthentRoutes(userCon))

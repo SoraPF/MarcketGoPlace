@@ -7,8 +7,3 @@ import (
 func ToLower(str string) string {
 	return strings.ToLower(str)
 }
-
-/*
-func categories() []objets.Categories{
-
-}*/
