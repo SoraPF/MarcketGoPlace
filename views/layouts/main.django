@@ -1,12 +1,8 @@
 <!DOCTYPE html>
-<html>
-
-<head>
-  <title>Main</title>
-</head>
-
+<html lang="en">
+{% include "partials/head.django" %}
 <body>
-  {{embed}}
+    {% include "partials/header.django" %}
+    {{ embed }}
 </body>
-
 </html>

@@ -1,4 +1,4 @@
-{% include "partials/header.django"%}
+{% include "partials/head.django"%}
 
 <script>
        async function createUser() {

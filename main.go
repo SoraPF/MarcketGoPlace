@@ -50,7 +50,7 @@ func main() {
 	// Routes pour les templates
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.Render("index", fiber.Map{
-			"Title": "Hello, World!",
+			"Title": "Marchet Go Place!",
 		})
 	})
 

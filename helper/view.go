@@ -1,7 +1,14 @@
 package helper
 
-import "strings"
+import (
+	"strings"
+)
 
 func ToLower(str string) string {
 	return strings.ToLower(str)
 }
+
+/*
+func categories() []objets.Categories{
+
+}*/

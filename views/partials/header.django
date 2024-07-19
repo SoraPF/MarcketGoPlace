@@ -1,4 +1,23 @@
-<head>
-    <title>{{ lower(Title) }}</title>
-    <link href="/public/output.css" rel="stylesheet">
-</head>
+{% include "partials/head.django" %}
+<div class="bg-gray-800 p-4 flex justify-between items-center">
+    <div class="flex items-center space-x-2">
+        <input type="search" class="px-4 py-2 rounded-md focus:outline-none" placeholder="Rechercher...">
+        <button class="p-2 bg-blue-500 rounded-md text-white hover:bg-blue-700 focus:outline-none">
+            <img src="path_to_loupe_image" alt="img de loupe" class="w-5 h-5">
+        </button>
+    </div>
+    <div class="flex space-x-4">
+        <!--for categorie as categories-->
+        <div>
+            <a href="#" class="text-white">
+                <button class="px-4 py-2 bg-green-500 rounded-md text-white hover:bg-green-700 focus:outline-none">categorie.title</button>
+            </a>
+        </div>
+    </div>
+    <div>
+        <!--if islogin-->
+        <button class="px-4 py-2 bg-red-500 rounded-md text-white hover:bg-red-700 focus:outline-none">logout</button>
+        <!--else-->
+        <a href="login"><button class="px-4 py-2 bg-yellow-500 rounded-md text-white hover:bg-yellow-700 focus:outline-none">login</button></a>
+    </div>
+</div>
