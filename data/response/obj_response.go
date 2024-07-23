@@ -16,8 +16,9 @@ type StatusResponse struct {
 }
 
 type CategoryResponse struct {
-	ID    uint   `json:"id"`
-	Title string `json:"title"`
+	ID    uint
+	Title string
+	Img   []byte
 }
 
 type AllTags struct {

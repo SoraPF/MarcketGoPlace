@@ -4,7 +4,7 @@
 
 
 <!-- categories -->
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
     {% for category in Categories %}
     <div class="relative w-44 h-44 rounded-full overflow-hidden group mx-auto">        
         <img src="assets/images/category/category-1.jpg" class="w-full h-full object-cover">
