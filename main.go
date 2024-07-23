@@ -28,7 +28,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Failed to migrate database", err)
 	}
-
+	config.InsertImage(db, 1, "./public/img/vetement.jpg")
 	fmt.Println("Database migration successful")
 
 	fmt.Println("loading needs for templates")
@@ -72,7 +72,7 @@ func main() {
 	// Routes pour les templates
 	app.Get("/", func(c *fiber.Ctx) error {
 		for _, categ := range categories {
-			println("Category ID:", categ.ID, "Category Title:", categ.Title)
+			println("Category ID:", categ.ID, "Category Title:", categ.Title, "Category Image:", categ.Img)
 		}
 
 		return c.Render("index", fiber.Map{

@@ -23,12 +23,14 @@
 
         <div class="flex items-center justify-between flex-grow pl-12">
             <div class="flex items-center space-x-6 capitalize">
-                <a href="#" class="text-gray-200 hover:text-white transition">Home</a>
+                <a href="/" class="text-gray-200 hover:text-white transition">Home</a>
+            </div>            
+            <div class="flex w-full max-w-md">
                 <input type="text" name="search" id="search"
-                    class="w-full border border-primary border-r-0 pl-12 py-3 pr-3 rounded-l-md focus:outline-none"
-                    placeholder="search">
+                    class="w-full border border-primary border-r-0 pl-4 py-3 pr-3 rounded-l-md focus:outline-none"
+                    placeholder="Search">
                 <button
-                    class="bg-primary border border-primary text-white px-8 rounded-r-md hover:bg-transparent hover:text-primary transition">Search</button>
+                    class="bg-primary border border-primary text-white px-4 py-3 rounded-r-md hover:bg-transparent hover:text-primary transition">Search</button>
             </div>
             <a href="/login" class="text-gray-200 hover:text-white transition"> Login </a>
         </div>

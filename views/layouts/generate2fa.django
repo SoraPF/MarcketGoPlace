@@ -1,3 +1,4 @@
+{% include "partials/head.django" %}
 {% include "partials/header.django" %}
 
 <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">

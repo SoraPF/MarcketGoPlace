@@ -30,6 +30,7 @@ func (e *ElementImp) FindAllCategories() ([]response.CategoryResponse, error) {
 		Category := response.CategoryResponse{
 			ID:    value.ID,
 			Title: value.Title,
+			Img:   value.Image,
 		}
 		truc = append(truc, Category)
 	}

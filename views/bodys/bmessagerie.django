@@ -1,0 +1,12 @@
+{% include "partials/head.django"%}
+{% include "layouts/ads.django"%}
+
+<div class="flex items-center justify-center min-h-screen">
+    <div class="w-full max-w-lg p-6 bg-white rounded-lg shadow-lg">
+        <div id="chat-box" class="h-64 p-4 mb-4 overflow-y-scroll border border-gray-200 rounded"></div>
+        <div class="flex">
+            <input type="text" id="chat-input" class="flex-1 p-2 border border-gray-300 rounded-l" placeholder="Type a message...">
+            <button id="send-btn" class="p-2 text-white bg-blue-500 rounded-r hover:bg-blue-600">Send</button>
+        </div>
+    </div>
+</div>
