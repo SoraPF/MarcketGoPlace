@@ -20,9 +20,9 @@ func NewEleServiceImpl(ElementRepository repository.ElemRepository, validate *va
 }
 
 // FindAllCategories implements Element.
-func (e *ElementImp) FindAllCategories() (response.AllCategory, error) {
+func (e *ElementImp) FindAllCategories() ([]response.CategoryResponse, error) {
 	result := e.ElementRepository.FindAllCategories()
-	var truc response.AllCategory
+	var truc []response.CategoryResponse
 	if result == nil {
 		return truc, nil
 	}
@@ -31,7 +31,7 @@ func (e *ElementImp) FindAllCategories() (response.AllCategory, error) {
 			ID:    value.ID,
 			Title: value.Title,
 		}
-		truc.Categories = append(truc.Categories, Category)
+		truc = append(truc, Category)
 	}
 	return truc, nil
 }

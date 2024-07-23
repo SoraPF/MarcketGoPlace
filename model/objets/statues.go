@@ -4,6 +4,6 @@ import "gorm.io/gorm"
 
 type Statuses struct {
 	gorm.Model
-	ID    uint
-	Title string
+	ID    uint   `gorm:"primaryKey;autoIncrement"`
+	Title string `gorm:"not null"`
 }

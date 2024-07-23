@@ -20,10 +20,6 @@ type CategoryResponse struct {
 	Title string `json:"title"`
 }
 
-type AllCategory struct {
-	Categories []CategoryResponse
-}
-
 type AllTags struct {
 	Tags []TagResponse
 }

@@ -64,16 +64,30 @@ func main() {
 	userCon := controller.NewuserController(userServ)
 	userRoutes := router.UserRoute(userCon)
 
+	categories, err := eCon.GetCategories()
+	if err != nil {
+		log.Fatal("Failed to catch", err)
+	}
+
 	// Routes pour les templates
 	app.Get("/", func(c *fiber.Ctx) error {
+		for _, categ := range categories {
+			println("Category ID:", categ.ID, "Category Title:", categ.Title)
+		}
+
 		return c.Render("index", fiber.Map{
 			"Title":      "Marchet Go Place!",
-			"categories": eCon.GetCategories(),
+			"Categories": categories,
+		})
+	})
+	app.Get("/test", func(c *fiber.Ctx) error {
+		return c.Render("layouts/main", fiber.Map{
+			"Title": "Test!",
 		})
 	})
 
 	// Grouper les routes de l'API sous le préfixe "/api"
-	app.Mount("/", router.AuthentRoutes(userCon))
+	app.Mount("/", router.AuthentRoutes(userCon, categories))
 	app.Mount("/", router.Aouth2())
 
 	api := app.Group("/api")

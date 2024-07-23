@@ -13,12 +13,12 @@ func NewElemController(service services.Element) *ElemController {
 	return &ElemController{ElemService: service}
 }
 
-func (controller *ElemController) GetCategories() response.AllCategory {
+func (controller *ElemController) GetCategories() ([]response.CategoryResponse, error) {
 	categs, err := controller.ElemService.FindAllCategories()
 	if err != nil {
-		return response.AllCategory{}
+		return nil, err
 	}
-	return categs
+	return categs, nil
 }
 
 func (controller *ElemController) GetTags() response.AllTags {

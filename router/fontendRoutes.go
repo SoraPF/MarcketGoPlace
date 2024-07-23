@@ -2,16 +2,18 @@ package router
 
 import (
 	"Marcketplace/controller"
+	"Marcketplace/data/response"
 
 	"github.com/gofiber/fiber/v2"
 )
 
-func AuthentRoutes(userController *controller.UserController) *fiber.App {
+func AuthentRoutes(userController *controller.UserController, categories []response.CategoryResponse) *fiber.App {
 	router := fiber.New()
 
 	router.Get("/login", func(c *fiber.Ctx) error {
 		return c.Render("layouts/login", fiber.Map{
-			"Title": "LOGIN",
+			"Title":      "LOGIN",
+			"Categories": categories,
 		})
 	})
 

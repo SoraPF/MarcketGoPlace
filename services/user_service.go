@@ -19,6 +19,6 @@ type UserService interface {
 }
 
 type Element interface {
-	FindAllCategories() (response.AllCategory, error)
+	FindAllCategories() ([]response.CategoryResponse, error)
 	FindAllTags() (response.AllTags, error)
 }
