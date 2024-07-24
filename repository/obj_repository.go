@@ -8,6 +8,7 @@ type ObjectRepository interface {
 	Delete(objectId int)
 	FindById(objectId int) (objets.Objects, error)
 	FindAll() []objets.Objects
+	ObjByCategID(CID uint) ([]objets.Objects, error)
 }
 
 type StatusRepository interface {

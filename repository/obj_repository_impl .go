@@ -67,3 +67,15 @@ func (o *ObjRepositoryImpl) Update(object objets.Objects) {
 	result := o.Db.Model(&object).Updates(updateObj)
 	helper.ErrorPanic(result.Error)
 }
+
+func (o *ObjRepositoryImpl) ObjByCategID(CID uint) ([]objets.Objects, error) {
+	var obj []objets.Objects
+	result := o.Db.Where("category_id = ?", CID).Find(&obj)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	if result.RowsAffected == 0 {
+		return nil, errors.New("object is not found")
+	}
+	return obj, nil
+}

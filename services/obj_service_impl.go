@@ -137,3 +137,9 @@ func (o *ObjServiceImpl) Update(objet request.UpdateObjRequest) {
 	objData.Tags = tags
 	o.ObjRepository.Update(objData)
 }
+func (o *ObjServiceImpl) ObjByCategID(CID uint) ([]objets.Objects, error) {
+	LObject, err := o.ObjRepository.ObjByCategID(CID)
+	helper.ErrorPanic(err)
+
+	return LObject, nil
+}

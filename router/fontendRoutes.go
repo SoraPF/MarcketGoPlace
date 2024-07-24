@@ -3,6 +3,8 @@ package router
 import (
 	"Marcketplace/controller"
 	"Marcketplace/data/response"
+	"fmt"
+	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -35,5 +37,26 @@ func AuthentRoutes(userController *controller.UserController, categories []respo
 			"Title": "double authentification validate",
 		})
 	})
+	return router
+}
+
+func Robject(ObjController *controller.ObjController, categories []response.CategoryResponse) *fiber.App {
+	router := fiber.New()
+
+	router.Get("/categories/:id", func(c *fiber.Ctx) error {
+		CID := c.Params("id")
+		id, err := strconv.Atoi(CID)
+		cid := uint(id)
+		if err != nil {
+			fmt.Println("Invalid user ID:", err)
+		}
+		objets := ObjController.ObjByCategID(cid)
+		return c.Render("categories", fiber.Map{
+			"Title":      "categorie",
+			"Categories": categories,
+			"objectsByC": objets,
+		})
+	})
+
 	return router
 }

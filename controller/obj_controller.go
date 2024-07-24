@@ -4,6 +4,7 @@ import (
 	"Marcketplace/data/request"
 	"Marcketplace/data/response"
 	"Marcketplace/helper"
+	"Marcketplace/model/objets"
 	"Marcketplace/services"
 	"strconv"
 
@@ -96,4 +97,12 @@ func (controller *ObjController) ObjFindAll(ctx *fiber.Ctx) error {
 		Data:    ObjController,
 	}
 	return ctx.Status(fiber.StatusCreated).JSON(webResponse)
+}
+
+func (controller *ObjController) ObjByCategID(CID uint) []objets.Objects {
+	LObject, err := controller.objService.ObjByCategID(CID)
+	if err != nil {
+		return []objets.Objects{}
+	}
+	return LObject
 }

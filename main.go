@@ -29,7 +29,7 @@ func main() {
 		log.Fatal("Failed to migrate database", err)
 	}
 
-	config.InsertImages(db)
+	/* config.InsertImages(db) */
 
 	fmt.Println("Database migration successful")
 
@@ -73,24 +73,22 @@ func main() {
 
 	// Routes pour les templates
 	app.Get("/", func(c *fiber.Ctx) error {
-		for _, categ := range categories {
-			println("Category ID:", categ.ID, "Category Title:", categ.Title, "Category Image:", categ.Img)
-		}
-
 		return c.Render("index", fiber.Map{
 			"Title":      "Marchet Go Place!",
 			"Categories": categories,
 		})
 	})
 	app.Get("/test", func(c *fiber.Ctx) error {
-		return c.Render("layouts/main", fiber.Map{
-			"Title": "Test!",
+		return c.Render("main", fiber.Map{
+			"Title":      "Test!",
+			"Categories": categories,
 		})
 	})
 
 	// Grouper les routes de l'API sous le préfixe "/api"
 	app.Mount("/", router.AuthentRoutes(userCon, categories))
 	app.Mount("/", router.Aouth2())
+	app.Mount("/", router.Robject(objCon, categories))
 
 	api := app.Group("/api")
 	api.Mount("/", objRoutes)

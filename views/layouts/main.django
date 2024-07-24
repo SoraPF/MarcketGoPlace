@@ -1,3 +1,0 @@
-{% include "partials/header.django"%}
-{% include "bodys/bmessagerie.django"%}
-{% include "partials/footer.django"%}

@@ -3,6 +3,7 @@ package services
 import (
 	"Marcketplace/data/request"
 	"Marcketplace/data/response"
+	"Marcketplace/model/objets"
 )
 
 type ObjService interface {
@@ -11,4 +12,5 @@ type ObjService interface {
 	Delete(objetId int)
 	FindById(objetId int) response.ObjResponse
 	FindAll() []response.ObjResponse
+	ObjByCategID(CID uint) ([]objets.Objects, error)
 }
