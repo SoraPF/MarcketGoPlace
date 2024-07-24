@@ -19,7 +19,8 @@ func AuthentRoutes(userController *controller.UserController, categories []respo
 
 	router.Get("/register", func(c *fiber.Ctx) error {
 		return c.Render("layouts/register", fiber.Map{
-			"Title": "REGISTER",
+			"Title":      "REGISTER",
+			"Categories": categories,
 		})
 	})
 

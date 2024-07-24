@@ -6,5 +6,5 @@ type Categories struct {
 	gorm.Model
 	ID    uint   `gorm:"primaryKey;autoIncrement"`
 	Title string `gorm:"not null"`
-	Image []byte
+	Image string
 }

@@ -18,7 +18,7 @@ type StatusResponse struct {
 type CategoryResponse struct {
 	ID    uint
 	Title string
-	Img   []byte
+	Img   string
 }
 
 type AllTags struct {

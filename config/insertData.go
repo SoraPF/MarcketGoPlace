@@ -3,10 +3,22 @@ package config
 import (
 	"Marcketplace/model/objets"
 	"fmt"
-	"os"
 
 	"gorm.io/gorm"
 )
+
+func InsertImages(db *gorm.DB) {
+	InsertImage(db, 1, "../public/img/vetement.jpg")
+	InsertImage(db, 2, "../public/img/vehicule.png")
+	InsertImage(db, 3, "../public/img/animaux.png")
+	InsertImage(db, 4, "../public/img/amenagement_interieur.jpg")
+	InsertImage(db, 5, "../public/img/amenagement_exterieur.jpg")
+	InsertImage(db, 6, "../public/img/high-tech.jpg")
+	InsertImage(db, 7, "../public/img/beaute_et_bien_etre.jpg")
+	InsertImage(db, 8, "../public/img/jeux.jpg")
+	InsertImage(db, 9, "../public/img/loisire_et_sport.jpg")
+	InsertImage(db, 10, "../public/img/bureau.png")
+}
 
 func InsertImage(db *gorm.DB, id uint, imagePath string) {
 	var category objets.Categories
@@ -23,13 +35,9 @@ func updateCategory(db *gorm.DB, category *objets.Categories, newTitle string, n
 	}
 
 	if newImagePath != "" {
-		imageBytes, err := os.ReadFile(newImagePath)
-		if err != nil {
-			return fmt.Errorf("failed to read new image file: %v", err)
-		}
-		category.Image = imageBytes
+		category.Image = newImagePath
 	} else {
-		category.Image = nil
+		category.Image = ""
 	}
 
 	result := db.Save(category)
