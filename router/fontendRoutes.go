@@ -3,7 +3,6 @@ package router
 import (
 	"Marcketplace/controller"
 	"Marcketplace/data/response"
-	"fmt"
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
@@ -48,7 +47,10 @@ func Robject(ObjController *controller.ObjController, categories []response.Cate
 		id, err := strconv.Atoi(CID)
 		cid := uint(id)
 		if err != nil {
-			fmt.Println("Invalid user ID:", err)
+			return c.Render("categories", fiber.Map{
+				"Title":      "categorie",
+				"Categories": categories,
+			})
 		}
 		objets := ObjController.ObjByCategID(cid)
 		return c.Render("categories", fiber.Map{

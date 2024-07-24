@@ -29,6 +29,7 @@ func main() {
 		log.Fatal("Failed to migrate database", err)
 	}
 
+	//config.InsertObject(db)
 	/* config.InsertImages(db) */
 
 	fmt.Println("Database migration successful")
