@@ -324,3 +324,15 @@ func (uc *UserController) GetValidate2FA(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusOK).JSON(webResponse)
 	}
 }
+
+func IsLogin(c *fiber.Ctx) error {
+	token := c.Get("Authorization")
+	println("token:", token)
+	_, err := VerifyToken(token)
+	if err != nil {
+		println("error:", err)
+		return c.SendStatus(fiber.StatusInternalServerError)
+	}
+	println("no error")
+	return c.SendStatus(fiber.StatusOK)
+}

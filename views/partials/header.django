@@ -1,4 +1,30 @@
 {% include "partials/head.django" %}
+<script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        try {
+            const token = document.cookie.split('; ').find(row => row.startsWith('jwt=')).split('=')[1];
+            console.log(token)
+            const response = await fetch('/api/authent/isLogin', {
+                method: 'GET',
+                headers: {
+                    'Authorization': token,
+                    'Content-Type': 'application/json'
+                },
+            });
+
+            if (response.ok) {
+                document.getElementById('createArticle').style.display = 'block';
+            } else {
+                console.error('Error:', data.message);
+                document.getElementById('createArticle').style.display = 'none';
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            document.getElementById('createArticle').style.display = 'none';
+        }
+    });
+</script>
+
 <header class="py-4 shadow-sm bg-white">
     
 <nav class="bg-gray-800">
@@ -24,7 +50,10 @@
         <div class="flex items-center justify-between flex-grow pl-12">
             <div class="flex items-center space-x-6 capitalize">
                 <a href="/" class="text-gray-200 hover:text-white transition">Home</a>
-            </div>            
+                <a href="/createSell" class="text-gray-200 hover:text-white transition"
+                    id="createArticle" style="display: none;">Faire une annonce</a>
+            </div>  
+
             <div class="flex w-full max-w-md">
                 <input type="text" name="search" id="search"
                     class="w-full border border-primary border-r-0 pl-4 py-3 pr-3 rounded-l-md focus:outline-none"

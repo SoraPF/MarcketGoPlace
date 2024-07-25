@@ -12,7 +12,7 @@ func Authentification(userController *controller.UserController) *fiber.App {
 	router.Route("/authent", func(router fiber.Router) {
 		router.Post("/login", userController.Login)
 		router.Post("/register", userController.UserCreate)
-		//router.Get("/isLogin")
+		router.Get("/isLogin", controller.IsLogin)
 	})
 
 	router.Get("/captcha", controller.Captcha)
