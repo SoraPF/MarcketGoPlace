@@ -64,4 +64,20 @@ func InsertObject(db *gorm.DB) {
 	}
 
 	db.Create(&mps)*/
+	var obj objets.Objects
+	id := uint(1)
+	result := db.First(&obj, id)
+	if result.Error != nil {
+		fmt.Println(fmt.Errorf("object with ID %d not found", id))
+		return
+	}
+
+	obj.Img = []string{"../public/img/product/m1.jpg", "../public/img/product/m2.jpg"}
+	result = db.Save(&obj)
+	if result.Error != nil {
+		fmt.Println(fmt.Errorf("failed to update object: %v", result.Error))
+		return
+	}
+
+	fmt.Printf("Object ID: %d updated successfully\n", obj.ID)
 }
