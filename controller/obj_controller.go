@@ -102,7 +102,7 @@ func (controller *ObjController) ObjFindAll(ctx *fiber.Ctx) error {
 func (controller *ObjController) ObjByCategID(CID uint) []objets.Objects {
 	LObject, err := controller.objService.ObjByCategID(CID)
 	if err != nil {
-		return []objets.Objects{}
+		return nil
 	}
 	return LObject
 }

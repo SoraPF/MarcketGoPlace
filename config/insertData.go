@@ -50,7 +50,7 @@ func updateCategory(db *gorm.DB, category *objets.Categories, newTitle string, n
 }
 
 func InsertObject(db *gorm.DB) {
-	/*mps := objets.Objects{
+	/*mps := {
 		IdVendeur:  1,
 		Title:      "manette de PS4",
 		Price:      8990,

@@ -16,4 +16,5 @@ type Objects struct {
 	CategoryID uint       `gorm:"not null"`
 	Category   Categories `gorm:"foreignKey:CategoryID"`
 	Tags       []Tags     `gorm:"many2many:object_tags"`
+	Img        []string   `gorm:"type:json"`
 }

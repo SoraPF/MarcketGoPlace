@@ -52,11 +52,17 @@ func Robject(ObjController *controller.ObjController, categories []response.Cate
 				"Categories": categories,
 			})
 		}
-		objets := ObjController.ObjByCategID(cid)
+		articles := ObjController.ObjByCategID(cid)
+		if articles == nil {
+			return c.Render("categories", fiber.Map{
+				"Title":      "categorie",
+				"Categories": categories,
+			})
+		}
 		return c.Render("categories", fiber.Map{
 			"Title":      "categorie",
 			"Categories": categories,
-			"objectsByC": objets,
+			"articles":   articles,
 		})
 	})
 

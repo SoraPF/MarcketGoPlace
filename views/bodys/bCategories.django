@@ -69,26 +69,32 @@
         </div>
         <!-- products -->
         <div class="grid md:grid-cols-3 grid-cols-2 gap-6">
+            {% if articles %}
+            {% for article in articles %}
             <div class="bg-white shadow rounded overflow-hidden group">
                 <div class="relative">
-                    <img src="../assets/images/products/product1.jpg" alt="product 1" class="w-full">
+                    <img src="{{article.Img[1]}}" alt=" {{article.Title}}" class="w-full">
                 </div>
                 <div class="pt-4 pb-3 px-4">
-                    <a href="#">
+                    <a href="/article/{{article.ID}}">
                         <h4 class="uppercase font-medium text-xl mb-2 text-gray-800 hover:text-primary transition">
-                            Guyer
-                            Chair</h4>
+                            {{article.Title}}
+                        </h4>
                     </a>
                     <div class="flex items-baseline mb-1 space-x-2">
-                        <p class="text-xl text-primary font-semibold">$45.00</p>
-                        <p class="text-sm text-gray-400 line-through">$55.90</p>
+                        <p class="text-xl text-primary font-semibold">{{article.Price}}XPF</p>
                     </div>
                 </div>
                 <a href="#"
-                    class="block w-full py-1 text-center text-white bg-primary border border-primary rounded-b hover:bg-transparent hover:text-primary transition">Add
+                    class="block w-full py-1 bg-red text-center text-white border rounded-b hover:bg-transparent hover:text-primary transition">Add
                     to cart</a>
             </div>
+            {% endfor %}
+            {% else %}
+                <p> il n'a aucun article ne possède cette categorie</p>
+            {% endif %}
         </div>
+
     </div>
 
     <!-- ./products -->

@@ -139,7 +139,9 @@ func (o *ObjServiceImpl) Update(objet request.UpdateObjRequest) {
 }
 func (o *ObjServiceImpl) ObjByCategID(CID uint) ([]objets.Objects, error) {
 	LObject, err := o.ObjRepository.ObjByCategID(CID)
-	helper.ErrorPanic(err)
+	if err != nil {
+		return nil, err
+	}
 
 	return LObject, nil
 }
