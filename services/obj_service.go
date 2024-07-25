@@ -13,4 +13,5 @@ type ObjService interface {
 	FindById(objetId int) response.ObjResponse
 	FindAll() []response.ObjResponse
 	ObjByCategID(CID uint) ([]objets.Objects, error)
+	ObjByArticleID(CID uint) (objets.Objects, error)
 }

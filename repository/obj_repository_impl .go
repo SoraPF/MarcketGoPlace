@@ -79,3 +79,12 @@ func (o *ObjRepositoryImpl) ObjByCategID(CID uint) ([]objets.Objects, error) {
 	}
 	return obj, nil
 }
+
+func (o *ObjRepositoryImpl) ObjByArticleID(CID uint) (objets.Objects, error) {
+	var obj objets.Objects
+	result := o.Db.Where("category_id = ?", CID).Find(&obj)
+	if result.Error != nil {
+		return obj, result.Error
+	}
+	return obj, nil
+}

@@ -9,6 +9,7 @@ type ObjectRepository interface {
 	FindById(objectId int) (objets.Objects, error)
 	FindAll() []objets.Objects
 	ObjByCategID(CID uint) ([]objets.Objects, error)
+	ObjByArticleID(CID uint) (objets.Objects, error)
 }
 
 type StatusRepository interface {

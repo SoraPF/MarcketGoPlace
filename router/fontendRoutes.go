@@ -45,13 +45,13 @@ func Robject(ObjController *controller.ObjController, categories []response.Cate
 	router.Get("/categories/:id", func(c *fiber.Ctx) error {
 		CID := c.Params("id")
 		id, err := strconv.Atoi(CID)
-		cid := uint(id)
 		if err != nil {
 			return c.Render("categories", fiber.Map{
 				"Title":      "categorie",
 				"Categories": categories,
 			})
 		}
+		cid := uint(id)
 		articles := ObjController.ObjByCategID(cid)
 		if articles == nil {
 			return c.Render("categories", fiber.Map{
@@ -63,6 +63,30 @@ func Robject(ObjController *controller.ObjController, categories []response.Cate
 			"Title":      "categorie",
 			"Categories": categories,
 			"articles":   articles,
+		})
+	})
+
+	router.Get("/article/:id", func(c *fiber.Ctx) error {
+		CID := c.Params("id")
+		id, err := strconv.Atoi(CID)
+		if err != nil {
+			return c.Render("categories", fiber.Map{
+				"Title":      "categorie",
+				"Categories": categories,
+			})
+		}
+		cid := uint(id)
+		article, err := ObjController.ObjByArticleID(cid)
+		if err != nil {
+			return c.Render("categories", fiber.Map{
+				"Title":      "categorie",
+				"Categories": categories,
+			})
+		}
+		return c.Render("categories", fiber.Map{
+			"Title":      "categorie",
+			"Categories": categories,
+			"article":    article,
 		})
 	})
 
