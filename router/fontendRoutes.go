@@ -70,7 +70,7 @@ func Robject(ObjController *controller.ObjController, categories []response.Cate
 		CID := c.Params("id")
 		id, err := strconv.Atoi(CID)
 		if err != nil {
-			return c.Render("categories", fiber.Map{
+			return c.Render("article", fiber.Map{
 				"Title":      "categorie",
 				"Categories": categories,
 			})
@@ -78,12 +78,12 @@ func Robject(ObjController *controller.ObjController, categories []response.Cate
 		cid := uint(id)
 		article, err := ObjController.ObjByArticleID(cid)
 		if err != nil {
-			return c.Render("categories", fiber.Map{
+			return c.Render("article", fiber.Map{
 				"Title":      "categorie",
 				"Categories": categories,
 			})
 		}
-		return c.Render("categories", fiber.Map{
+		return c.Render("article", fiber.Map{
 			"Title":      "categorie",
 			"Categories": categories,
 			"article":    article,

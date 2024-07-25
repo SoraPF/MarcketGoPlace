@@ -149,8 +149,7 @@ func (o *ObjServiceImpl) ObjByCategID(CID uint) ([]objets.Objects, error) {
 func (o *ObjServiceImpl) ObjByArticleID(CID uint) (objets.Objects, error) {
 	Object, err := o.ObjRepository.ObjByArticleID(CID)
 	if err != nil {
-		return Object, err
+		return objets.Objects{}, err
 	}
-
 	return Object, nil
 }
