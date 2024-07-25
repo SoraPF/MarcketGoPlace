@@ -50,7 +50,7 @@ func updateCategory(db *gorm.DB, category *objets.Categories, newTitle string, n
 }
 
 func InsertObject(db *gorm.DB) {
-	mps := objets.Objects{
+	/*mps := objets.Objects{
 		IdVendeur:  1,
 		Title:      "manette de PS4",
 		Price:      8990,
@@ -63,47 +63,5 @@ func InsertObject(db *gorm.DB) {
 		},
 	}
 
-	status_Creation := objets.Statuses{Title: "create"}
-	status_Insale := objets.Statuses{Title: "in sale"}
-	status_Blocked := objets.Statuses{Title: "blocked"}
-	status_Sold := objets.Statuses{Title: "sold"}
-
-	tag_ordinateur := objets.Tags{Title: "Ordinateurs"}
-	tag_manettes := objets.Tags{Title: "Manettes"}
-	tag_playstation := objets.Tags{Title: "Playstation"}
-	tag_tricot := objets.Tags{Title: "Tricots"}
-	tag_short := objets.Tags{Title: "Chorts"}
-	tag_vase := objets.Tags{Title: "Vases"}
-	tag_tele := objets.Tags{Title: "Télévisions"}
-	tag_table := objets.Tags{Title: "Tables"}
-	tag_croquette := objets.Tags{Title: "Croquettes"}
-	tag_laisse := objets.Tags{Title: "Laisses"}
-	tag_verni := objets.Tags{Title: "Vernis"}
-	tag_balle := objets.Tags{Title: "Balle"}
-	tag_plante := objets.Tags{Title: "Plantes"}
-	tag_voiture := objets.Tags{Title: "Voitures"}
-	tag_scooter := objets.Tags{Title: "Scooter"}
-
-	db.Create(&status_Creation)
-	db.Create(&status_Insale)
-	db.Create(&status_Blocked)
-	db.Create(&status_Sold)
-
-	db.Create(&tag_ordinateur)
-	db.Create(&tag_manettes)
-	db.Create(&tag_playstation)
-	db.Create(&tag_tricot)
-	db.Create(&tag_short)
-	db.Create(&tag_vase)
-	db.Create(&tag_tele)
-	db.Create(&tag_table)
-	db.Create(&tag_croquette)
-	db.Create(&tag_laisse)
-	db.Create(&tag_verni)
-	db.Create(&tag_balle)
-	db.Create(&tag_plante)
-	db.Create(&tag_voiture)
-	db.Create(&tag_scooter)
-
-	db.Create(&mps)
+	db.Create(&mps)*/
 }
