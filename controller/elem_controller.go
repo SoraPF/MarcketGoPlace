@@ -21,10 +21,10 @@ func (controller *ElemController) GetCategories() ([]response.CategoryResponse, 
 	return categs, nil
 }
 
-func (controller *ElemController) GetTags() response.AllTags {
-	categs, err := controller.ElemService.FindAllTags()
+func (controller *ElemController) GetTags() ([]response.TagResponse, error) {
+	tags, err := controller.ElemService.FindAllTags()
 	if err != nil {
-		return response.AllTags{}
+		return nil, err
 	}
-	return categs
+	return tags, nil
 }

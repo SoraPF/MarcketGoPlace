@@ -21,10 +21,6 @@ type CategoryResponse struct {
 	Img   string
 }
 
-type AllTags struct {
-	Tags []TagResponse
-}
-
 type TagResponse struct {
 	ID    uint   `json:"id"`
 	Title string `json:"title"`

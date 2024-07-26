@@ -38,18 +38,18 @@ func (e *ElementImp) FindAllCategories() ([]response.CategoryResponse, error) {
 }
 
 // FindAllTags implements Element.
-func (e *ElementImp) FindAllTags() (response.AllTags, error) {
+func (e *ElementImp) FindAllTags() ([]response.TagResponse, error) {
 	result := e.ElementRepository.FindAllCategories()
-	var truc response.AllTags
+	var Tags []response.TagResponse
 	if result == nil {
-		return truc, nil
+		return Tags, nil
 	}
 	for _, value := range result {
 		Category := response.TagResponse{
 			ID:    value.ID,
 			Title: value.Title,
 		}
-		truc.Tags = append(truc.Tags, Category)
+		Tags = append(Tags, Category)
 	}
-	return truc, nil
+	return Tags, nil
 }

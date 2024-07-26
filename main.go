@@ -71,6 +71,10 @@ func main() {
 	if err != nil {
 		log.Fatal("Failed to catch", err)
 	}
+	tags, err := eCon.GetTags()
+	if err != nil {
+		log.Fatal("Failed to catch", err)
+	}
 
 	// Routes pour les templates
 	app.Get("/", func(c *fiber.Ctx) error {
@@ -89,7 +93,7 @@ func main() {
 	// Grouper les routes de l'API sous le préfixe "/api"
 	app.Mount("/", router.AuthentRoutes(userCon, categories))
 	app.Mount("/", router.Aouth2())
-	app.Mount("/", router.Robject(objCon, categories))
+	app.Mount("/", router.Robject(objCon, tags, categories))
 
 	api := app.Group("/api")
 	api.Mount("/", objRoutes)

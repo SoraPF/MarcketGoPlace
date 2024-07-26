@@ -39,7 +39,7 @@ func AuthentRoutes(userController *controller.UserController, categories []respo
 	return router
 }
 
-func Robject(ObjController *controller.ObjController, categories []response.CategoryResponse) *fiber.App {
+func Robject(ObjController *controller.ObjController, tags []response.TagResponse, categories []response.CategoryResponse) *fiber.App {
 	router := fiber.New()
 
 	router.Get("/categories/:id", func(c *fiber.Ctx) error {
@@ -87,6 +87,14 @@ func Robject(ObjController *controller.ObjController, categories []response.Cate
 			"Title":      "categorie",
 			"Categories": categories,
 			"article":    article,
+		})
+	})
+
+	router.Get("/createSell", func(c *fiber.Ctx) error {
+		return c.Render("newArticle", fiber.Map{
+			"Title":      "NEW ARTICLE",
+			"Categories": categories,
+			"tags":       tags,
 		})
 	})
 

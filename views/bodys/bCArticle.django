@@ -1,0 +1,74 @@
+{% include "partials/head.django" %}
+<script>
+    const IdVendeur = ;
+    const Title = document.getElementById('Title').value;
+    const Price = document.getElementById('Price').value;
+    const Desc = document.getElementById('Desc').value;
+    const CategoryID = document.getElementById('CategoryID').value;
+    const Tags = //liste des ids tags;
+    const Img = //liste des image;
+
+
+
+</script>
+
+<div>
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+        <h2 class="text-2xl font-bold mb-6 text-center">Create an Article</h2>
+        <form id="createArticleForm" class="space-y-4" onsubmit="event.preventDefault(); createArticle();">
+            <div>
+                <label for="Title" class="block text-sm font-medium leading-6 text-gray-900">Article title or name</label>
+                <div class="mt-2">
+                    <input id="Title" name="Title" type="text" autocomplete="Title" required
+                        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                </div>
+            </div>
+            <div>
+                <label for="Price" class="block text-sm font-medium leading-6 text-gray-900">Article Price</label>
+                <div class="mt-2">
+                    <input id="Price" name="Price" type="number" autocomplete="Price" required
+                        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                </div>
+            </div>
+            <div>
+                <label for="Desc" class="block text-sm font-medium leading-6 text-gray-900">Article Description</label>
+                <div class="mt-2">
+                    <textarea id="Desc" name="Desc" autocomplete="Desc" required
+                        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></textarea>
+                </div>
+            </div>
+            <div>
+                <label for="categories" class="block text-sm font-medium leading-6 text-gray-900">Categories</label>
+                <div class="mt-2">
+                    <select name="categories" id="categories" required
+                        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                        {% for category in Categories %}
+                            <option value="{{category.ID}}">{{category.Title}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div>
+                <label class="block text-sm font-medium leading-6 text-gray-900">Tags</label>
+                <div class="mt-2 grid grid-cols-2 gap-4">
+                    {% for tag in tags %}
+                        <div class="flex items-center">
+                            <input type="checkbox" name="tags" value="{{tag.ID}}" id="tag-{{tag.ID}}" class="mr-2">
+                            <label for="tag-{{tag.ID}}" class="text-gray-700">{{tag.Title}}</label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div>
+                <label for="images" class="block text-sm font-medium leading-6 text-gray-900">Upload Images</label>
+                <div class="mt-2">
+                    <input id="images" name="images" type="file" multiple
+                        class="block w-full text-gray-900 border border-gray-300 rounded-md cursor-pointer focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                </div>
+            </div>
+            <div>
+                <button type="submit" class="w-full px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-600">Create Article</button>
+            </div>
+        </form>
+    </div>
+</div>
