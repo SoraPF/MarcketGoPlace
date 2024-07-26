@@ -39,7 +39,7 @@ func AuthentRoutes(userController *controller.UserController, categories []respo
 	return router
 }
 
-func Robject(ObjController *controller.ObjController, tags []response.TagResponse, categories []response.CategoryResponse) *fiber.App {
+func Robject(ObjController *controller.ObjController, categories []response.CategoryResponse, tags []response.TagResponse) *fiber.App {
 	router := fiber.New()
 
 	router.Get("/categories/:id", func(c *fiber.Ctx) error {

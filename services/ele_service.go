@@ -39,17 +39,17 @@ func (e *ElementImp) FindAllCategories() ([]response.CategoryResponse, error) {
 
 // FindAllTags implements Element.
 func (e *ElementImp) FindAllTags() ([]response.TagResponse, error) {
-	result := e.ElementRepository.FindAllCategories()
+	result := e.ElementRepository.FindAllTags()
 	var Tags []response.TagResponse
 	if result == nil {
 		return Tags, nil
 	}
 	for _, value := range result {
-		Category := response.TagResponse{
+		tag := response.TagResponse{
 			ID:    value.ID,
 			Title: value.Title,
 		}
-		Tags = append(Tags, Category)
+		Tags = append(Tags, tag)
 	}
 	return Tags, nil
 }

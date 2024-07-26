@@ -93,7 +93,7 @@ func main() {
 	// Grouper les routes de l'API sous le préfixe "/api"
 	app.Mount("/", router.AuthentRoutes(userCon, categories))
 	app.Mount("/", router.Aouth2())
-	app.Mount("/", router.Robject(objCon, tags, categories))
+	app.Mount("/", router.Robject(objCon, categories, tags))
 
 	api := app.Group("/api")
 	api.Mount("/", objRoutes)
