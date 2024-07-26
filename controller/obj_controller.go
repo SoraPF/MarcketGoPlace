@@ -114,3 +114,19 @@ func (controller *ObjController) ObjByArticleID(CID uint) (objets.Objects, error
 	}
 	return Object, nil
 }
+
+func RequestCreateArticle(ctx *fiber.Ctx) error {
+	req := request.CreateObjRequest{}
+	err := ctx.BodyParser(&req)
+	helper.ErrorPanic(err)
+
+	NotifiedAdminNewArticle(ctx, &req)
+
+	webResponse := map[string]interface{}{
+		"code":         200,
+		"status":       "ok",
+		"message":      "request successful wait until admin accepte!",
+		"redirect_url": "/createOk",
+	}
+	return ctx.Status(fiber.StatusOK).JSON(webResponse)
+}

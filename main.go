@@ -11,6 +11,7 @@ import (
 	"log"
 
 	"github.com/go-playground/validator/v10"
+	"github.com/gofiber/contrib/websocket"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/template/django/v3"
 )
@@ -90,7 +91,9 @@ func main() {
 		})
 	})
 
-	// Grouper les routes de l'API sous le préfixe "/api"
+	// Grouper les routes
+	app.Get("/ws", websocket.New(controller.HandleConnections))
+	go controller.HandleMessages()
 	app.Mount("/", router.AuthentRoutes(userCon, categories))
 	app.Mount("/", router.Aouth2())
 	app.Mount("/", router.Robject(objCon, categories, tags))

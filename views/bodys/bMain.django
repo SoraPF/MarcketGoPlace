@@ -6,7 +6,7 @@
 <!-- categories -->
 <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
     {% for category in Categories %}
-    <div class="relative w-44 h-44 rounded-full overflow-hidden group mx-auto">        
+    <div class="relative w-44 h-44 rounded-xl overflow-hidden group mx-auto">        
         <img src="{{ category.Img }}" class="w-full h-full object-cover">
         <a href="/categories/{{category.ID}}"
             class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center text-xl text-white font-roboto font-medium group-hover:bg-opacity-60 transition text-center p-2">

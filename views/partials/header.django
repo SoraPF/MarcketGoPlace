@@ -1,29 +1,5 @@
 {% include "partials/head.django" %}
-<script>
-    document.addEventListener('DOMContentLoaded', async () => {
-        try {
-            const token = document.cookie.split('; ').find(row => row.startsWith('jwt=')).split('=')[1];
-            console.log(token)
-            const response = await fetch('/api/authent/isLogin', {
-                method: 'GET',
-                headers: {
-                    'Authorization': token,
-                    'Content-Type': 'application/json'
-                },
-            });
-
-            if (response.ok) {
-                document.getElementById('createArticle').style.display = 'block';
-            } else {
-                console.error('Error:', data.message);
-                document.getElementById('createArticle').style.display = 'none';
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            document.getElementById('createArticle').style.display = 'none';
-        }
-    });
-</script>
+<script src="../public/header.js"></script>
 
 <header class="py-4 shadow-sm bg-white">
     
@@ -61,6 +37,10 @@
                 <button
                     class="bg-primary border border-primary text-white px-4 py-3 rounded-r-md hover:bg-transparent hover:text-primary transition">Search</button>
             </div>
+
+            <div id="image-container"></div>
+            <div id="notification-container"></div>
+
             <a href="/login" class="text-gray-200 hover:text-white transition"> Login </a>
         </div>
     </div>
