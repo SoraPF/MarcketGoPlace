@@ -187,6 +187,12 @@ func (uc *UserController) Login(ctx *fiber.Ctx) error {
 		Expires: time.Now().Add(time.Hour * 72),
 	})
 
+	ctx.Cookie(&fiber.Cookie{
+		Name:    "user_id",
+		Value:   fmt.Sprintf("%d", user.Id),
+		Expires: time.Now().Add(time.Hour * 72),
+	})
+
 	webResponse := map[string]interface{}{
 		"code":         200,
 		"status":       "ok",

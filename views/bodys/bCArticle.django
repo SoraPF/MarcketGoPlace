@@ -1,20 +1,38 @@
 {% include "partials/head.django" %}
 {% include "layouts/ads.django" %}
 <script>
-    const IdVendeur = ;
-    const Title = document.getElementById('Title').value;
-    const Price = document.getElementById('Price').value;
-    const Desc = document.getElementById('Desc').value;
-    const CategoryID = document.getElementById('CategoryID').value;
-    const Tags = //liste des ids tags;
-    const Img = //liste des image;
+    async function createArticle() {
+        const userId = document.cookie.split('; ').find(row => row.startsWith('user_id=')).split('=')[1];
+        document.getElementById('userID').value = userId;
+        const formData = new FormData(document.getElementById('createArticleForm'));
+        console.log(formData);
+        /*
+        try {
+            const response = await fetch('/api/articles/create', {
+                method: 'POST',
+                body: formData,
+            });
 
+            const data = await response.json();
 
+            if (response.ok) {
+                alert('Article created successfully');
+                window.location.href = '/articles';
+            } else {
+                alert(data.error || 'Failed to create article');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again.');
+        }
+        */
+    }
 
 </script>
 <div class="mt-5 sm:mx-auto sm:w-full sm:max-w-sm">
     <h2 class="text-2xl font-bold mb-6 text-center">Create an Article</h2>
     <form id="createArticleForm" class="space-y-4" onsubmit="event.preventDefault(); createArticle();">
+        <input id="userID" name="userID" type="hidden" required >
         <div>
             <label for="Title" class="block text-sm font-medium leading-6 text-gray-900">Article title or name</label>
             <div class="mt-2">
