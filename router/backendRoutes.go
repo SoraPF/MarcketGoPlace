@@ -6,7 +6,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func Authentification(userController *controller.UserController) *fiber.App {
+func Authentification(userController *controller.UserController, ObjController *controller.ObjController) *fiber.App {
 	router := fiber.New()
 
 	router.Route("/authent", func(router fiber.Router) {
@@ -18,6 +18,8 @@ func Authentification(userController *controller.UserController) *fiber.App {
 	router.Get("/captcha", controller.Captcha)
 	router.Get("/generate-2fa/:id", userController.GetGenerate2FA)
 	router.Post("/validate-2fa/:id", userController.GetValidate2FA)
+	router.Post("/articles/create", controller.RequestCreateArticle)
+	router.Post("/articles/verify", ObjController.AdminResponceNewArticle)
 
 	return router
 }

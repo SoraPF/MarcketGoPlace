@@ -101,7 +101,7 @@ func main() {
 	api := app.Group("/api")
 	api.Mount("/", objRoutes)
 	api.Mount("/", userRoutes)
-	api.Mount("/", router.Authentification(userCon))
+	api.Mount("/", router.Authentification(userCon, objCon))
 
 	// Lancer l'application sur le port 3000
 	log.Fatal(app.Listen(":3000"))

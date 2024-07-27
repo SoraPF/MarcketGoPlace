@@ -120,13 +120,37 @@ func RequestCreateArticle(ctx *fiber.Ctx) error {
 	err := ctx.BodyParser(&req)
 	helper.ErrorPanic(err)
 
-	NotifiedAdminNewArticle(ctx, &req)
+	//NotifiedAdminNewArticle(ctx, &req)
 
 	webResponse := map[string]interface{}{
 		"code":         200,
 		"status":       "ok",
 		"message":      "request successful wait until admin accepte!",
 		"redirect_url": "/createOk",
+	}
+	return ctx.Status(fiber.StatusOK).JSON(webResponse)
+}
+
+func (controller *ObjController) AdminResponceNewArticle(ctx *fiber.Ctx) error {
+	req := request.CreateObjRequest{}
+	err := ctx.BodyParser(&req)
+	helper.ErrorPanic(err)
+	if req.Title == "" || req.Price == 0 || req.Desc == "" || req.CategoryID == 0 || req.IdVendeur == 0 || req.StatusID == 0 || req.Tags == nil {
+		webResponse := map[string]interface{}{
+			"code":    200,
+			"status":  "ok",
+			"message": "you successful refuse the article!",
+		}
+		return ctx.Status(fiber.StatusOK).JSON(webResponse)
+	}
+
+	//NotifiedUserNewArticle(ctx, &req)
+	//return controller.ObjCreate(ctx)
+
+	webResponse := map[string]interface{}{
+		"code":    200,
+		"status":  "ok",
+		"message": "you successful accepted the article!",
 	}
 	return ctx.Status(fiber.StatusOK).JSON(webResponse)
 }

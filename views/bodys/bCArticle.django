@@ -5,9 +5,27 @@
         const userId = document.cookie.split('; ').find(row => row.startsWith('user_id=')).split('=')[1];
         document.getElementById('userID').value = userId;
         document.getElementById('StatusID').value = 1;
-        const formData = new FormData(document.getElementById('createArticleForm'));
-        console.log(formData);
         
+        const formData = new FormData(document.getElementById('createArticleForm'));
+
+        // Convertir les champs en entiers
+        formData.set('id_vendeur', parseInt(formData.get('id_vendeur'), 10));
+        formData.set('status_id', parseInt(formData.get('status_id'), 10));
+        formData.set('price', parseInt(formData.get('price'), 10));
+        formData.set('category_id', parseInt(formData.get('category_id'), 10));
+
+        // Convertir les tags en tableau d'entiers
+        let tags = [];
+        formData.getAll('tags').forEach(tag => {
+            tags.push(parseInt(tag, 10));
+        });
+        formData.delete('tags');
+        tags.forEach(tag => {
+            formData.append('tags', tag);
+        });
+
+        console.log(formData);
+
         try {
             const response = await fetch('/api/articles/create', {
                 method: 'POST',
@@ -18,7 +36,7 @@
 
             if (response.ok) {
                 alert('Article created successfully');
-                window.location.href = '/articles';
+                window.location.href = data.redirect_url;
             } else {
                 alert(data.error || 'Failed to create article');
             }
@@ -26,9 +44,7 @@
             console.error('Error:', error);
             alert('An error occurred. Please try again.');
         }
-
     }
-
 </script>
 <div class="mt-5 sm:mx-auto sm:w-full sm:max-w-sm">
     <h2 class="text-2xl font-bold mb-6 text-center">Create an Article</h2>

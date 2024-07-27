@@ -37,7 +37,7 @@ func ObjRoute(ObjController *controller.ObjController) *fiber.App {
 			"message": "welcom to Golang, Fiber, and gorm",
 		})
 	})
-	router.Route("/articles", func(router fiber.Router) {
+	router.Route("/objets", func(router fiber.Router) {
 		router.Post("/create", ObjController.ObjCreate)
 		router.Get("/list", ObjController.ObjFindAll)
 		router.Route("/:noteId", func(router fiber.Router) {

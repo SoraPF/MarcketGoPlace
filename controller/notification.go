@@ -57,6 +57,9 @@ func NotifiedAdminNewArticle(ctx *fiber.Ctx, req *request.CreateObjRequest) erro
 	return ctx.SendStatus(fiber.StatusOK)
 }
 
-func NotifiedUserNewArticle() {
+func NotifiedUserNewArticle(ctx *fiber.Ctx, req *request.CreateObjRequest) error {
+	notification := "Article " + req.Title + " Valider par un Admin"
+	broadcast <- notification
 
+	return ctx.SendStatus(fiber.StatusOK)
 }
