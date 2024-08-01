@@ -153,3 +153,11 @@ func (o *ObjServiceImpl) ObjByArticleID(CID uint) (objets.Objects, error) {
 	}
 	return Object, nil
 }
+
+func (o *ObjServiceImpl) GetArticles(CID uint, status string) (objets.Objects, error) {
+	Object, err := o.ObjRepository.GetArticles(CID, status)
+	if err != nil {
+		return objets.Objects{}, err
+	}
+	return Object, nil
+}

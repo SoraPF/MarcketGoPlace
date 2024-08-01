@@ -98,5 +98,20 @@ func Robject(ObjController *controller.ObjController, categories []response.Cate
 		})
 	})
 
+	router.Get("/list/new-article", func(c *fiber.Ctx) error {
+
+		articles, err := ObjController.GetArticles(0, "create")
+		if err != nil {
+			return c.Render("VerifArticle", fiber.Map{
+				"Title":      "verify article",
+				"Categories": categories,
+			})
+		}
+		return c.Render("VerifArticle", fiber.Map{
+			"Title":      "verify article",
+			"Categories": categories,
+			"Articles":   articles,
+		})
+	})
 	return router
 }

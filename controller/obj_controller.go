@@ -115,6 +115,14 @@ func (controller *ObjController) ObjByArticleID(CID uint) (objets.Objects, error
 	return Object, nil
 }
 
+func (controller *ObjController) GetArticles(CID uint, status string) (objets.Objects, error) {
+	Object, err := controller.objService.GetArticles(CID, status)
+	if err != nil {
+		return objets.Objects{}, err
+	}
+	return Object, nil
+}
+
 func RequestCreateArticle(ctx *fiber.Ctx) error {
 	req := request.CreateObjRequest{}
 	err := ctx.BodyParser(&req)

@@ -70,7 +70,9 @@ func (o *ObjRepositoryImpl) Update(object objets.Objects) {
 
 func (o *ObjRepositoryImpl) ObjByCategID(CID uint) ([]objets.Objects, error) {
 	var obj []objets.Objects
-	result := o.Db.Where("category_id = ?", CID).Find(&obj)
+	result := o.Db.Joins("JOIN statuses ON statuses.id = objects.status_id").
+		Where("category_id = ? AND statuses.title = ?", CID, "in sale").
+		Find(&obj)
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -82,7 +84,27 @@ func (o *ObjRepositoryImpl) ObjByCategID(CID uint) ([]objets.Objects, error) {
 
 func (o *ObjRepositoryImpl) ObjByArticleID(CID uint) (objets.Objects, error) {
 	var obj objets.Objects
-	result := o.Db.Where("id = ?", CID).Find(&obj)
+	result := o.Db.Joins("JOIN statuses ON statuses.id = objects.status_id").
+		Where("status_id = ? AND statuses.title = ?", CID, "in sale").
+		Find(&obj)
+	if result.Error != nil {
+		return obj, result.Error
+	}
+	return obj, nil
+}
+
+func (o *ObjRepositoryImpl) GetArticles(CID uint, status string) (objets.Objects, error) {
+	var obj objets.Objects
+	var result *gorm.DB
+	if CID == 0 {
+		result = o.Db.Joins("JOIN statuses ON statuses.id = objects.status_id").
+			Where("statuses.title = ?", status).
+			Find(&obj)
+	} else {
+		result = o.Db.Joins("JOIN statuses ON statuses.id = objects.status_id").
+			Where("objects.id = ? AND statuses.title = ?", CID, status).
+			Find(&obj)
+	}
 	if result.Error != nil {
 		return obj, result.Error
 	}
