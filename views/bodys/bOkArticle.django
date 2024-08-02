@@ -1,6 +1,11 @@
 {% include "partials/head.django" %}
-<div>
-    votre article est en attente d'une vérification d'un administrateur.
-    veiller passionter l'orsqu'il sera verifier vous resevrais une notification.
-    Bonne journées
+<div class="max-w-lg mx-auto my-10 p-6 bg-gray-100 rounded-lg shadow-lg text-center">
+    <h1 class="text-2xl font-semibold text-gray-800 mb-4">Article en attente de vérification</h1>
+    <p class="text-lg text-gray-600 mb-4">
+        Votre article est en attente d'une vérification par un administrateur.
+        Veuillez patienter, et une fois vérifié, vous recevrez une notification.
+    </p>
+    <p class="text-sm text-gray-500">
+        Bonne journée !
+    </p>
 </div>

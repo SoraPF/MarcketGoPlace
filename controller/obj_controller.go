@@ -94,7 +94,7 @@ func (controller *ObjController) ObjCreate(ctx *fiber.Ctx) error {
 				fmt.Printf("Failed to save file: %s\n", err)
 				return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to save file"})
 			}
-			createObjRequest.Img = append(createObjRequest.Img, filename)
+			createObjRequest.Img = append(createObjRequest.Img, filePath)
 		}
 	}
 
