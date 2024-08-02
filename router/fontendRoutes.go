@@ -99,35 +99,35 @@ func Robject(ObjController *controller.ObjController, categories []response.Cate
 	})
 
 	router.Get("/new-article/list", func(c *fiber.Ctx) error {
-		println("1")
 		articles, err := ObjController.GetArticles(0, "create")
-		println("2")
-		if err != nil {
+		if err != nil || len(articles) == 0 {
 			println("err1")
 			return c.Render("VerifArticle", fiber.Map{
 				"Title":      "verify article",
 				"Categories": categories,
 			})
 		}
-		println("3")
 		return c.Render("VerifArticle", fiber.Map{
-			"Title":      "verify article",
+			"Title":      "List article",
 			"Categories": categories,
 			"Articles":   articles,
 		})
 	})
+
 	router.Get("/new-article/:id", func(c *fiber.Ctx) error {
 		CID := c.Params("id")
 		id, err := strconv.Atoi(CID)
 		if err != nil {
+			println("err1")
 			return c.Render("VerifArticle", fiber.Map{
 				"Title":      "categorie",
 				"Categories": categories,
 			})
 		}
 		cid := uint(id)
-		article, err := ObjController.GetArticles(cid, "create")
+		articles, err := ObjController.GetArticles(cid, "create")
 		if err != nil {
+			println("err2")
 			return c.Render("VerifArticle", fiber.Map{
 				"Title":      "verify article",
 				"Categories": categories,
@@ -138,7 +138,14 @@ func Robject(ObjController *controller.ObjController, categories []response.Cate
 			"Title":      "verify article",
 			"Categories": categories,
 			"tags":       tags,
-			"Article":    article,
+			"Article":    articles[0],
+		})
+	})
+
+	router.Get("/createOk", func(c *fiber.Ctx) error {
+		return c.Render("newArticle", fiber.Map{
+			"Title":      "verify article",
+			"Categories": categories,
 		})
 	})
 	return router

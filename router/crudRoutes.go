@@ -40,7 +40,7 @@ func ObjRoute(ObjController *controller.ObjController) *fiber.App {
 	router.Route("/objets", func(router fiber.Router) {
 		router.Post("/create", ObjController.ObjCreate)
 		router.Get("/list", ObjController.ObjFindAll)
-		router.Route("/:noteId", func(router fiber.Router) {
+		router.Route("/:objId", func(router fiber.Router) {
 			router.Delete("/delete", ObjController.ObjDelete)
 			router.Get("/find", ObjController.ObjFindById)
 			router.Patch("/update", ObjController.ObjUpdate)

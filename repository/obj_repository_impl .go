@@ -46,7 +46,9 @@ func (o *ObjRepositoryImpl) FindById(objectId int) (objets.Objects, error) {
 // Save implements ObjectRepository.
 func (o *ObjRepositoryImpl) Save(object objets.Objects) {
 	result := o.Db.Create(&object)
+	println("repo")
 	helper.ErrorPanic(result.Error)
+
 }
 
 // Update implements ObjectRepository.
@@ -93,8 +95,8 @@ func (o *ObjRepositoryImpl) ObjByArticleID(CID uint) (objets.Objects, error) {
 	return obj, nil
 }
 
-func (o *ObjRepositoryImpl) GetArticles(CID uint, status string) (objets.Objects, error) {
-	var obj objets.Objects
+func (o *ObjRepositoryImpl) GetArticles(CID uint, status string) ([]objets.Objects, error) {
+	var obj []objets.Objects
 	var result *gorm.DB
 	if CID == 0 {
 		result = o.Db.Joins("JOIN statuses ON statuses.id = objects.status_id").

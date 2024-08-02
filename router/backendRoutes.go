@@ -18,7 +18,7 @@ func Authentification(userController *controller.UserController, ObjController *
 	router.Get("/captcha", controller.Captcha)
 	router.Get("/generate-2fa/:id", userController.GetGenerate2FA)
 	router.Post("/validate-2fa/:id", userController.GetValidate2FA)
-	router.Post("/articles/create", controller.RequestCreateArticle)
+	//router.Post("/articles/create", controller.RequestCreateArticle)
 	router.Post("/articles/verify", ObjController.AdminResponceNewArticle)
 
 	return router

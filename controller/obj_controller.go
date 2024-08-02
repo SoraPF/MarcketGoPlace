@@ -6,7 +6,11 @@ import (
 	"Marcketplace/helper"
 	"Marcketplace/model/objets"
 	"Marcketplace/services"
+	"fmt"
+	"os"
+	"path/filepath"
 	"strconv"
+	"strings"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -20,16 +24,87 @@ func NewObjController(service services.ObjService) *ObjController {
 }
 
 func (controller *ObjController) ObjCreate(ctx *fiber.Ctx) error {
-	createObjRequest := request.CreateObjRequest{}
-	err := ctx.BodyParser(&createObjRequest)
-	helper.ErrorPanic(err)
+	idVendeur := ctx.FormValue("id_vendeur")
+	statusID := ctx.FormValue("status_id")
+	title := ctx.FormValue("title")
+	price := ctx.FormValue("price")
+	desc := ctx.FormValue("desc")
+	categoryID := ctx.FormValue("category_id")
+	tags := ctx.FormValue("tags")
+
+	idVendeurInt, err := strconv.Atoi(idVendeur)
+	if err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid id_vendeur"})
+	}
+	statusIDInt, err := strconv.Atoi(statusID)
+	if err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid status_id"})
+	}
+	priceInt, err := strconv.Atoi(price)
+	if err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid price"})
+	}
+	categoryIDInt, err := strconv.Atoi(categoryID)
+	if err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid category_id"})
+	}
+	var tagInts []int
+	if tags != "" {
+		tagStrs := strings.Split(tags, ",")
+		for _, tag := range tagStrs {
+			tagInt, err := strconv.Atoi(tag)
+			if err != nil {
+				return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid tag"})
+			}
+			tagInts = append(tagInts, tagInt)
+		}
+	}
+
+	createObjRequest := request.CreateObjRequest{
+		IdVendeur:  idVendeurInt,
+		Title:      title,
+		Price:      priceInt,
+		Desc:       desc,
+		StatusID:   statusIDInt,
+		CategoryID: categoryIDInt,
+		Tags:       tagInts,
+	}
+
+	form, err := ctx.MultipartForm()
+	if err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Failed to parse form data"})
+	}
+
+	files := form.File["images"]
+	if len(files) > 0 {
+		for _, file := range files {
+			filename := file.Filename
+			filePath := filepath.Join("./public/img/product", filename)
+
+			// Check if the directory exists, if not, create it
+			if _, err := os.Stat("./public/img/product"); os.IsNotExist(err) {
+				err := os.MkdirAll("./public/img/product", os.ModePerm)
+				if err != nil {
+					return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to create directory"})
+				}
+			}
+
+			// Try saving the file
+			if err := ctx.SaveFile(file, filePath); err != nil {
+				fmt.Printf("Failed to save file: %s\n", err)
+				return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to save file"})
+			}
+			createObjRequest.Img = append(createObjRequest.Img, filename)
+		}
+	}
+
 	controller.objService.Create(createObjRequest)
 
-	webResponse := response.Response{
-		Code:    200,
-		Status:  "ok",
-		Message: "Successfully created notes data!",
-		Data:    nil,
+	webResponse := map[string]interface{}{
+		"code":         200,
+		"status":       "ok",
+		"message":      "request successful wait until admin accepte!",
+		"redirect_url": "/createOk",
 	}
 	return ctx.Status(fiber.StatusCreated).JSON(webResponse)
 }
@@ -115,10 +190,10 @@ func (controller *ObjController) ObjByArticleID(CID uint) (objets.Objects, error
 	return Object, nil
 }
 
-func (controller *ObjController) GetArticles(CID uint, status string) (objets.Objects, error) {
+func (controller *ObjController) GetArticles(CID uint, status string) ([]objets.Objects, error) {
 	Object, err := controller.objService.GetArticles(CID, status)
 	if err != nil {
-		return objets.Objects{}, err
+		return []objets.Objects{}, err
 	}
 	return Object, nil
 }

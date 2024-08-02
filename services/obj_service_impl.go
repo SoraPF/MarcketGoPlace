@@ -28,10 +28,12 @@ func NewObjServiceImpl(objRepository repository.ObjectRepository, validate *vali
 // Create implements ObjService.
 func (o *ObjServiceImpl) Create(object request.CreateObjRequest) {
 	err := o.validate.Struct(object)
+	println("service")
 	helper.ErrorPanic(err)
+
 	var tags []objets.Tags
 	for _, tagID := range object.Tags {
-		tag := objets.Tags{ID: tagID}
+		tag := objets.Tags{ID: uint(tagID)}
 		tags = append(tags, tag)
 	}
 	objModel := objets.Objects{
@@ -39,8 +41,8 @@ func (o *ObjServiceImpl) Create(object request.CreateObjRequest) {
 		Title:      object.Title,
 		Price:      object.Price,
 		Desc:       object.Desc,
-		StatusID:   object.StatusID,
-		CategoryID: object.CategoryID,
+		StatusID:   uint(object.StatusID),
+		CategoryID: uint(object.CategoryID),
 		Tags:       tags,
 	}
 	o.ObjRepository.Save(objModel)
@@ -154,10 +156,10 @@ func (o *ObjServiceImpl) ObjByArticleID(CID uint) (objets.Objects, error) {
 	return Object, nil
 }
 
-func (o *ObjServiceImpl) GetArticles(CID uint, status string) (objets.Objects, error) {
+func (o *ObjServiceImpl) GetArticles(CID uint, status string) ([]objets.Objects, error) {
 	Object, err := o.ObjRepository.GetArticles(CID, status)
 	if err != nil {
-		return objets.Objects{}, err
+		return []objets.Objects{}, err
 	}
 	return Object, nil
 }

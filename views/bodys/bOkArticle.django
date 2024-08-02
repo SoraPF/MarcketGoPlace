@@ -1,0 +1,6 @@
+{% include "partials/head.django" %}
+<div>
+    votre article est en attente d'une vérification d'un administrateur.
+    veiller passionter l'orsqu'il sera verifier vous resevrais une notification.
+    Bonne journées
+</div>

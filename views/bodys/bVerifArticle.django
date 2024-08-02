@@ -1,8 +1,53 @@
 {% include "partials/head.django" %}
 
 <script>
-    async function createArticle() {
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        const article = {
+            IdVendeur: {{ Article.IdVendeur }},
+            Title: "{{ Article.Title}}",
+            Price: {{ Article.Price }},
+            Desc: "{{ Article.Desc}}",
+            StatusID: {{ Article.StatusID }},
+            CategoryID: {{ Article.CategoryID }},
+            Tags: [{{ Article.Tags|join:', ' }}],
+        };
 
+        // Remplir les champs du formulaire
+        document.getElementById('userID').value = article.IdVendeur;
+        document.getElementById('StatusID').value = article.StatusID;
+        document.getElementById('Title').value = article.Title;
+        document.getElementById('Price').value = article.Price;
+        document.getElementById('Desc').value = article.Desc;
+        document.getElementById('categories').value = article.CategoryID;
+        // Remplir les cases à cocher pour les tags
+        article.Tags.forEach(tag => {
+            const checkbox = document.querySelector(`input[name="tags"][value="${tag}"]`);
+            if (checkbox) {
+                checkbox.checked = true;
+            }
+        });
+    });
+
+
+
+    async function createArticle() {
+     /*   const response = await fetch('/api/objets/'+article.ID+'/update', {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, email, password, captcha }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            
+            window.location.href = /new-article/list;
+        } else {
+            alert(data.error);
+        }*/
     }
     async function refuseArticle() {
 
@@ -10,7 +55,7 @@
 </script>
 
 <div class="mt-5 sm:mx-auto sm:w-full sm:max-w-sm">
-    <H1>List article</H1>
+    <H1>new article</H1>
     <form id="createArticleForm" class="space-y-4">
         <input id="userID" name="id_vendeur" type="hidden" required>
         <input id="StatusID" name="status_id" type="hidden" required>
@@ -63,8 +108,8 @@
             {%endfor%}
         </div>
         <div>
-            <button type="button" onclick="acceptArticle()" class="w-full px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-600">Accept Article</button>
-            <button type="button" onclick="refuseArticle()" class="w-full px-3 py-2 bg-red-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-600">refuse Article</button>
+            <button type="button" onclick="acceptArticle()" class="w-full px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-600">Accept Article</button>
+            <button type="button" onclick="refuseArticle()" class="w-full px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-600">refuse Article</button>
         </div>
     </form>
 </div>
