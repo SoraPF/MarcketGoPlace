@@ -1,3 +1,7 @@
 {% include "partials/header.django"%}
+{%if Articles %}
+{% include "bodys/bArticleList.django" %}
+{%else%}
 {% include "bodys/bVerifArticle.django"%}
+{%endif%}
 {% include "partials/footer.django"%}
