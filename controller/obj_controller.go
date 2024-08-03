@@ -7,6 +7,7 @@ import (
 	"Marcketplace/model/objets"
 	"Marcketplace/services"
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -110,15 +111,60 @@ func (controller *ObjController) ObjCreate(ctx *fiber.Ctx) error {
 }
 
 func (controller *ObjController) ObjUpdate(ctx *fiber.Ctx) error {
-	updateObjRequest := request.UpdateObjRequest{}
-	err := ctx.BodyParser(&updateObjRequest)
-	helper.ErrorPanic(err)
+	idVendeur := ctx.FormValue("id_vendeur")
+	statusID := ctx.FormValue("status_id")
+	title := ctx.FormValue("title")
+	price := ctx.FormValue("price")
+	desc := ctx.FormValue("desc")
+	categoryID := ctx.FormValue("category_id")
+	tags := ctx.FormValue("tags")
+
+	// Add logging to check the received values
+	log.Printf("Received values - id_vendeur: %s, status_id: %s, title: %s, price: %s, desc: %s, category_id: %s, tags: %s", idVendeur, statusID, title, price, desc, categoryID, tags)
+
+	idVendeurInt, err := strconv.Atoi(idVendeur)
+	if err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid id_vendeur"})
+	}
+	statusIDInt, err := strconv.Atoi(statusID)
+	if err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid status_id"})
+	}
+	priceInt, err := strconv.Atoi(price)
+	if err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid price"})
+	}
+	categoryIDInt, err := strconv.Atoi(categoryID)
+	if err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid category_id"})
+	}
+	var tagInts []int
+	if tags != "" {
+		tagStrs := strings.Split(tags, ",")
+		for _, tag := range tagStrs {
+			tagInt, err := strconv.Atoi(tag)
+			if err != nil {
+				return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid tag"})
+			}
+			tagInts = append(tagInts, tagInt)
+		}
+	}
+
+	updateObjRequest := request.UpdateObjRequest{
+		IdVendeur:  idVendeurInt,
+		Title:      title,
+		Price:      priceInt,
+		Desc:       desc,
+		StatusID:   statusIDInt,
+		CategoryID: categoryIDInt,
+		Tags:       tagInts,
+	}
 
 	objId := ctx.Params("objId")
-	id, err := strconv.ParseUint(objId, 10, 32)
+	id, err := strconv.Atoi(objId)
 	helper.ErrorPanic(err)
 
-	updateObjRequest.ID = uint(id)
+	updateObjRequest.ID = id
 
 	controller.objService.Update(updateObjRequest)
 

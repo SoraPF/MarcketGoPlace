@@ -1,10 +1,10 @@
 package repository
 
 import (
-	"Marcketplace/data/request"
 	"Marcketplace/helper"
 	"Marcketplace/model/objets"
 	"errors"
+	"log"
 
 	"gorm.io/gorm"
 )
@@ -53,20 +53,16 @@ func (o *ObjRepositoryImpl) Save(object objets.Objects) {
 
 // Update implements ObjectRepository.
 func (o *ObjRepositoryImpl) Update(object objets.Objects) {
-	var tagIDs []uint
-	for _, tag := range object.Tags {
-		tagIDs = append(tagIDs, tag.ID)
-	}
-	var updateObj = request.UpdateObjRequest{
-		ID:         object.ID,
+	log.Printf("values - id_vendeur: %s, status_id: %s, title: %s, price: %s, desc: %s, category_id: %s, tags: %s", object.IdVendeur, object.StatusID, object.Title, object.Price, object.Desc, object.CategoryID, object.Tags)
+	var updateObj = objets.Objects{
 		Title:      object.Title,
 		Price:      object.Price,
 		Desc:       object.Desc,
 		StatusID:   object.StatusID,
 		CategoryID: object.CategoryID,
-		Tags:       tagIDs,
+		Tags:       object.Tags,
 	}
-	result := o.Db.Model(&object).Updates(updateObj)
+	result := o.Db.Model(&object).Where("id = ?", object.ID).Updates(updateObj)
 	helper.ErrorPanic(result.Error)
 }
 

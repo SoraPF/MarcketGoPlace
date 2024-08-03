@@ -1,26 +1,26 @@
 {% include "partials/head.django" %}
 
 <script>
-    
-    document.addEventListener('DOMContentLoaded', function() {
-        const article = {
-            IdVendeur: {{ Article.IdVendeur }},
-            Title: "{{ Article.Title}}",
-            Price: {{ Article.Price }},
-            Desc: "{{ Article.Desc}}",
-            StatusID: {{ Article.StatusID }},
-            CategoryID: {{ Article.CategoryID }},
-            Tags: [{{ Article.Tags|join:', ' }}],
-        };
+    const article = {
+        IdVendeur: {{ Article.IdVendeur }},
+        Title: "{{ Article.Title }}",
+        Price: {{ Article.Price }},
+        Desc: "{{ Article.Desc }}",
+        StatusID: {{ Article.StatusID }},
+        CategoryID: {{ Article.CategoryID }},
+        Tags: [{% for tag in Article.Tags %}{{ tag }}{% if not forloop.last %}, {% endif %}{% endfor %}]
+    };
 
-        // Remplir les champs du formulaire
+    document.addEventListener('DOMContentLoaded', function() {
+        // Fill in the form fields with the article data
         document.getElementById('userID').value = article.IdVendeur;
         document.getElementById('StatusID').value = article.StatusID;
         document.getElementById('Title').value = article.Title;
         document.getElementById('Price').value = article.Price;
         document.getElementById('Desc').value = article.Desc;
         document.getElementById('categories').value = article.CategoryID;
-        // Remplir les cases à cocher pour les tags
+    
+        // Fill in the checkboxes for tags
         article.Tags.forEach(tag => {
             const checkbox = document.querySelector(`input[name="tags"][value="${tag}"]`);
             if (checkbox) {
@@ -28,88 +28,118 @@
             }
         });
     });
+    
+    async function acceptArticle() {
+        document.getElementById('StatusID').value = 2;
+        const formData = new FormData(document.getElementById('ArticleForm'));
+        const formObject = {};
+        formData.forEach((value, key) => {
+            if (key === 'tags') {
+                if (!formObject[key]) {
+                    formObject[key] = [];
+                }
+                formObject[key].push(parseInt(value));
+            } else {
+                formObject[key] = value;
+            }
+        });
 
-
-
-    async function createArticle() {
-     /*   const response = await fetch('/api/objets/'+article.ID+'/update', {
+        console.log(formData)
+    
+        const response = await fetch('/api/objets/' + {{ Article.ID }} + '/update', {
             method: 'PATCH',
+            body: formData,
+        });
+    
+        const data = await response.json();
+    
+        if (response.ok) {
+            alert("L'article a été Accepter avec succès.");
+            window.location.href = "/new-article/list";
+        } else {
+            alert(data.error);
+        }
+    }
+    
+    async function refuseArticle() {
+        const response = await fetch('/api/objets/' + {{ Article.ID }} + '/delete', {
+            method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ username, email, password, captcha }),
         });
-
+    
         const data = await response.json();
-
+    
         if (response.ok) {
-            
-            window.location.href = /new-article/list;
+            alert("L'article a été refusé avec succès.");
+            window.location.href = "/new-article/list";
         } else {
             alert(data.error);
-        }*/
+        }
     }
-    async function refuseArticle() {
-
-    }
+    
+    
 </script>
-
 <div class="mt-5 sm:mx-auto sm:w-full sm:max-w-sm">
-    <H1>new article</H1>
-    <form id="createArticleForm" class="space-y-4">
+    <h1>Nouvel article</h1>
+    <form id="ArticleForm" class="space-y-4">
         <input id="userID" name="id_vendeur" type="hidden" required>
         <input id="StatusID" name="status_id" type="hidden" required>
+        
         <div>
-            <label for="Title" class="block text-sm font-medium leading-6 text-gray-900">Article title or name</label>
+            <label for="Title" class="block text-sm font-medium leading-6 text-gray-900">Titre ou nom de l'article</label>
             <div class="mt-2">
-                <input id="Title" name="title" type="text" autocomplete="Title" required
-                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                <input id="Title" name="title" type="text" autocomplete="Title" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
             </div>
         </div>
+
         <div>
-            <label for="Price" class="block text-sm font-medium leading-6 text-gray-900">Article Price</label>
+            <label for="Price" class="block text-sm font-medium leading-6 text-gray-900">Prix de l'article</label>
             <div class="mt-2">
-                <input id="Price" name="price" type="number" autocomplete="Price" required
-                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                <input id="Price" name="price" type="number" autocomplete="Price" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
             </div>
         </div>
+
         <div>
-            <label for="Desc" class="block text-sm font-medium leading-6 text-gray-900">Article Description</label>
+            <label for="Desc" class="block text-sm font-medium leading-6 text-gray-900">Description de l'article</label>
             <div class="mt-2">
-                <textarea id="Desc" name="desc" autocomplete="Desc" required
-                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></textarea>
+                <textarea id="Desc" name="desc" autocomplete="Desc" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></textarea>
             </div>
         </div>
+
         <div>
-            <label for="categories" class="block text-sm font-medium leading-6 text-gray-900">Categories</label>
+            <label for="categories" class="block text-sm font-medium leading-6 text-gray-900">Catégories</label>
             <div class="mt-2">
-                <select name="category_id" id="categories" required
-                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                <select name="category_id" id="categories" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                     {% for category in Categories %}
-                        <option value="{{category.ID}}">{{category.Title}}</option>
+                        <option value="{{ category.ID }}">{{ category.Title }}</option>
                     {% endfor %}
                 </select>
             </div>
         </div>
+
         <div>
             <label class="block text-sm font-medium leading-6 text-gray-900">Tags</label>
             <div class="mt-2 grid grid-cols-2 sm:grid-cols-3 gap-4">
                 {% for tag in tags %}
                     <div class="flex items-center">
-                        <input type="checkbox" name="tags" value="{{tag.ID}}" id="tag-{{tag.ID}}" class="mr-2">
-                        <label for="tag-{{tag.ID}}" class="text-gray-700">{{tag.Title}}</label>
+                        <input type="checkbox" name="tags" value="{{ tag.ID }}" id="tag-{{ tag.ID }}" class="mr-2">
+                        <label for="tag-{{ tag.ID }}" class="text-gray-700">{{ tag.Title }}</label>
                     </div>
                 {% endfor %}
             </div>
         </div>
+
         <div>
-            {%for img in article.Img%}
-                <img src="{{img}}" class="w-full border border-primary">
-            {%endfor%}
+            {% for img in article.Img %}
+                <img src="{{ img }}" class="w-full border border-primary">
+            {% endfor %}
         </div>
+
         <div>
-            <button type="button" onclick="acceptArticle()" class="w-full px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-600">Accept Article</button>
-            <button type="button" onclick="refuseArticle()" class="w-full px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-600">refuse Article</button>
+            <button type="button" onclick="acceptArticle()" class="w-full px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-600">Accepter l'article</button>
+            <button type="button" onclick="refuseArticle()" class="w-full px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-600">Refuser l'article</button>
         </div>
     </form>
 </div>

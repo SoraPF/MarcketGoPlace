@@ -28,7 +28,6 @@ func NewObjServiceImpl(objRepository repository.ObjectRepository, validate *vali
 // Create implements ObjService.
 func (o *ObjServiceImpl) Create(object request.CreateObjRequest) {
 	err := o.validate.Struct(object)
-	println("service")
 	helper.ErrorPanic(err)
 
 	var tags []objets.Tags
@@ -117,26 +116,35 @@ func (o *ObjServiceImpl) FindById(objetId int) response.ObjResponse {
 
 // Update implements ObjService.
 func (o *ObjServiceImpl) Update(objet request.UpdateObjRequest) {
-	objData, err := o.ObjRepository.FindById(int(objet.ID))
+	objData, err := o.ObjRepository.FindById(objet.ID)
 	helper.ErrorPanic(err)
 
-	objData.Title = objet.Title
-	objData.Price = objet.Price
-	objData.Desc = objet.Desc
-
-	status, err := o.StatusRepository.FindById(objet.StatusID)
-	helper.ErrorPanic(err)
-	objData.Status = status
-
-	category, err := o.CategoryRepository.FindById(objet.CategoryID)
-	helper.ErrorPanic(err)
-	objData.Category = category
-
-	var tags []objets.Tags
-	for _, tagID := range objet.Tags {
-		tags = append(tags, objets.Tags{ID: tagID})
+	if objet.CategoryID != 0 && uint(objet.CategoryID) != objData.CategoryID {
+		objData.CategoryID = uint(objet.CategoryID)
 	}
-	objData.Tags = tags
+	if objet.IdVendeur != 0 && objet.IdVendeur != objData.IdVendeur {
+		objData.IdVendeur = objet.IdVendeur
+	}
+	if objet.Price != 0 && objet.Price != objData.Price {
+		objData.Price = objet.Price
+	}
+	if objet.StatusID != 0 && uint(objet.StatusID) != objData.StatusID {
+		objData.StatusID = uint(objet.StatusID)
+	}
+	if objet.Title != "" && objet.Title != objData.Title {
+		objData.Title = objet.Title
+	}
+	if objet.Desc != "" && objet.Desc != objData.Desc {
+		objData.Desc = objet.Desc
+	}
+	if objet.Tags != nil {
+		var tags []objets.Tags
+		for _, tagID := range objet.Tags {
+			tags = append(tags, objets.Tags{ID: uint(tagID)})
+		}
+		objData.Tags = tags
+	}
+
 	o.ObjRepository.Update(objData)
 }
 func (o *ObjServiceImpl) ObjByCategID(CID uint) ([]objets.Objects, error) {
