@@ -100,7 +100,7 @@ func (controller *ObjController) ObjCreate(ctx *fiber.Ctx) error {
 	}
 
 	controller.objService.Create(createObjRequest)
-
+	//NotifiedAdminNewArticle(ctx, &req)
 	webResponse := map[string]interface{}{
 		"code":         200,
 		"status":       "ok",
@@ -244,22 +244,6 @@ func (controller *ObjController) GetArticles(CID uint, status string) ([]objets.
 	return Object, nil
 }
 
-func RequestCreateArticle(ctx *fiber.Ctx) error {
-	req := request.CreateObjRequest{}
-	err := ctx.BodyParser(&req)
-	helper.ErrorPanic(err)
-
-	//NotifiedAdminNewArticle(ctx, &req)
-
-	webResponse := map[string]interface{}{
-		"code":         200,
-		"status":       "ok",
-		"message":      "request successful wait until admin accepte!",
-		"redirect_url": "/createOk",
-	}
-	return ctx.Status(fiber.StatusOK).JSON(webResponse)
-}
-
 func (controller *ObjController) AdminResponceNewArticle(ctx *fiber.Ctx) error {
 	req := request.CreateObjRequest{}
 	err := ctx.BodyParser(&req)
@@ -280,6 +264,25 @@ func (controller *ObjController) AdminResponceNewArticle(ctx *fiber.Ctx) error {
 		"code":    200,
 		"status":  "ok",
 		"message": "you successful accepted the article!",
+	}
+	return ctx.Status(fiber.StatusOK).JSON(webResponse)
+}
+
+func (controller *ObjController) FindByName(ctx *fiber.Ctx) error {
+	nameJson := request.FindById{}
+	if err := ctx.BodyParser(&nameJson); err != nil {
+		return ctx.Status(fiber.StatusBadRequest).SendString("body probleme")
+	}
+	name := nameJson.Name
+	objets, err := controller.objService.FindByName(name)
+	if err != nil || objets.ID == 0 {
+		return ctx.Status(fiber.StatusBadRequest).SendString("the article not found")
+	}
+
+	webResponse := map[string]interface{}{
+		"code":    200,
+		"status":  "ok",
+		"article": objets,
 	}
 	return ctx.Status(fiber.StatusOK).JSON(webResponse)
 }

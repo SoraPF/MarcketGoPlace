@@ -51,3 +51,33 @@ socket.onmessage = function(event) {
 socket.onopen = function(event) { console.log('WebSocket connection established.'); };
 
 socket.onclose = function(event) { console.log('WebSocket connection closed.'); };
+
+async function searchBar() {
+    const searching = document.getElementById('search').value;
+    console.log("searching bar say:", searching);
+
+    try {
+        const response = await fetch('/api/article/by-name', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ 'name': searching })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            if(data.article.StatusID == 1){
+                alert("l'article du même nom n'a pas encore etais verifier")    
+            }else{
+                window.location.href = "/article/" + data.article.ID;
+            }
+        } else {
+            alert(data.error);
+        }
+    } catch (error) {
+        console.error("Erreur lors de la recherche de l'article:", error);
+        alert("Une erreur est survenue. Veuillez réessayer plus tard.");
+    }
+}

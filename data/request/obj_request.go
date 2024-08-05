@@ -21,3 +21,7 @@ type UpdateObjRequest struct {
 	CategoryID int    `json:"category_id"`
 	Tags       []int  `json:"tags"`
 }
+
+type FindById struct {
+	Name string `json:name`
+}

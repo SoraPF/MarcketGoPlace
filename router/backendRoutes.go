@@ -20,6 +20,7 @@ func Authentification(userController *controller.UserController, ObjController *
 	router.Post("/validate-2fa/:id", userController.GetValidate2FA)
 	//router.Post("/articles/create", controller.RequestCreateArticle)
 	router.Post("/articles/verify", ObjController.AdminResponceNewArticle)
+	router.Post("/article/by-name", ObjController.FindByName)
 
 	return router
 }

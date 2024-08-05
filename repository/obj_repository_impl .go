@@ -53,7 +53,6 @@ func (o *ObjRepositoryImpl) Save(object objets.Objects) {
 
 // Update implements ObjectRepository.
 func (o *ObjRepositoryImpl) Update(object objets.Objects) {
-	log.Printf("values - id_vendeur: %s, status_id: %s, title: %s, price: %s, desc: %s, category_id: %s, tags: %s", object.IdVendeur, object.StatusID, object.Title, object.Price, object.Desc, object.CategoryID, object.Tags)
 	var updateObj = objets.Objects{
 		Title:      object.Title,
 		Price:      object.Price,
@@ -63,6 +62,7 @@ func (o *ObjRepositoryImpl) Update(object objets.Objects) {
 		Tags:       object.Tags,
 	}
 	result := o.Db.Model(&object).Where("id = ?", object.ID).Updates(updateObj)
+	log.Printf("values - id_vendeur: %s, status_id: %s, title: %s, price: %s, desc: %s, category_id: %s, tags: %s", object.IdVendeur, object.StatusID, object.Title, object.Price, object.Desc, object.CategoryID, object.Tags)
 	helper.ErrorPanic(result.Error)
 }
 
@@ -105,6 +105,18 @@ func (o *ObjRepositoryImpl) GetArticles(CID uint, status string) ([]objets.Objec
 	}
 	if result.Error != nil {
 		return obj, result.Error
+	}
+	return obj, nil
+}
+
+func (o *ObjRepositoryImpl) FindByName(name string) (objets.Objects, error) {
+	var obj objets.Objects
+	var result *gorm.DB
+	println(name)
+	result = o.Db.Where("objects.title = ?", name).Find(&obj)
+
+	if result.Error != nil {
+		return objets.Objects{}, result.Error
 	}
 	return obj, nil
 }

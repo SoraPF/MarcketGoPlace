@@ -171,3 +171,12 @@ func (o *ObjServiceImpl) GetArticles(CID uint, status string) ([]objets.Objects,
 	}
 	return Object, nil
 }
+
+func (o *ObjServiceImpl) FindByName(name string) (objets.Objects, error) {
+
+	objets, err := o.ObjRepository.FindByName(name)
+	if err != nil {
+		return objets, err
+	}
+	return objets, nil
+}
