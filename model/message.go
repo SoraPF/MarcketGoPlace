@@ -24,7 +24,7 @@ type Conversation struct {
 }
 type JConversation struct {
 	ID   int
-	Name string `gorm:"not null" json:"name"`
+	Name string `json:"name"`
 }
 
 type Participant struct {

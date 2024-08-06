@@ -33,6 +33,9 @@ func AutoMigrate(DB *gorm.DB) error {
 		&objets.Statuses{},
 		&objets.Tags{},
 		&objets.Objects{},
+		&model.Conversation{},
+		&model.Message{},
+		&model.Participant{},
 	); err != nil {
 		return err
 	}
