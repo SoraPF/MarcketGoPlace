@@ -42,7 +42,7 @@
             <div id="notification-container"></div>
             
             <a href="/login" class="text-gray-200 hover:text-white transition" style="display: block;" id="login"> Login </a>
-            <a class="text-gray-200 hover:text-white transition" style="display: none;" id="logout"> logout </a>
+            <a class="text-gray-200 hover:text-white transition cursor" style="display: none;" id="logout" onclick="logout()"> logout </a>
         </div>
     </div>
 </nav>
