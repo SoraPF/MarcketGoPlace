@@ -13,6 +13,7 @@ func Authentification(userController *controller.UserController, ObjController *
 		router.Post("/login", userController.Login)
 		router.Post("/register", userController.UserCreate)
 		router.Get("/isLogin", controller.IsLogin)
+		router.Get("/logout", userController.Logout)
 	})
 
 	router.Get("/captcha", controller.Captcha)

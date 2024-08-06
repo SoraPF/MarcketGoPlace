@@ -40,8 +40,9 @@
 
             <div id="image-container"></div>
             <div id="notification-container"></div>
-
-            <a href="/login" class="text-gray-200 hover:text-white transition"> Login </a>
+            
+            <a href="/login" class="text-gray-200 hover:text-white transition" style="display: block;" id="login"> Login </a>
+            <a class="text-gray-200 hover:text-white transition" style="display: none;" id="logout"> logout </a>
         </div>
     </div>
 </nav>

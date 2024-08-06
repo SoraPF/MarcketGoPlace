@@ -10,7 +10,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             },
         });
         if (response.ok) {
+            console.log("test")
             document.getElementById('createArticle').style.display = 'block';
+            document.getElementById('login').style.display = 'none';
+            document.getElementById('logout').style.display = 'block';
         } else {
             console.error('Error:', data.message);
             document.getElementById('createArticle').style.display = 'none';
@@ -51,6 +54,21 @@ socket.onmessage = function(event) {
 socket.onopen = function(event) { console.log('WebSocket connection established.'); };
 
 socket.onclose = function(event) { console.log('WebSocket connection closed.'); };
+
+async function logout(){
+    try {
+        const response = await fetch("/logout",{
+            method: 'GET'
+        });
+        if (response.ok){
+            document.getElementById('login').style.display = 'block';
+            document.getElementById('logout').style.display = 'none';
+        }
+    }catch (error) {
+        console.error("Erreur lors de la déconnexion:", error);
+        alert("Une erreur est survenue. Veuillez réessayer plus tard.");
+    }
+}
 
 async function searchBar() {
     const searching = document.getElementById('search').value;

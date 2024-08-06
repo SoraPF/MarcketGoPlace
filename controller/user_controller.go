@@ -342,3 +342,17 @@ func IsLogin(c *fiber.Ctx) error {
 	println("no error")
 	return c.SendStatus(fiber.StatusOK)
 }
+
+func (uc *UserController) Logout(c *fiber.Ctx) error {
+	c.Cookie(&fiber.Cookie{
+		Name:    "captcha",
+		Expires: time.Unix(0, 0),
+		MaxAge:  -1,
+	})
+	c.Cookie(&fiber.Cookie{
+		Name:    "jwt",
+		Expires: time.Unix(0, 0),
+		MaxAge:  -1,
+	})
+	return c.SendStatus(fiber.StatusOK)
+}
