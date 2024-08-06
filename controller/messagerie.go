@@ -2,6 +2,7 @@ package controller
 
 import (
 	"Marcketplace/data/response"
+	"Marcketplace/helper"
 	"Marcketplace/model"
 	"Marcketplace/services"
 	"strconv"
@@ -13,8 +14,12 @@ type MessageController struct {
 	ms services.MessageService
 }
 
+func NewMessController(service services.MessageService) *MessageController {
+	return &MessageController{ms: service}
+}
+
 func (mc MessageController) CreateConversation(c *fiber.Ctx) error {
-	var convo model.Conversation
+	var convo model.JConversation
 	if err := c.BodyParser(&convo); err != nil {
 		return c.Status(fiber.StatusBadRequest).SendString("the body wasnt correct")
 	}
@@ -30,7 +35,7 @@ func (mc MessageController) CreateConversation(c *fiber.Ctx) error {
 	}
 	return c.Status(fiber.StatusCreated).JSON(webResponse)
 }
-func (mc MessageController) supprimerConversation(c *fiber.Ctx) error {
+func (mc MessageController) SupprimerConversation(c *fiber.Ctx) error {
 	type Conv struct {
 		ID int `json:"id"`
 	}
@@ -51,8 +56,8 @@ func (mc MessageController) supprimerConversation(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusCreated).JSON(webResponse)
 }
 
-func (mc MessageController) sendMessage(c *fiber.Ctx) error {
-	var newMessage model.Message
+func (mc MessageController) SendMessage(c *fiber.Ctx) error {
+	var newMessage model.JMessage
 	if err := c.BodyParser(&newMessage); err != nil {
 		return c.Status(fiber.StatusBadRequest).SendString("the body wasnt correct")
 	}
@@ -61,7 +66,9 @@ func (mc MessageController) sendMessage(c *fiber.Ctx) error {
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).SendString("insternal error the conversation couldnt be created")
 	}
+
 	/*ajouter la parti notification*/
+
 	webResponse := response.Response{
 		Code:    200,
 		Status:  "ok",
@@ -77,6 +84,7 @@ func (mc MessageController) GetMessageFromConversation(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).SendString("no such conversation")
 	}
 	idInt, err := strconv.Atoi(id)
+	helper.ErrorPanic(err)
 	messages, err := mc.ms.GetMessageFromConversation(idInt)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).SendString("didnt find conversation")

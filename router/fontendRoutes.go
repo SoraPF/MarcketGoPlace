@@ -150,3 +150,16 @@ func Robject(ObjController *controller.ObjController, categories []response.Cate
 	})
 	return router
 }
+
+func FrontMessenger(mc *controller.MessageController) *fiber.App {
+	router := fiber.New()
+
+	router.Get("/message/:id", func(c *fiber.Ctx) error {
+		mc.GetMessageFromConversation(c)
+		return c.Render("messenger", fiber.Map{
+			"Title": "messenger",
+		})
+	})
+
+	return router
+}

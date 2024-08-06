@@ -6,7 +6,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func Authentification(userController *controller.UserController, ObjController *controller.ObjController) *fiber.App {
+func BackendRoutes(userController *controller.UserController, ObjController *controller.ObjController, messController *controller.MessageController) *fiber.App {
 	router := fiber.New()
 
 	router.Route("/authent", func(router fiber.Router) {
@@ -22,6 +22,12 @@ func Authentification(userController *controller.UserController, ObjController *
 	//router.Post("/articles/create", controller.RequestCreateArticle)
 	router.Post("/articles/verify", ObjController.AdminResponceNewArticle)
 	router.Post("/article/by-name", ObjController.FindByName)
+
+	router.Route("/messenger", func(router fiber.Router) {
+		router.Post("/create", messController.CreateConversation)
+		router.Post("/delete", messController.SupprimerConversation)
+		router.Post("/newMesage", messController.SendMessage)
+	})
 
 	return router
 }

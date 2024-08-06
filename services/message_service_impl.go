@@ -20,8 +20,11 @@ func NewMesServiceImpl(MessageRepository repository.MessageRepository, validate 
 }
 
 // createConversation implements MessageService.
-func (m *MsessageImp) CreateConversation(convo model.Conversation) error {
-	err := m.MessageRepository.CreateConversation(convo)
+func (m *MsessageImp) CreateConversation(convo model.JConversation) error {
+	conv := model.Conversation{
+		Name: convo.Name,
+	}
+	err := m.MessageRepository.CreateConversation(conv)
 	if err != nil {
 		return err
 	}
@@ -38,8 +41,13 @@ func (m *MsessageImp) SupprimerConversation(convoID int) error {
 }
 
 // sendMessage implements MessageService.
-func (m *MsessageImp) SendMessage(message model.Message) error {
-	err := m.MessageRepository.SendMessage(message)
+func (m *MsessageImp) SendMessage(message model.JMessage) error {
+	mess := model.Message{
+		ConversationID: uint(message.ConversationID),
+		SenderID:       uint(message.SenderID),
+		Content:        message.Content,
+	}
+	err := m.MessageRepository.SendMessage(mess)
 	if err != nil {
 		return err
 	}

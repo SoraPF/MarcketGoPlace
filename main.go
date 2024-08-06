@@ -68,6 +68,11 @@ func main() {
 	userCon := controller.NewuserController(userServ)
 	userRoutes := router.UserRoute(userCon)
 
+	messRepo := repository.NewMessageRepositoryImpl(db)
+	messServ := services.NewMesServiceImpl(messRepo, validate)
+	messCon := controller.NewMessController(messServ)
+	//objRoutes := router.ObjRoute(objCon)
+
 	categories, err := eCon.GetCategories()
 	if err != nil {
 		log.Fatal("Failed to catch", err)
@@ -101,7 +106,7 @@ func main() {
 	api := app.Group("/api")
 	api.Mount("/", objRoutes)
 	api.Mount("/", userRoutes)
-	api.Mount("/", router.Authentification(userCon, objCon))
+	api.Mount("/", router.BackendRoutes(userCon, objCon, messCon))
 
 	// Lancer l'application sur le port 3000
 	log.Fatal(app.Listen(":3000"))
