@@ -12,10 +12,19 @@ type Message struct {
 	Sender         entities.User `gorm:"foreignKey:SenderID"`
 	Content        string        `gorm:"not null" json:"Content"`
 }
+type JMessage struct {
+	ConversationID int    `gorm:"not null" json:"ConversationID"`
+	SenderID       int    `gorm:"not null" json:"SenderID"`
+	Content        string `gorm:"not null" json:"Content"`
+}
 
 type Conversation struct {
 	ID   uint   `gorm:"primaryKey;autoIncrement"`
 	Name string `gorm:"not null"`
+}
+type JConversation struct {
+	ID   int
+	Name string `gorm:"not null" json:"name"`
 }
 
 type Participant struct {

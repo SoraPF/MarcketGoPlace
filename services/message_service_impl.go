@@ -20,31 +20,47 @@ func NewMesServiceImpl(MessageRepository repository.MessageRepository, validate 
 }
 
 // createConversation implements MessageService.
-func (m *MsessageImp) CreateConversation(convo model.Conversation) {
-	if convo.Name != "" {
-		m.MessageRepository.CreateConversation(convo)
+func (m *MsessageImp) CreateConversation(convo model.Conversation) error {
+	err := m.MessageRepository.CreateConversation(convo)
+	if err != nil {
+		return err
 	}
+	return nil
 }
 
 // supprimerConversation implements MessageService.
-func (m *MsessageImp) SupprimerConversation(convoID int) {
-	if convoID != 0 {
-		m.MessageRepository.SupprimerConversation(uint(convoID))
+func (m *MsessageImp) SupprimerConversation(convoID int) error {
+	err := m.MessageRepository.SupprimerConversation(uint(convoID))
+	if err != nil {
+		return err
 	}
+	return nil
 }
 
 // sendMessage implements MessageService.
-func (m *MsessageImp) SendMessage(message model.Message) {
-	if message.ConversationID != 0 && message.SenderID != 0 && message.Conversation.ID != 0 {
-		m.MessageRepository.SendMessage(message)
+func (m *MsessageImp) SendMessage(message model.Message) error {
+	err := m.MessageRepository.SendMessage(message)
+	if err != nil {
+		return err
 	}
+	return nil
 }
 
 // GetMessageFromConversation implements MessageService.
-func (m *MsessageImp) GetMessageFromConversation(convoID int) []model.Message {
-	var messages []model.Message
-	if convoID != 0 {
-		messages = m.MessageRepository.GetMessageFromConversation(uint(convoID))
+func (m *MsessageImp) GetMessageFromConversation(convoID int) ([]model.JMessage, error) {
+	messages, err := m.MessageRepository.GetMessageFromConversation(uint(convoID))
+	if err != nil {
+		return nil, err
 	}
-	return messages
+	var jmessages []model.JMessage
+	for _, message := range messages {
+		mess := model.JMessage{
+			ConversationID: int(message.ConversationID),
+			SenderID:       int(message.SenderID),
+			Content:        message.Content,
+		}
+		jmessages = append(jmessages, mess)
+	}
+
+	return jmessages, nil
 }

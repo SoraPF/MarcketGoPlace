@@ -16,28 +16,43 @@ func NewMessageRepositoryImpl(Db *gorm.DB) MessageRepository {
 }
 
 // CreateConversation implements MessageRepository.
-func (m *MessageRepositoryImpl) CreateConversation(convo model.Conversation) {
+func (m *MessageRepositoryImpl) CreateConversation(convo model.Conversation) error {
 	result := m.Db.Create(&convo)
-	helper.ErrorPanic(result.Error)
+	if result.Error != nil {
+		helper.ErrorPanic(result.Error)
+		return result.Error
+	}
+	return nil
 }
 
 // SupprimerConversation implements MessageRepository.
-func (m *MessageRepositoryImpl) SupprimerConversation(convoID uint) {
+func (m *MessageRepositoryImpl) SupprimerConversation(convoID uint) error {
 	var convo model.Conversation
 	result := m.Db.Where("id = ? ", convoID).Delete(&convo)
-	helper.ErrorPanic(result.Error)
+	if result.Error != nil {
+		helper.ErrorPanic(result.Error)
+		return result.Error
+	}
+	return nil
 }
 
 // SendMessage implements MessageRepository.
-func (m *MessageRepositoryImpl) SendMessage(message model.Message) {
+func (m *MessageRepositoryImpl) SendMessage(message model.Message) error {
 	result := m.Db.Create(&message)
-	helper.ErrorPanic(result.Error)
+	if result.Error != nil {
+		helper.ErrorPanic(result.Error)
+		return result.Error
+	}
+	return nil
 }
 
 // GetMessageFromConversation implements MessageRepository.
-func (m *MessageRepositoryImpl) GetMessageFromConversation(convoID uint) []model.Message {
+func (m *MessageRepositoryImpl) GetMessageFromConversation(convoID uint) ([]model.Message, error) {
 	var messages []model.Message
 	result := m.Db.Where("id = ?", convoID).Find(&messages)
-	helper.ErrorPanic(result.Error)
-	return messages
+	if result.Error != nil {
+		helper.ErrorPanic(result.Error)
+		return messages, result.Error
+	}
+	return messages, nil
 }
