@@ -65,6 +65,6 @@ func NotifiedUserNewArticle(ctx *fiber.Ctx, req *request.CreateObjRequest) error
 }
 
 func messageNotification(ctx *fiber.Ctx, userNotified uint) error {
-	//la fonction doi prevenir les participant d'un tout nouveau message
+	//la fonction doit prevenir les participant d'un tout nouveau message
 
 }

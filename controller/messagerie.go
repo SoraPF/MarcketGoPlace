@@ -12,7 +12,7 @@ func CreateConversation(c *fiber.Ctx) error {
 	if err := c.BodyParser(&convo); err != nil {
 		return c.Status(fiber.StatusBadRequest).SendString("the body wasnt correct")
 	}
-	conv, err := controller.service.createConversation() //need a modification and shoul be created service
+	conv, err := controller.service.createConversation(convo) //need a modification and shoul be created service
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).SendString("insternal error the conversation couldnt be created")
 	}
