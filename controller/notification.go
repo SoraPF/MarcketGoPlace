@@ -63,3 +63,8 @@ func NotifiedUserNewArticle(ctx *fiber.Ctx, req *request.CreateObjRequest) error
 
 	return ctx.SendStatus(fiber.StatusOK)
 }
+
+func messageNotification(ctx *fiber.Ctx, userNotified uint) error {
+	//la fonction doi prevenir les participant d'un tout nouveau message
+
+}

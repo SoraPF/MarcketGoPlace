@@ -1,14 +1,16 @@
 package model
 
-import "Marcketplace/model/entities"
+import (
+	"Marcketplace/model/entities"
+)
 
-type Messages struct {
-	ID              uint          `gorm:"primaryKey;autoIncrement"`
-	Conversation_id uint          `gorm:"not null"`
-	Conversation    Conversation  `gorm:"foreignKey:Userid"`
-	Sender_id       uint          `gorm:"not null"`
-	Sender          entities.User `gorm:"foreignKey:Userid"`
-	Content         string        `gorm:"not null"`
+type Message struct {
+	ID             uint          `gorm:"primaryKey;autoIncrement"`
+	ConversationID uint          `gorm:"not null" json:"ConversationID"`
+	Conversation   Conversation  `gorm:"foreignKey:ConversationID"`
+	SenderID       uint          `gorm:"not null" json:"SenderID"`
+	Sender         entities.User `gorm:"foreignKey:SenderID"`
+	Content        string        `gorm:"not null" json:"Content"`
 }
 
 type Conversation struct {
@@ -17,9 +19,9 @@ type Conversation struct {
 }
 
 type Participant struct {
-	ID              uint          `gorm:"primaryKey;autoIncrement"`
-	Conversation_id uint          `gorm:"not null"`
-	Conversation    Conversation  `gorm:"foreignKey:Userid"`
-	User_id         uint          `gorm:"not null"`
-	User            entities.User `gorm:"foreignKey:Userid"`
+	ID             uint          `gorm:"primaryKey;autoIncrement"`
+	ConversationID uint          `gorm:"not null"`
+	Conversation   Conversation  `gorm:"foreignKey:ConversationID"`
+	UserID         uint          `gorm:"not null"`
+	User           entities.User `gorm:"foreignKey:UserID"`
 }
