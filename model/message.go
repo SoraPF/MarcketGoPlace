@@ -42,3 +42,9 @@ type Participant struct {
 	UserID         uint          `gorm:"not null"`
 	User           entities.User `gorm:"foreignKey:UserID"`
 }
+
+type Checkids struct {
+	UserID   int    `json:"UserID"`
+	SellerID int    `json:"SellerID"`
+	Name     string `json:"Name"`
+}

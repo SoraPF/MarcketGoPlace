@@ -3,6 +3,7 @@ package services
 import (
 	"Marcketplace/model"
 	"Marcketplace/repository"
+	"errors"
 
 	"github.com/go-playground/validator/v10"
 )
@@ -71,4 +72,22 @@ func (m *MsessageImp) GetMessageFromConversation(convoID int) ([]model.JMessage,
 	}
 
 	return jmessages, nil
+}
+
+func (m *MsessageImp) checkMessenger(checks model.Checkids) error {
+
+	conversation := m.MessageRepository.FindConversationByName(checks.Name)
+	cpt := 0
+	for _, user := range conversation.UserIDs {
+		if user == checks.SellerID || user == checks.UserID {
+			cpt++
+		}
+	}
+	if cpt < 2 {
+		var err error
+		err = errors.New("pas trouver")
+		return err
+	}
+
+	return nil
 }

@@ -7,6 +7,6 @@ type MessageRepository interface {
 	SupprimerConversation(convoID uint) error
 
 	SendMessage(message model.Message) error
-
 	GetMessageFromConversation(convoID uint) ([]model.Message, error)
+	FindConversationByName(name string) (model.Conversation, error)
 }

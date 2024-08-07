@@ -36,6 +36,16 @@ func (m *MessageRepositoryImpl) SupprimerConversation(convoID uint) error {
 	return nil
 }
 
+func (m *MessageRepositoryImpl) FindConversationByName(name string) (model.Conversation, error) {
+	var convo model.Conversation
+	result := m.Db.Where("name = ? ", name).Find(&convo)
+	if result.Error != nil {
+		helper.ErrorPanic(result.Error)
+		return convo, result.Error
+	}
+	return convo, nil
+}
+
 // SendMessage implements MessageRepository.
 func (m *MessageRepositoryImpl) SendMessage(message model.Message) error {
 	result := m.Db.Create(&message)

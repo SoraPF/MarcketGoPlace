@@ -112,3 +112,24 @@ func (mc MessageController) GetMessagesFromConversation(c *fiber.Ctx) error {
 	}
 	return c.Status(fiber.StatusOK).JSON(webResponse)
 }
+
+func (mc MessageController) CheckMessenger(c *fiber.Ctx) error {
+
+	var newMessage model.Checkids
+	if err := c.BodyParser(&newMessage); err != nil {
+		return c.Status(fiber.StatusBadRequest).SendString("the body wasnt correct")
+	}
+
+	err := mc.ms.CheckMessenger(newMessage) //need a modification and shoul be created service
+	if err != nil {
+		return c.Status(fiber.StatusNotFound).SendString("Internal error the conversation couldnt be created")
+	}
+
+	webResponse := response.Response{
+		Code:    200,
+		Status:  "ok",
+		Message: "Successfully delete notes data!",
+	}
+	return c.Status(fiber.StatusCreated).JSON(webResponse)
+
+}

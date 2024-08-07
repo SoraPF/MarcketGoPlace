@@ -9,4 +9,6 @@ type MessageService interface {
 	SendMessage(message model.JMessage) error
 
 	GetMessageFromConversation(convoID int) ([]model.JMessage, error)
+
+	CheckMessenger(ids model.Checkids) error
 }

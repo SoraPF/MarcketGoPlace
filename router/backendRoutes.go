@@ -26,6 +26,8 @@ func BackendRoutes(userController *controller.UserController, ObjController *con
 		router.Post("/create", messController.CreateConversation)
 		router.Post("/delete", messController.SupprimerConversation)
 		router.Post("/newMesage", messController.SendMessage)
+		router.Post("/check", messController.CheckMessenger)
+
 		//router.Get("/getmessages/:id", messController.GetMessagesFromConversation)
 	})
 
