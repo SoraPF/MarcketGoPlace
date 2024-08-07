@@ -3,7 +3,7 @@ package services
 import "Marcketplace/model"
 
 type MessageService interface {
-	CreateConversation(convo model.JConversation) error
+	CreateConversation(convo model.JConversation) (uint, error)
 	SupprimerConversation(convoID int) error
 
 	SendMessage(message model.JMessage) error

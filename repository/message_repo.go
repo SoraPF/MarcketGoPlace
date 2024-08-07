@@ -3,7 +3,7 @@ package repository
 import "Marcketplace/model"
 
 type MessageRepository interface {
-	CreateConversation(convo model.Conversation) error
+	CreateConversation(convo model.Conversation) (uint, error)
 	SupprimerConversation(convoID uint) error
 
 	SendMessage(message model.Message) error

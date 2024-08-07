@@ -5,6 +5,7 @@ import (
 	"Marcketplace/helper"
 	"Marcketplace/model"
 	"Marcketplace/services"
+	"log"
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
@@ -23,15 +24,16 @@ func (mc MessageController) CreateConversation(c *fiber.Ctx) error {
 	if err := c.BodyParser(&convo); err != nil {
 		return c.Status(fiber.StatusBadRequest).SendString("the body wasnt correct")
 	}
-	err := mc.ms.CreateConversation(convo) //need a modification and shoul be created service
+	id, err := mc.ms.CreateConversation(convo) //need a modification and shoul be created service
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).SendString("insternal error the conversation couldnt be created")
 	}
 
-	webResponse := response.Response{
-		Code:    200,
-		Status:  "ok",
-		Message: "Successfully delete notes data!",
+	webResponse := map[string]interface{}{
+		"code":    200,
+		"status":  "ok",
+		"message": "Login successful!",
+		"id":      id, // Notez qu'on retourne le token sous forme de string
 	}
 	return c.Status(fiber.StatusCreated).JSON(webResponse)
 }
@@ -78,18 +80,20 @@ func (mc MessageController) SendMessage(c *fiber.Ctx) error {
 
 }
 
-func (mc MessageController) GetMessageFromConversation(c *fiber.Ctx) []model.JMessage {
+func (mc MessageController) GetMessageFromConversation(c *fiber.Ctx) ([]model.JMessage, error) {
 	id := c.Params("id")
 	if id == "" {
-		return nil
+		return nil, nil
 	}
 	idInt, err := strconv.Atoi(id)
-	helper.ErrorPanic(err)
+	if id == "" {
+		return nil, err
+	}
 	messages, err := mc.ms.GetMessageFromConversation(idInt)
 	if err != nil {
-		return nil
+		return nil, err
 	}
-	return messages
+	return messages, nil
 }
 
 func (mc MessageController) GetMessagesFromConversation(c *fiber.Ctx) error {
@@ -117,6 +121,7 @@ func (mc MessageController) CheckMessenger(c *fiber.Ctx) error {
 
 	var newMessage model.Checkids
 	if err := c.BodyParser(&newMessage); err != nil {
+		log.Printf("Error parsing body: %v", err)
 		return c.Status(fiber.StatusBadRequest).SendString("the body wasnt correct")
 	}
 
@@ -125,7 +130,13 @@ func (mc MessageController) CheckMessenger(c *fiber.Ctx) error {
 		if err.Error() == "pas trouver" {
 			return c.Status(fiber.StatusInternalServerError).SendString("le nom existe mais ce nest pas les bon utilisateur")
 		}
-		return c.Status(fiber.StatusNotFound).SendString("peut etre creer")
+		webResponse := map[string]interface{}{
+			"code":    200,
+			"status":  "ok",
+			"message": "Login successful!",
+			"text":    "can be created",
+		}
+		return c.Status(fiber.StatusOK).JSON(webResponse)
 	}
 
 	webResponse := map[string]interface{}{

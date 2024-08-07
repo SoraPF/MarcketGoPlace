@@ -16,13 +16,13 @@ func NewMessageRepositoryImpl(Db *gorm.DB) MessageRepository {
 }
 
 // CreateConversation implements MessageRepository.
-func (m *MessageRepositoryImpl) CreateConversation(convo model.Conversation) error {
+func (m *MessageRepositoryImpl) CreateConversation(convo model.Conversation) (uint, error) {
 	result := m.Db.Create(&convo)
 	if result.Error != nil {
 		helper.ErrorPanic(result.Error)
-		return result.Error
+		return 0, result.Error
 	}
-	return nil
+	return convo.ID, nil
 }
 
 // SupprimerConversation implements MessageRepository.

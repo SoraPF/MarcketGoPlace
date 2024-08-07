@@ -21,15 +21,17 @@ func NewMesServiceImpl(MessageRepository repository.MessageRepository, validate 
 }
 
 // createConversation implements MessageService.
-func (m *MsessageImp) CreateConversation(convo model.JConversation) error {
+func (m *MsessageImp) CreateConversation(convo model.JConversation) (uint, error) {
 	conv := model.Conversation{
-		Name: convo.Name,
+		Name:   convo.Name,
+		Seller: uint(convo.SellerID),
+		Buyer:  uint(convo.BuyerID),
 	}
-	err := m.MessageRepository.CreateConversation(conv)
+	id, err := m.MessageRepository.CreateConversation(conv)
 	if err != nil {
-		return err
+		return 0, err
 	}
-	return nil
+	return id, nil
 }
 
 // supprimerConversation implements MessageService.
@@ -80,13 +82,8 @@ func (m *MsessageImp) CheckMessenger(checks model.Checkids) (uint, error) {
 	if err != nil {
 		return 0, errors.New("pas trouver")
 	}
-	cpt := 0
-	for _, user := range conversation.UserIDs {
-		if int(user) == checks.SellerID || int(user) == checks.UserID {
-			cpt++
-		}
-	}
-	if cpt < 2 {
+	println("trouver")
+	if int(conversation.Seller) != checks.SellerID && int(conversation.Buyer) != checks.BuyerID {
 		return 0, errors.New("le nom existe mais ce nest pas les bon utilisateur")
 	}
 

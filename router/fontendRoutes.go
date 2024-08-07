@@ -156,8 +156,8 @@ func FrontMessenger(mc *controller.MessageController) *fiber.App {
 
 	router.Get("/message/:id", func(c *fiber.Ctx) error {
 
-		conv := mc.GetMessageFromConversation(c)
-		if conv == nil {
+		conv, err := mc.GetMessageFromConversation(c)
+		if err != nil {
 			erreur := "Il y a eu un problème lord de la vérification! veuillez réeseyer ultérieurement"
 			return c.Render("messenger", fiber.Map{
 				"Title":         "messenger",

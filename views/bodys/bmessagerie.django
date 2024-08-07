@@ -14,7 +14,7 @@
             "SenderID": parseInt(sender,10),
             "Content": content
         };
-        console.error(data)
+        console.log(data)
 
         const response = await fetch('/api/messenger/newMesage', {
             method: 'POST',

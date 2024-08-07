@@ -47,7 +47,7 @@
                     class="bg-primary border border-primary text-white px-8 py-2 font-medium rounded uppercase flex items-center gap-2 hover:bg-transparent hover:text-primary transition">
                     <i class="fa-solid fa-bag-shopping"></i> Add to cart
                 </a>
-                <button onclick="createConversation()"
+                <button onclick="checkiscreated()"
                     class="border border-gray-300 text-gray-600 px-8 py-2 font-medium rounded uppercase flex items-center gap-2 hover:text-primary transition">
                     <i class="fa-solid fa-heart">Message</i>
             </button>
@@ -66,55 +66,54 @@
     
 <script>
     //verifi si deja creer entre les 2 utilisateur sinon retourner vers la page de messagerie
-    async function checkiscreated(){
-        
+    async function checkiscreated(){        
         const userID = document.cookie.split('; ').find(row => row.startsWith('user_id=')).split('=')[1];
-        const sellerID = {{article.IdVendeur}}
-        const name = "tchat between seller" + sellerID + "and" + userID + "the article {{article.Title}}"
+        const sellerID = {{article.IdVendeur}};
+        const name = "tchat between seller" + sellerID + "and" + userID + "the article {{article.Title}}";
         const data = {
-            "UserID":   parseInt(userID,10),
-            "SellerID": parseInt(sellerID,10),
+            "BuyerID": parseInt(userID, 10),
+            "SellerID": parseInt(sellerID, 10),
             "Name": name,
         };
+        
+        
         console.log(data)
         const response = await fetch('/api/messenger/check', {
             method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
             body:  JSON.stringify(data),
         });
+        
+        const jdata = await response.json();
 
-        const data = await response.json();
+        if (response.ok) {
+            if(jdata.text){
+                createConversation(data);
+            }else{
+                window.location.href = `/message/${jdata.conversationID}`;
+            }
+        } else {
+            alert("Un problème est survenu lors de la vérification de la conversation");
+        }
+    }
 
+    async function createConversation(data){
+        const response = await fetch('/api/messenger/create', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body:  JSON.stringify(data),
+        });
+            
+        const jdata = await response.json();
         if(response.ok){
-            window.location.href = "/message/"+ data.conversationID
-
-        }else if(response.NotFound){
-            createConversation();
+            window.location.href = "/message/"+ jdata.conversationID
         }else{
             alert("un problème est survenue lord de la création de conversation")
         }
-    }
-    async function createConversation(){
-        const userID = document.cookie.split('; ').find(row => row.startsWith('user_id=')).split('=')[1];
-        const sellerID = {{article.IdVendeur}}
-        const name = "tchat between seller" + sellerID + "and" + userID + "the article {{article.Title}}"
-        
-        const data = {
-            "UserIDs" : [parseInt(userID,10),parseInt(sellerID,10)],
-            "Name": name,
-        };
-        console.log(data)
-        /*
-        const response = await fetch('/api/messenger/create', {
-            method: 'POST',
-            body:  JSON.stringify(data),
-        });
-        
-        if(response.ok){
-
-        }else{
-
-        }
-        */
 
     }
 </script>
