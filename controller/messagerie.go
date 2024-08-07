@@ -125,7 +125,7 @@ func (mc MessageController) CheckMessenger(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).SendString("the body wasnt correct")
 	}
 
-	conversationID, err := mc.ms.CheckMessenger(newMessage) //need a modification and shoul be created service
+	conversationID, err := mc.ms.CheckMessenger(newMessage)
 	if err != nil {
 		if err.Error() == "pas trouver" {
 			return c.Status(fiber.StatusInternalServerError).SendString("le nom existe mais ce nest pas les bon utilisateur")

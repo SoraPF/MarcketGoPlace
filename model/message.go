@@ -15,11 +15,6 @@ type Message struct {
 	Sender         entities.User `gorm:"foreignKey:SenderID"`
 	Content        string        `gorm:"not null" json:"Content"`
 }
-type JMessage struct {
-	ConversationID int    `gorm:"not null" json:"ConversationID"`
-	SenderID       int    `gorm:"not null" json:"SenderID"`
-	Content        string `gorm:"not null" json:"Content"`
-}
 
 type Conversation struct {
 	gorm.Model
@@ -27,13 +22,6 @@ type Conversation struct {
 	Name   string `gorm:"not null"`
 	Seller uint   `gorm:"not null"`
 	Buyer  uint   `gorm:"not null"`
-}
-
-type JConversation struct {
-	ID       int
-	Name     string `json:"Name"`
-	SellerID int    `json:"SellerID"`
-	BuyerID  int    `json:"BuyerID"`
 }
 
 type Participant struct {
@@ -45,8 +33,21 @@ type Participant struct {
 	User           entities.User `gorm:"foreignKey:UserID"`
 }
 
-type Checkids struct {
+type JMessage struct {
+	ConversationID int    `gorm:"not null" json:"ConversationID"`
+	SenderID       int    `gorm:"not null" json:"SenderID"`
+	Content        string `gorm:"not null" json:"Content"`
+}
+
+type JConversation struct {
+	ID       int
+	Name     string `json:"Name"`
+	SellerID int    `json:"SellerID"`
 	BuyerID  int    `json:"BuyerID"`
+}
+
+type Checkids struct {
+	UserID   int    `json:"UserID"`
 	SellerID int    `json:"SellerID"`
 	Name     string `json:"Name"`
 }

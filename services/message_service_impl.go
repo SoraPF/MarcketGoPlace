@@ -83,8 +83,17 @@ func (m *MsessageImp) CheckMessenger(checks model.Checkids) (uint, error) {
 		return 0, errors.New("pas trouver")
 	}
 	println("trouver")
-	if int(conversation.Seller) != checks.SellerID && int(conversation.Buyer) != checks.BuyerID {
+	if checks.SellerID == checks.UserID && int(conversation.Seller) == checks.UserID {
+		println("user is seller")
+		return conversation.ID, nil
+	}
+	if int(conversation.Seller) != checks.SellerID && int(conversation.Buyer) != checks.UserID {
+		println("user and buyer is ok")
 		return 0, errors.New("le nom existe mais ce nest pas les bon utilisateur")
+	}
+	if conversation.ID == 0 {
+		println("existe pas")
+		return 0, errors.New("existe pas")
 	}
 
 	return conversation.ID, nil

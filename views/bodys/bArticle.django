@@ -43,10 +43,6 @@
             <p class="mt-4 text-gray-600">Description: {{article.Desc}}</p>
             
             <div class="mt-6 flex gap-3 pb-5 pt-5">
-                <a href="#"
-                    class="bg-primary border border-primary text-white px-8 py-2 font-medium rounded uppercase flex items-center gap-2 hover:bg-transparent hover:text-primary transition">
-                    <i class="fa-solid fa-bag-shopping"></i> Add to cart
-                </a>
                 <button onclick="checkiscreated()"
                     class="border border-gray-300 text-gray-600 px-8 py-2 font-medium rounded uppercase flex items-center gap-2 hover:text-primary transition">
                     <i class="fa-solid fa-heart">Message</i>
@@ -109,8 +105,9 @@
         });
             
         const jdata = await response.json();
+        
         if(response.ok){
-            window.location.href = "/message/"+ jdata.conversationID
+            window.location.href = "/message/"+ jdata.id
         }else{
             alert("un problème est survenue lord de la création de conversation")
         }

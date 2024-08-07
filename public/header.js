@@ -57,7 +57,7 @@ socket.onclose = function(event) { console.log('WebSocket connection closed.'); 
 
 async function logout(){
     try {
-        const response = await fetch("api/authent/logout",{
+        const response = await fetch("http://127.0.0.1:3000/api/authent/logout",{
             method: 'GET'
         });
         if (response.ok){

@@ -24,7 +24,7 @@
         });
 
         try {
-            const response = await fetch('/api/articles/create', {
+            const response = await fetch('/api/objets/create', {
                 method: 'POST',
                 body: formData,
             });
