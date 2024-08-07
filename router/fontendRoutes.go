@@ -164,7 +164,7 @@ func FrontMessenger(mc *controller.MessageController) *fiber.App {
 				"messageErreur": erreur,
 			})
 		}
-		userID := c.Cookies("userid")
+		userID := c.Cookies("user_id")
 		return c.Render("messenger", fiber.Map{
 			"Title":    "messenger",
 			"messages": conv,

@@ -49,7 +49,7 @@ func (m *MessageRepositoryImpl) SendMessage(message model.Message) error {
 // GetMessageFromConversation implements MessageRepository.
 func (m *MessageRepositoryImpl) GetMessageFromConversation(convoID uint) ([]model.Message, error) {
 	var messages []model.Message
-	result := m.Db.Where("id = ?", convoID).Find(&messages)
+	result := m.Db.Where("conversation_id = ?", convoID).Find(&messages)
 	if result.Error != nil {
 		helper.ErrorPanic(result.Error)
 		return messages, result.Error
