@@ -74,20 +74,21 @@ func (m *MsessageImp) GetMessageFromConversation(convoID int) ([]model.JMessage,
 	return jmessages, nil
 }
 
-func (m *MsessageImp) checkMessenger(checks model.Checkids) error {
-
-	conversation := m.MessageRepository.FindConversationByName(checks.Name)
+// CheckMessenger implements MessageService.
+func (m *MsessageImp) CheckMessenger(checks model.Checkids) (uint, error) {
+	conversation, err := m.MessageRepository.FindConversationByName(checks.Name)
+	if err != nil {
+		return 0, errors.New("pas trouver")
+	}
 	cpt := 0
 	for _, user := range conversation.UserIDs {
-		if user == checks.SellerID || user == checks.UserID {
+		if int(user) == checks.SellerID || int(user) == checks.UserID {
 			cpt++
 		}
 	}
 	if cpt < 2 {
-		var err error
-		err = errors.New("pas trouver")
-		return err
+		return 0, errors.New("le nom existe mais ce nest pas les bon utilisateur")
 	}
 
-	return nil
+	return conversation.ID, nil
 }

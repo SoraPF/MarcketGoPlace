@@ -10,5 +10,5 @@ type MessageService interface {
 
 	GetMessageFromConversation(convoID int) ([]model.JMessage, error)
 
-	CheckMessenger(ids model.Checkids) error
+	CheckMessenger(checks model.Checkids) (uint, error)
 }

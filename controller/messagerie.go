@@ -120,15 +120,19 @@ func (mc MessageController) CheckMessenger(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).SendString("the body wasnt correct")
 	}
 
-	err := mc.ms.CheckMessenger(newMessage) //need a modification and shoul be created service
+	conversationID, err := mc.ms.CheckMessenger(newMessage) //need a modification and shoul be created service
 	if err != nil {
-		return c.Status(fiber.StatusNotFound).SendString("Internal error the conversation couldnt be created")
+		if err.Error() == "pas trouver" {
+			return c.Status(fiber.StatusInternalServerError).SendString("le nom existe mais ce nest pas les bon utilisateur")
+		}
+		return c.Status(fiber.StatusNotFound).SendString("peut etre creer")
 	}
 
-	webResponse := response.Response{
-		Code:    200,
-		Status:  "ok",
-		Message: "Successfully delete notes data!",
+	webResponse := map[string]interface{}{
+		"code":           200,
+		"status":         "ok",
+		"message":        "Login successful!",
+		"conversationID": int(conversationID),
 	}
 	return c.Status(fiber.StatusCreated).JSON(webResponse)
 
