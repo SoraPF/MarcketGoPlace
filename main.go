@@ -102,6 +102,7 @@ func main() {
 	app.Mount("/", router.AuthentRoutes(userCon, categories))
 	app.Mount("/", router.Aouth2())
 	app.Mount("/", router.Robject(objCon, categories, tags))
+	app.Mount("/", router.FrontMessenger(messCon))
 
 	api := app.Group("/api")
 	api.Mount("/", objRoutes)

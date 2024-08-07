@@ -2,9 +2,12 @@ package model
 
 import (
 	"Marcketplace/model/entities"
+
+	"gorm.io/gorm"
 )
 
 type Message struct {
+	gorm.Model
 	ID             uint          `gorm:"primaryKey;autoIncrement"`
 	ConversationID uint          `gorm:"not null" json:"ConversationID"`
 	Conversation   Conversation  `gorm:"foreignKey:ConversationID"`
@@ -19,6 +22,7 @@ type JMessage struct {
 }
 
 type Conversation struct {
+	gorm.Model
 	ID   uint   `gorm:"primaryKey;autoIncrement"`
 	Name string `gorm:"not null"`
 }
@@ -28,6 +32,7 @@ type JConversation struct {
 }
 
 type Participant struct {
+	gorm.Model
 	ID             uint          `gorm:"primaryKey;autoIncrement"`
 	ConversationID uint          `gorm:"not null"`
 	Conversation   Conversation  `gorm:"foreignKey:ConversationID"`

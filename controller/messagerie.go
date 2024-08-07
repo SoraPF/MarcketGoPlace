@@ -78,23 +78,37 @@ func (mc MessageController) SendMessage(c *fiber.Ctx) error {
 
 }
 
-func (mc MessageController) GetMessageFromConversation(c *fiber.Ctx) error {
+func (mc MessageController) GetMessageFromConversation(c *fiber.Ctx) []model.JMessage {
 	id := c.Params("id")
 	if id == "" {
-		return c.Status(fiber.StatusBadRequest).SendString("no such conversation")
+		return nil
 	}
 	idInt, err := strconv.Atoi(id)
 	helper.ErrorPanic(err)
 	messages, err := mc.ms.GetMessageFromConversation(idInt)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).SendString("didnt find conversation")
+		return nil
+	}
+	return messages
+}
+
+func (mc MessageController) GetMessagesFromConversation(c *fiber.Ctx) error {
+	id := c.Params("id")
+	if id == "" {
+		return c.Status(fiber.StatusBadRequest).SendString("pas bon la requette")
+	}
+	idInt, err := strconv.Atoi(id)
+	helper.ErrorPanic(err)
+	messages, err := mc.ms.GetMessageFromConversation(idInt)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString("pas bon la requette")
 	}
 
 	webResponse := map[string]interface{}{
 		"code":     200,
 		"status":   "ok",
-		"message":  "you successful refuse the article!",
-		"messages": messages,
+		"message":  "Login successful!",
+		"messages": messages, // Notez qu'on retourne le token sous forme de string
 	}
-	return c.Status(fiber.StatusCreated).JSON(webResponse)
+	return c.Status(fiber.StatusOK).JSON(webResponse)
 }

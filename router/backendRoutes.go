@@ -19,14 +19,14 @@ func BackendRoutes(userController *controller.UserController, ObjController *con
 	router.Get("/captcha", controller.Captcha)
 	router.Get("/generate-2fa/:id", userController.GetGenerate2FA)
 	router.Post("/validate-2fa/:id", userController.GetValidate2FA)
-	//router.Post("/articles/create", controller.RequestCreateArticle)
-	router.Post("/articles/verify", ObjController.AdminResponceNewArticle)
-	router.Post("/article/by-name", ObjController.FindByName)
+	router.Post("/articles/verify", ObjController.AdminResponceNewArticle) //presque bon
+	router.Post("/article/by-name", ObjController.FindByName)              //a modifier
 
 	router.Route("/messenger", func(router fiber.Router) {
 		router.Post("/create", messController.CreateConversation)
 		router.Post("/delete", messController.SupprimerConversation)
 		router.Post("/newMesage", messController.SendMessage)
+		//router.Get("/getmessages/:id", messController.GetMessagesFromConversation)
 	})
 
 	return router

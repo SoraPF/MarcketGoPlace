@@ -1,12 +1,58 @@
 {% include "partials/head.django"%}
 {% include "layouts/ads.django"%}
 
+<script>
+    // Fonction pour envoyer un message
+    async function sendMessage() {
+        const content = document.getElementById('chat-input').value;
+        const url = window.location.href;
+        const conversationID = url.substring(url.lastIndexOf('/') + 1);
+        const sender = document.cookie.split('; ').find(row => row.startsWith('user_id=')).split('=')[1];
+
+        const data = {
+            "ConversationID": conversationID,
+            "SenderID": sender, 
+            "Content": content
+        };
+        
+        const response = await fetch('/api/messenger/newMessage', {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+            document.getElementById('chat-input').value = '';
+            // Recharger les messages après l'envoi
+        } else {
+            console.error('Erreur lors de l\'envoi du message');
+        }
+    }
+
+</script>
+
 <div class="flex items-center justify-center min-h-screen">
     <div class="w-full max-w-lg p-6 bg-white rounded-lg shadow-lg">
-        <div id="chat-box" class="h-64 p-4 mb-4 overflow-y-scroll border border-gray-200 rounded"></div>
+        <div id="chat-box" class="h-64 p-4 mb-4 overflow-y-scroll border border-gray-200 rounded">
+            {% for message in messages%}
+                {% if message.SenderID == userid %}
+                    <div class="flex justify-end mb-2">
+                        <div class="bg-blue-200 p-3 rounded-lg max-w-xs">
+                            {{message.Content}}</div>
+                    </div>
+                {%else%}
+                <div class="flex justify-start mb-2">
+                    <div class="bg-gray-200 p-3 rounded-lg max-w-xs">
+                        {{message.Content}}</div>
+                </div>
+                {%endif%}
+            {%endfor%}
+        </div>
         <div class="flex">
             <input type="text" id="chat-input" class="flex-1 p-2 border border-gray-300 rounded-l" placeholder="Type a message...">
-            <button id="send-btn" class="p-2 text-white bg-blue-500 rounded-r hover:bg-blue-600">Send</button>
+            <button id="send-btn" class="p-2 text-white bg-blue-500 rounded-r hover:bg-blue-600" onclick="sendMessage()">Send</button>
         </div>
     </div>
 </div>

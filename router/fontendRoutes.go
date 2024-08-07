@@ -155,9 +155,20 @@ func FrontMessenger(mc *controller.MessageController) *fiber.App {
 	router := fiber.New()
 
 	router.Get("/message/:id", func(c *fiber.Ctx) error {
-		mc.GetMessageFromConversation(c)
+
+		conv := mc.GetMessageFromConversation(c)
+		if conv == nil {
+			erreur := "Il y a eu un problème lord de la vérification! veuillez réeseyer ultérieurement"
+			return c.Render("messenger", fiber.Map{
+				"Title":         "messenger",
+				"messageErreur": erreur,
+			})
+		}
+		userID := c.Cookies("userid")
 		return c.Render("messenger", fiber.Map{
-			"Title": "messenger",
+			"Title":    "messenger",
+			"messages": conv,
+			"userid":   userID,
 		})
 	})
 
