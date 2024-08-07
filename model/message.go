@@ -23,12 +23,15 @@ type JMessage struct {
 
 type Conversation struct {
 	gorm.Model
-	ID   uint   `gorm:"primaryKey;autoIncrement"`
-	Name string `gorm:"not null"`
+	ID      uint          `gorm:"primaryKey;autoIncrement"`
+	Name    string        `gorm:"not null"`
+	UserIDs []uint        `gorm:"not null"`
+	User    entities.User `gorm:"foreignKey:userIDs"`
 }
 type JConversation struct {
-	ID   int
-	Name string `json:"name"`
+	ID      int
+	Name    string `json:"Name"`
+	UserIDs []int  `json:"UserIDs"`
 }
 
 type Participant struct {

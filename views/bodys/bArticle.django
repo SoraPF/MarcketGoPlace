@@ -47,10 +47,10 @@
                     class="bg-primary border border-primary text-white px-8 py-2 font-medium rounded uppercase flex items-center gap-2 hover:bg-transparent hover:text-primary transition">
                     <i class="fa-solid fa-bag-shopping"></i> Add to cart
                 </a>
-                <a href="#"
+                <button onclick="createConversation()"
                     class="border border-gray-300 text-gray-600 px-8 py-2 font-medium rounded uppercase flex items-center gap-2 hover:text-primary transition">
-                    <i class="fa-solid fa-heart"></i> Message
-                </a>
+                    <i class="fa-solid fa-heart">Message</i>
+            </button>
             </div>
 
         </div>
@@ -62,3 +62,54 @@
        
     </div>
     <!-- ./map -->
+
+    
+<script>
+    //verifi si deja creer entre les 2 utilisateur sinon retourner vers la page de messagerie
+    async function checkiscreated(){
+        
+        const userID = document.cookie.split('; ').find(row => row.startsWith('user_id=')).split('=')[1];
+        const sellerID = {{article.IdVendeur}}
+        const data = {
+            "userID": userID,
+            "sellerID": sellerID,
+        };
+        console.log(data)
+        /*
+        const response = await fetch('/api/message/check', {
+            method: 'POST',
+            body:  JSON.stringify(data),
+        });
+
+        if(response.ok){
+            //redirection message/:id
+        }else{
+            createConversation();
+        }
+        */
+    }
+    async function createConversation(){
+        const userID = document.cookie.split('; ').find(row => row.startsWith('user_id=')).split('=')[1];
+        const sellerID = {{article.IdVendeur}}
+        const name = "tchat between seller" + sellerID + "and" + userID + "the article {{article.Title}}"
+        
+        const data = {
+            "UserIDs" : [parseInt(userID,10),parseInt(sellerID,10)],
+            "Name": name,
+        };
+        console.log(data)
+        /*
+        const response = await fetch('/api/messenger/create', {
+            method: 'POST',
+            body:  JSON.stringify(data),
+        });
+        
+        if(response.ok){
+
+        }else{
+
+        }
+        */
+
+    }
+</script>

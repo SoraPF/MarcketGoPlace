@@ -73,7 +73,9 @@
             {% for article in articles %}
             <div class="bg-white shadow rounded overflow-hidden group">
                 <div class="relative">
-                    <img src="{{article.Img[1]}}" alt=" {{article.Title}}" class="w-full">
+                    <a href="/article/{{article.ID}}">
+                        <img src="{{article.Img[1]}}" alt=" {{article.Title}}" class="w-full">
+                    </a>
                 </div>
                 <div class="pt-4 pb-3 px-4">
                     <a href="/article/{{article.ID}}">
