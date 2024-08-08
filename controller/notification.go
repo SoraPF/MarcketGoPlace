@@ -1,18 +1,22 @@
 package controller
 
 import (
-	"Marcketplace/data/request"
 	"sync"
 
 	"github.com/gofiber/contrib/websocket"
-	"github.com/gofiber/fiber/v2"
 )
 
 var (
 	clients   = make(map[*websocket.Conn]bool)
-	broadcast = make(chan string)
+	broadcast = make(chan Message)
 	mu        sync.Mutex
 )
+
+type Message struct {
+	Type    string `json:"type"`    // "chat" ou "notification"
+	UserID  string `json:"user_id"` // ID de l'utilisateur (pour les messages de chat)
+	Content string `json:"content"` // Contenu du message ou de la notification
+}
 
 func HandleConnections(c *websocket.Conn) {
 	defer func() {
@@ -27,11 +31,12 @@ func HandleConnections(c *websocket.Conn) {
 	mu.Unlock()
 
 	for {
-		_, msg, err := c.ReadMessage()
+		var msg Message
+		err := c.ReadJSON(&msg)
 		if err != nil {
 			break
 		}
-		broadcast <- string(msg)
+		broadcast <- msg
 	}
 }
 
@@ -40,7 +45,7 @@ func HandleMessages() {
 		msg := <-broadcast
 		mu.Lock()
 		for client := range clients {
-			err := client.WriteMessage(websocket.TextMessage, []byte(msg))
+			err := client.WriteJSON(msg)
 			if err != nil {
 				client.Close()
 				delete(clients, client)
@@ -48,20 +53,6 @@ func HandleMessages() {
 		}
 		mu.Unlock()
 	}
-}
-
-func NotifiedAdminNewArticle(ctx *fiber.Ctx, req *request.CreateObjRequest) error {
-	notification := "Un nouvel article a été créé : " + req.Title
-	broadcast <- notification
-
-	return ctx.SendStatus(fiber.StatusOK)
-}
-
-func NotifiedUserNewArticle(ctx *fiber.Ctx, req *request.CreateObjRequest) error {
-	notification := "Article " + req.Title + " Valider par un Admin"
-	broadcast <- notification
-
-	return ctx.SendStatus(fiber.StatusOK)
 }
 
 /*

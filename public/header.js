@@ -40,20 +40,7 @@ const svgNotification = function () {
 
 document.addEventListener('DOMContentLoaded', svgNotification);
 
-const socket = new WebSocket('ws://localhost:3000/ws');
 
-socket.onmessage = function(event) {
-    const message = event.data;
-    console.log('Notification received:', message);
-    // Affiche la notification sur la page
-    const notificationElement = document.createElement('div');
-    notificationElement.innerText = message;
-    document.body.appendChild(notificationElement);
-};
-
-socket.onopen = function(event) { console.log('WebSocket connection established.'); };
-
-socket.onclose = function(event) { console.log('WebSocket connection closed.'); };
 
 async function logout(){
     try {

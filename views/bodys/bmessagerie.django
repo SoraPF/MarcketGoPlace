@@ -2,20 +2,19 @@
 {% include "layouts/ads.django"%}
 
 <script>
-    // Fonction pour envoyer un message
-    async function sendMessage() {
+   async function sendMessenger() {
         const content = document.getElementById('chat-input').value;
         const url = window.location.href;
         const conversationID = url.substring(url.lastIndexOf('/') + 1);
         const sender = document.cookie.split('; ').find(row => row.startsWith('user_id=')).split('=')[1];
-
+    
         const data = {
             "ConversationID": parseInt(conversationID,10),
             "SenderID": parseInt(sender,10),
             "Content": content
         };
-        console.log(data)
-
+        console.log(data);
+    
         const response = await fetch('/api/messenger/newMesage', {
             method: 'POST',
             headers: {
@@ -23,15 +22,80 @@
             },
             body: JSON.stringify(data)
         });
-
+    
         if (response.ok) {
-            document.getElementById('chat-input').value = '';
-            // Recharger les messages après l'envoi
+            sendMessage();
+            
         } else {
             console.error('Erreur lors de l\'envoi du message');
         }
     }
-
+    
+    const socket = new WebSocket("ws://localhost:3000/ws");
+    
+    socket.onopen = function(event) {
+        console.log("Connected to WebSocket server");
+    };
+    
+    socket.onmessage = function(event) {
+        const msg = JSON.parse(event.data);
+        console.log("Notification received:", msg);
+        if (msg.type === "chat") {
+            displayMessage(msg.user_id, msg.content);
+        } else if (msg.type === "notification") {
+            displayMessage(msg.user_id,msg.content);
+        }
+    };
+    
+    socket.onclose = function(event) {
+        console.log("Disconnected from WebSocket server");
+    };
+    
+    function sendMessage() {
+        const input = document.getElementById("chat-input");
+        const messageContent = input.value;
+        const userID = "{{ userid }}";
+        const message = {
+            type: "chat",
+            user_id: userID,
+            content: messageContent
+        };
+        socket.send(JSON.stringify(message));
+        input.value = ''; // Clear the input field
+    }
+    
+    function displayMessage(userID, content) {
+        const chatBox = document.getElementById("chat-box");
+        const messageDiv = document.createElement("div");
+        messageDiv.classList.add("flex", "mb-2");
+        if (userID === "{{ userid }}") {
+            messageDiv.classList.add("justify-end");
+            const messageContentDiv = document.createElement("div");
+            messageContentDiv.classList.add("bg-blue-200", "p-3", "rounded-lg", "max-w-xs");
+            messageContentDiv.textContent = content;
+            messageDiv.appendChild(messageContentDiv);
+        } else {
+            messageDiv.classList.add("justify-start");
+            const messageContentDiv = document.createElement("div");
+            messageContentDiv.classList.add("bg-gray-200", "p-3", "rounded-lg", "max-w-xs");
+            messageContentDiv.textContent = content;
+            messageDiv.appendChild(messageContentDiv);
+        }
+        chatBox.appendChild(messageDiv);
+        chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
+    }
+    
+    function displayNotification(content) {
+        const chatBox = document.getElementById("chat-box");
+        const notificationDiv = document.createElement("div");
+        notificationDiv.classList.add("flex", "justify-start", "mb-2");
+        const notificationContentDiv = document.createElement("div");
+        notificationContentDiv.classList.add("bg-gray-200", "p-3", "rounded-lg", "max-w-xs");
+        notificationContentDiv.textContent = content;
+        notificationDiv.appendChild(notificationContentDiv);
+        chatBox.appendChild(notificationDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
 </script>
 
 <div class="flex items-center justify-center min-h-screen">
@@ -57,7 +121,7 @@
         </div>
         <div class="flex">
             <input type="text" id="chat-input" class="flex-1 p-2 border border-gray-300 rounded-l" placeholder="Type a message...">
-            <button id="send-btn" class="p-2 text-white bg-blue-500 rounded-r hover:bg-blue-600" onclick="sendMessage()">Send</button>
+            <button id="send-btn" class="p-2 text-white bg-blue-500 rounded-r hover:bg-blue-600" onclick="sendMessenger()">Send</button>
         </div>
     </div>
 </div>
