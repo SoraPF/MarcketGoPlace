@@ -80,6 +80,7 @@ func (m *MsessageImp) GetMessageFromConversation(convoID int) ([]model.JMessage,
 func (m *MsessageImp) CheckMessenger(checks model.Checkids) (uint, error) {
 	conversation, err := m.MessageRepository.FindConversationByName(checks.Name)
 	if err != nil {
+		println("pas trouver")
 		return 0, errors.New("pas trouver")
 	}
 	println("trouver")

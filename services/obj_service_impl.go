@@ -119,6 +119,9 @@ func (o *ObjServiceImpl) Update(objet request.UpdateObjRequest) {
 	objData, err := o.ObjRepository.FindById(objet.ID)
 	helper.ErrorPanic(err)
 
+	if objet.ID != 0 && uint(objet.ID) != objData.ID {
+		objData.ID = uint(objet.ID)
+	}
 	if objet.CategoryID != 0 && uint(objet.CategoryID) != objData.CategoryID {
 		objData.CategoryID = uint(objet.CategoryID)
 	}
@@ -129,6 +132,7 @@ func (o *ObjServiceImpl) Update(objet request.UpdateObjRequest) {
 		objData.Price = objet.Price
 	}
 	if objet.StatusID != 0 && uint(objet.StatusID) != objData.StatusID {
+		println(objet.StatusID)
 		objData.StatusID = uint(objet.StatusID)
 	}
 	if objet.Title != "" && objet.Title != objData.Title {
@@ -137,14 +141,6 @@ func (o *ObjServiceImpl) Update(objet request.UpdateObjRequest) {
 	if objet.Desc != "" && objet.Desc != objData.Desc {
 		objData.Desc = objet.Desc
 	}
-	if objet.Tags != nil {
-		var tags []objets.Tags
-		for _, tagID := range objet.Tags {
-			tags = append(tags, objets.Tags{ID: uint(tagID)})
-		}
-		objData.Tags = tags
-	}
-
 	o.ObjRepository.Update(objData)
 }
 func (o *ObjServiceImpl) ObjByCategID(CID uint) ([]objets.Objects, error) {

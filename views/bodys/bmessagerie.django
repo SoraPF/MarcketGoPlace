@@ -38,19 +38,18 @@
     <div class="w-full max-w-lg p-6 bg-white rounded-lg shadow-lg">
         <div id="chat-box" class="h-64 p-4 mb-4 overflow-y-scroll border border-gray-200 rounded">
             {% for message in messages %}
-                {{ message.SenderID }} == {{ userid }} 
-                {% if message.SenderID == userid %}
+                {% if (message.SenderID == userid) %}
                     <div class="flex justify-end mb-2">
                         <div class="bg-blue-200 p-3 rounded-lg max-w-xs">
                             {{ message.Content }}
-                            (Sent by you: {{ message.SenderID }})
+                            <!--(Sent by you: {{ message.SenderID }})--> 
                         </div>
                     </div>
                 {% else %}
                     <div class="flex justify-start mb-2">
                         <div class="bg-gray-200 p-3 rounded-lg max-w-xs">
                             {{ message.Content }}
-                            (Sent by others: {{ message.SenderID }})
+                            <!-- (Sent by others: {{ message.SenderID }})--> 
                         </div>
                     </div>
                 {% endif %}

@@ -10,9 +10,17 @@
         CategoryID: {{ Article.CategoryID }},
         Tags: [{% for tag in Article.Tags %}{{ tag }}{% if not forloop.last %}, {% endif %}{% endfor %}]
     };
+    const ladata = {
+        "objId": {{ Article.ID }},
+        "id_vendeur": {{ Article.IdVendeur }},
+        "title": "{{ Article.Title }}",
+        "price": {{ Article.Price }},
+        "desc": "{{ Article.Desc }}",
+        "status_id": {{ Article.StatusID }},
+        "category_id": {{ Article.CategoryID }}
+    };
 
     document.addEventListener('DOMContentLoaded', function() {
-        // Fill in the form fields with the article data
         document.getElementById('userID').value = article.IdVendeur;
         document.getElementById('StatusID').value = article.StatusID;
         document.getElementById('Title').value = article.Title;
@@ -30,25 +38,15 @@
     });
     
     async function acceptArticle() {
-        document.getElementById('StatusID').value = 2;
-        const formData = new FormData(document.getElementById('ArticleForm'));
-        const formObject = {};
-        formData.forEach((value, key) => {
-            if (key === 'tags') {
-                if (!formObject[key]) {
-                    formObject[key] = [];
-                }
-                formObject[key].push(parseInt(value));
-            } else {
-                formObject[key] = value;
-            }
-        });
-
-        console.log(formData)
-    
+        ladata.status_id = 2
+        console.log(ladata)
+        
         const response = await fetch('/api/objets/' + {{ Article.ID }} + '/update', {
             method: 'PATCH',
-            body: formData,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body:  JSON.stringify(ladata),
         });
     
         const data = await response.json();

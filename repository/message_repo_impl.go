@@ -3,6 +3,8 @@ package repository
 import (
 	"Marcketplace/helper"
 	"Marcketplace/model"
+	"fmt"
+	"log"
 
 	"gorm.io/gorm"
 )
@@ -43,6 +45,10 @@ func (m *MessageRepositoryImpl) FindConversationByName(name string) (model.Conve
 		helper.ErrorPanic(result.Error)
 		return convo, result.Error
 	}
+	if result.RowsAffected == 0 {
+		return convo, fmt.Errorf("no conversation found with name: %s", name)
+	}
+	log.Printf("Query successful. Rows affected: %d", result.RowsAffected)
 	return convo, nil
 }
 

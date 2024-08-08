@@ -164,7 +164,15 @@ func FrontMessenger(mc *controller.MessageController) *fiber.App {
 				"messageErreur": erreur,
 			})
 		}
-		userID := c.Cookies("user_id")
+		StringuserID := c.Cookies("user_id")
+		userID, err := strconv.Atoi(StringuserID)
+		if err != nil {
+			erreur := "Il y a eu un problème lord de la vérification! veuillez réeseyer ultérieurement"
+			return c.Render("messenger", fiber.Map{
+				"Title":         "messenger",
+				"messageErreur": erreur,
+			})
+		}
 		return c.Render("messenger", fiber.Map{
 			"Title":    "messenger",
 			"messages": conv,

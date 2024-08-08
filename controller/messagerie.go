@@ -127,7 +127,7 @@ func (mc MessageController) CheckMessenger(c *fiber.Ctx) error {
 
 	conversationID, err := mc.ms.CheckMessenger(newMessage)
 	if err != nil {
-		if err.Error() == "pas trouver" {
+		if err.Error() != "pas trouver" {
 			return c.Status(fiber.StatusInternalServerError).SendString("le nom existe mais ce nest pas les bon utilisateur")
 		}
 		webResponse := map[string]interface{}{

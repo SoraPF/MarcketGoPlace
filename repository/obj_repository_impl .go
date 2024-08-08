@@ -46,24 +46,30 @@ func (o *ObjRepositoryImpl) FindById(objectId int) (objets.Objects, error) {
 // Save implements ObjectRepository.
 func (o *ObjRepositoryImpl) Save(object objets.Objects) {
 	result := o.Db.Create(&object)
-	println("repo")
 	helper.ErrorPanic(result.Error)
 
 }
 
 // Update implements ObjectRepository.
 func (o *ObjRepositoryImpl) Update(object objets.Objects) {
-	var updateObj = objets.Objects{
-		Title:      object.Title,
-		Price:      object.Price,
-		Desc:       object.Desc,
-		StatusID:   object.StatusID,
-		CategoryID: object.CategoryID,
-		Tags:       object.Tags,
+	updates := map[string]interface{}{
+		"title":       object.Title,
+		"price":       object.Price,
+		"desc":        object.Desc,
+		"status_id":   object.StatusID,
+		"category_id": object.CategoryID,
 	}
-	result := o.Db.Model(&object).Where("id = ?", object.ID).Updates(updateObj)
-	log.Printf("values - id_vendeur: %s, status_id: %s, title: %s, price: %s, desc: %s, category_id: %s, tags: %s", object.IdVendeur, object.StatusID, object.Title, object.Price, object.Desc, object.CategoryID, object.Tags)
-	helper.ErrorPanic(result.Error)
+	log.Printf("Updating object with ID: %d, with values: %+v", object.ID, updates)
+
+	// Effectuer la mise à jour
+	result := o.Db.Model(&objets.Objects{}).Where("id = ?", object.ID).Updates(updates)
+
+	// Vérifier les erreurs et les lignes affectées
+	if result.Error != nil {
+		log.Printf("Error updating object: %v", result.Error)
+	} else {
+		log.Printf("Update successful. Rows affected: %d", result.RowsAffected)
+	}
 }
 
 func (o *ObjRepositoryImpl) ObjByCategID(CID uint) ([]objets.Objects, error) {
