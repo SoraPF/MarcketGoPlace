@@ -40,6 +40,11 @@ const svgNotification = function () {
 
 document.addEventListener('DOMContentLoaded', svgNotification);
 
+function searchKey(event) {
+    if (event.key === 'Enter') {
+        searchBar();
+    }
+}
 
 
 async function logout(){

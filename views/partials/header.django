@@ -2,7 +2,7 @@
 <script src="../public/header.js"></script>
 
 <header class="py-4 shadow-sm bg-white">
-    
+   
 <nav class="bg-gray-600">
     <div class="container flex">
         <div class="dropdown px-8 py-4 bg-primary flex items-center cursor-pointer relative group">
@@ -31,7 +31,7 @@
             </div>  
 
             <div class="flex w-full max-w-md">
-                <input type="text" name="search" id="search"
+                <input type="text" name="search" id="search" onkeydown="searchKey(event)"
                     class="w-full border border-primary border-r-0 pl-4 py-3 pr-3 rounded-l-md focus:outline-none"
                     placeholder="Search">
                 <button onclick="searchBar()"
