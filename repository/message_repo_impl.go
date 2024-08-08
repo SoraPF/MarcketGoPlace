@@ -3,8 +3,6 @@ package repository
 import (
 	"Marcketplace/helper"
 	"Marcketplace/model"
-	"fmt"
-	"log"
 
 	"gorm.io/gorm"
 )
@@ -38,18 +36,12 @@ func (m *MessageRepositoryImpl) SupprimerConversation(convoID uint) error {
 	return nil
 }
 
-func (m *MessageRepositoryImpl) FindConversationByName(name string) (model.Conversation, error) {
+func (m *MessageRepositoryImpl) FindConversationByName(name string) (*model.Conversation, error) {
 	var convo model.Conversation
-	result := m.Db.Where("name = ? ", name).Find(&convo)
-	if result.Error != nil {
-		helper.ErrorPanic(result.Error)
-		return convo, result.Error
+	if err := m.Db.Where("name LIKE ?", name).First(&convo).Error; err != nil {
+		return nil, err
 	}
-	if result.RowsAffected == 0 {
-		return convo, fmt.Errorf("no conversation found with name: %s", name)
-	}
-	log.Printf("Query successful. Rows affected: %d", result.RowsAffected)
-	return convo, nil
+	return &convo, nil
 }
 
 // SendMessage implements MessageRepository.
