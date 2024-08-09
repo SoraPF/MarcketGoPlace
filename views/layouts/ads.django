@@ -1,7 +1,7 @@
 {% include "partials/head.django"%}
 
 <!-- ads -->
-<div class="container pb-16">
+<div class="container mt-1 mb-4 pb-16">
     <a href="#">
         <img src="assets/images/offer.jpg" alt="ads" class="w-full">
     </a>

@@ -4,7 +4,7 @@
 
 
 <!-- categories -->
-<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 mt-4 mb-4">
     {% for category in Categories %}
     <div class="relative w-44 h-44 rounded-xl overflow-hidden group mx-auto">        
         <img src="{{ category.Img }}" class="w-full h-full object-cover">

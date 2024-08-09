@@ -128,5 +128,9 @@
             <input type="text" onkeydown="messageKey(event)"  id="chat-input" class="flex-1 p-2 border border-gray-300 rounded-l" placeholder="Type a message...">
             <button id="send-btn" class="p-2 text-white bg-blue-500 rounded-r hover:bg-blue-600" onclick="sendMessenger()">Send</button>
         </div>
+        {% if (message.SenderID == userid) %}
+            <input type="text" onkeydown="priceKey(event)"  id="chat-input" class="flex-1 p-2 border border-gray-300 rounded-l" placeholder="Enter the price...">
+            <button id="ideal_price" class="p-2 text-white bg-blue-500 rounded-r hover:bg-blue-600">hello</button>
+        {% endif %}
     </div>
 </div>
