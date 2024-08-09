@@ -3,6 +3,7 @@ package repository
 import (
 	"Marcketplace/helper"
 	"Marcketplace/model"
+	"errors"
 
 	"gorm.io/gorm"
 )
@@ -38,8 +39,12 @@ func (m *MessageRepositoryImpl) SupprimerConversation(convoID uint) error {
 
 func (m *MessageRepositoryImpl) FindConversationByName(name string) (*model.Conversation, error) {
 	var convo model.Conversation
-	if err := m.Db.Where("name LIKE ?", name).First(&convo).Error; err != nil {
-		return nil, err
+	result := m.Db.Where("name LIKE ?", name).Find(&convo)
+	if result.Error != nil {
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			return nil, nil
+		}
+		return nil, result.Error
 	}
 	return &convo, nil
 }

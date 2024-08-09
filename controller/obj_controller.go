@@ -12,6 +12,8 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/lib/pq"
+
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -76,15 +78,17 @@ func (controller *ObjController) ObjCreate(ctx *fiber.Ctx) error {
 	}
 
 	files := form.File["images"]
+	var paths []string
 	if len(files) > 0 {
 		for _, file := range files {
 			filename := file.Filename
 			filePath := filepath.Join("./public/img/product", filename)
+			Path := "../public/img/product/" + filename
 
 			// Check if the directory exists, if not, create it
-			if _, err := os.Stat("./public/img/product"); os.IsNotExist(err) {
-				err := os.MkdirAll("./public/img/product", os.ModePerm)
-				if err != nil {
+			dir := filepath.Dir(filePath)
+			if _, err := os.Stat(dir); os.IsNotExist(err) {
+				if err := os.MkdirAll(dir, os.ModePerm); err != nil {
 					return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to create directory"})
 				}
 			}
@@ -94,10 +98,12 @@ func (controller *ObjController) ObjCreate(ctx *fiber.Ctx) error {
 				fmt.Printf("Failed to save file: %s\n", err)
 				return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to save file"})
 			}
-			createObjRequest.Img = append(createObjRequest.Img, filePath)
+
+			// Collect paths
+			paths = append(paths, Path)
 		}
 	}
-
+	createObjRequest.Img = pq.StringArray(paths)
 	controller.objService.Create(createObjRequest)
 	//NotifiedAdminNewArticle(ctx, &req)
 	webResponse := map[string]interface{}{

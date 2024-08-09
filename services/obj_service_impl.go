@@ -43,6 +43,7 @@ func (o *ObjServiceImpl) Create(object request.CreateObjRequest) {
 		StatusID:   uint(object.StatusID),
 		CategoryID: uint(object.CategoryID),
 		Tags:       tags,
+		Img:        object.Img,
 	}
 	o.ObjRepository.Save(objModel)
 }

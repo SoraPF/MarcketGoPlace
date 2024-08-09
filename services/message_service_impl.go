@@ -80,10 +80,12 @@ func (m *MsessageImp) GetMessageFromConversation(convoID int) ([]model.JMessage,
 func (m *MsessageImp) CheckMessenger(checks model.Checkids) (uint, error) {
 	conversation, err := m.MessageRepository.FindConversationByName(checks.Name)
 	if err != nil {
+		if checks.SellerID == checks.UserID && int(conversation.Seller) == checks.UserID {
+			return 0, errors.New("pas trouver et sellerID")
+		}
 		println("pas trouver")
 		return 0, errors.New("pas trouver")
 	}
-	println("trouver")
 	if checks.SellerID == checks.UserID && int(conversation.Seller) == checks.UserID {
 		println("user is seller")
 		return conversation.ID, nil

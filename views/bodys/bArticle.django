@@ -94,7 +94,11 @@
             if(jdata.text){
                 createConversation(data);
             }else{
-                window.location.href = `/message/${jdata.conversationID}`;
+                if(jdata.conversationID == 0){
+                    alert("il n'y a pas de tchat et tu est le vendeur")
+                }else{
+                    window.location.href = `/message/${jdata.conversationID}`;
+                }
             }
         } else {
             alert("Un problème est survenu lors de la vérification de la conversation");
