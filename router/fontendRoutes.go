@@ -90,6 +90,13 @@ func Robject(ObjController *controller.ObjController, categories []response.Cate
 		})
 	})
 
+	router.Get("/article/search", func(c *fiber.Ctx) error {
+		return c.Render("article", fiber.Map{
+			"Title":      "categorie",
+			"Categories": categories,
+		})
+	})
+
 	router.Get("/createSell", func(c *fiber.Ctx) error {
 		return c.Render("newArticle", fiber.Map{
 			"Title":      "NEW ARTICLE",

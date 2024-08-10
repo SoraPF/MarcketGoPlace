@@ -15,5 +15,5 @@ type ObjService interface {
 	ObjByCategID(CID uint) ([]objets.Objects, error)
 	ObjByArticleID(CID uint) (objets.Objects, error)
 	GetArticles(CID uint, status string) ([]objets.Objects, error)
-	FindByName(name string) (objets.Objects, error)
+	FindByName(name string) ([]objets.Objects, error)
 }

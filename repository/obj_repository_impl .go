@@ -115,14 +115,14 @@ func (o *ObjRepositoryImpl) GetArticles(CID uint, status string) ([]objets.Objec
 	return obj, nil
 }
 
-func (o *ObjRepositoryImpl) FindByName(name string) (objets.Objects, error) {
-	var obj objets.Objects
+func (o *ObjRepositoryImpl) FindByName(name string) ([]objets.Objects, error) {
+	var obj []objets.Objects
 	var result *gorm.DB
 	println(name)
-	result = o.Db.Where("objects.title = ?", name).Find(&obj)
+	result = o.Db.Where("title LIKE  ? AND status_id = ?", "%"+name+"%", 2).Find(&obj)
 
 	if result.Error != nil {
-		return objets.Objects{}, result.Error
+		return []objets.Objects{}, result.Error
 	}
 	return obj, nil
 }

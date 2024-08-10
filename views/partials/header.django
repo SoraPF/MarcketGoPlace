@@ -1,7 +1,7 @@
 {% include "partials/head.django" %}
 <script src="../public/header.js"></script>
 
-<header class="py-4 shadow-sm bg-white">
+<header class="py-4 shadow-sm">
    
 <nav class="bg-gray-600">
     <div class="container flex">

@@ -34,78 +34,81 @@
         document.getElementById('captchaImage').src = '/api/captcha?' + new Date().getTime();
     }
 </script>
-<body>
-    <!-- login -->
-    <div class="contain py-16">
-        <div class="max-w-lg mx-auto shadow px-6 py-7 rounded overflow-hidden">
-            <h2 class="text-2xl uppercase font-medium mb-1">Create an account</h2>
-            <p class="text-gray-600 mb-6 text-sm">
-                Register for new customer
-            </p>
-            <form onsubmit="event.preventDefault(); createUser();">
-                <div class="space-y-2">
-                    <div>
-                        <label for="name" class="text-gray-600 mb-2 block">Full Name</label>
-                        <input type="text" name="name" id="name"
-                            class="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
-                            placeholder="fulan fulana">
-                    </div>
-                    <div>
-                        <label for="email" class="text-gray-600 mb-2 block">Email address</label>
-                        <input type="email" name="email" id="email"
-                            class="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
-                            placeholder="youremail.@domain.com">
-                    </div>
-                    <div>
-                        <label for="password" class="text-gray-600 mb-2 block">Password</label>
-                        <input type="password" name="password" id="password"
-                            class="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
-                            placeholder="*******">
-                    </div>
-                    <div>
-                        <label for="confirm" class="text-gray-600 mb-2 block">Confirm password</label>
-                        <input type="password" name="confirm" id="confirm"
-                            class="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
-                            placeholder="*******">
-                    </div>
-                    <div>
-                        <label for="captcha" class="text-gray-600 mb-2 block">Captcha</label>
-                        <input type="text" name="captcha" id="captcha"
-                            class="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-primary placeholder-gray-400"
-                            placeholder="Enter captcha">
-                        <img id="captchaImage" src="/api/captcha" alt="Captcha Image" class="mt-2">
-                        <button type="button" onclick="refreshCaptcha()" class="mt-2 px-4 py-2 bg-gray-200 rounded">Refresh Captcha</button>
-                    </div>
+
+<div class="flex min-h-screen items-center justify-center px-6 py-12">
+    <div class="max-w-md w-full bg-gray-800 rounded-lg shadow-lg p-8">
+        <!-- Bouton de retour -->
+        <a href="/" class="inline-block mb-6 text-indigo-400 hover:text-indigo-300">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 inline-block mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+            Back
+        </a>
+
+        <h2 class="text-2xl font-semibold text-white text-center mb-4">Create an account</h2>
+        <p class="text-gray-400 text-sm text-center mb-6">
+            Register for new customer
+        </p>
+        <form onsubmit="event.preventDefault(); createUser();">
+            <div class="space-y-4">
+                <div>
+                    <label for="name" class="text-gray-200 block text-sm font-medium mb-1">Full Name</label>
+                    <input type="text" name="name" id="name"
+                        class="block w-full bg-gray-700 border border-gray-600 px-4 py-3 text-gray-200 text-sm rounded focus:ring-0 focus:border-indigo-500 placeholder-gray-400"
+                        placeholder="John Doe">
                 </div>
-                <div class="mt-6">
-                    <div class="flex items-center">
-                        <input type="checkbox" name="agreement" id="agreement"
-                            class="text-primary focus:ring-0 rounded-sm cursor-pointer">
-                        <label for="agreement" class="text-gray-600 ml-3 cursor-pointer">I have read and agree to the <a
-                                href="#" class="text-primary">terms & conditions</a></label>
-                    </div>
+                <div>
+                    <label for="email" class="text-gray-200 block text-sm font-medium mb-1">Email address</label>
+                    <input type="email" name="email" id="email"
+                        class="block w-full bg-gray-700 border border-gray-600 px-4 py-3 text-gray-200 text-sm rounded focus:ring-0 focus:border-indigo-500 placeholder-gray-400"
+                        placeholder="youremail@example.com">
+                </div>
+                <div>
+                    <label for="password" class="text-gray-200 block text-sm font-medium mb-1">Password</label>
+                    <input type="password" name="password" id="password"
+                        class="block w-full bg-gray-700 border border-gray-600 px-4 py-3 text-gray-200 text-sm rounded focus:ring-0 focus:border-indigo-500 placeholder-gray-400"
+                        placeholder="*******">
+                </div>
+                <div>
+                    <label for="confirm" class="text-gray-200 block text-sm font-medium mb-1">Confirm password</label>
+                    <input type="password" name="confirm" id="confirm"
+                        class="block w-full bg-gray-700 border border-gray-600 px-4 py-3 text-gray-200 text-sm rounded focus:ring-0 focus:border-indigo-500 placeholder-gray-400"
+                        placeholder="*******">
+                </div>
+                <div>
+                    <label for="captcha" class="text-gray-200 block text-sm font-medium mb-1">Captcha</label>
+                    <input type="text" name="captcha" id="captcha"
+                        class="block w-full bg-gray-700 border border-gray-600 px-4 py-3 text-gray-200 text-sm rounded focus:ring-0 focus:border-indigo-500 placeholder-gray-400"
+                        placeholder="Enter captcha">
+                    <img id="captchaImage" src="/api/captcha" alt="Captcha Image" class="mt-2"/>
+                    <button type="button" onclick="refreshCaptcha()" class="mt-2 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-500">Refresh Captcha</button>
+                </div>
+                <div class="flex items-center mt-4">
+                    <input type="checkbox" name="agreement" id="agreement"
+                        class="text-indigo-500 focus:ring-0 rounded-sm cursor-pointer">
+                    <label for="agreement" class="text-gray-200 ml-3 cursor-pointer">I have read and agree to the <a
+                            href="#" class="text-indigo-400">terms & conditions</a></label>
                 </div>
                 <div class="mt-4">
                     <button type="submit"
-                    class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Create
+                        class="w-full py-2 px-4 rounded-md bg-indigo-600 text-white text-sm font-semibold shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-600">Create
                         account</button>
                 </div>
             </form>
 
             <!-- login with -->
             <div class="mt-6 flex justify-center relative">
-                <div class="text-gray-600 uppercase px-3 bg-white z-10 relative">Or signup with</div>
-                <div class="absolute left-0 top-3 w-full border-b-2 border-gray-200"></div>
+                <div class="text-gray-400 uppercase px-3 bg-gray-800 z-10 relative">Or signup with</div>
+                <div class="absolute left-0 top-3 w-full border-b-2 border-gray-600"></div>
             </div>
             <div class="mt-4 flex gap-4 justify-center">
                 <a href="#"
-                    class="w-1/2 py-2 text-center text-white bg-red-600 rounded uppercase font-roboto font-medium text-sm hover:bg-red-500">Google</a>
+                    class="w-1/2 py-2 text-center text-white bg-red-600 rounded uppercase font-medium text-sm hover:bg-red-500">Google</a>
             </div>
             <!-- ./login with -->
 
-            <p class="mt-4 text-center text-gray-600">Already have an account? <a href="/login"
-                    class="text-primary">Login now</a></p>
+            <p class="mt-4 text-center text-gray-400">Already have an account? <a href="/login"
+                    class="text-indigo-400">Login now</a></p>
         </div>
     </div>
-    <!-- ./login -->
-</body>
+</div>

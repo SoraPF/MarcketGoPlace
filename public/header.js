@@ -78,10 +78,11 @@ async function searchBar() {
         const data = await response.json();
 
         if (response.ok) {
-            if(data.article.StatusID == 1){
-                alert("l'article du même nom n'a pas encore etais verifier")    
+            if(data.articles.length === 0){
+                alert("Aucun article trouvé.");
             }else{
-                window.location.href = "/article/" + data.article.ID;
+                sessionStorage.setItem('searchResults', JSON.stringify(data.articles));
+                window.location.href = "/article/search";
             }
         } else {
             alert(data.error);

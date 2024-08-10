@@ -1,6 +1,6 @@
 </body>
     <!-- footer -->
-    <footer class="bg-white pt-16 pb-12 border-t border-gray-100">
+    <footer class="bg-orange-100 pt-16 pb-12 border-t border-gray-100">
         <div class="container grid grid-cols-3">
             <div class="col-span-1 space-y-8 mr-2">
                 <img src="../assets/images/logo.svg" alt="logo" class="w-30">

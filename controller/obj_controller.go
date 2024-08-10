@@ -230,14 +230,14 @@ func (controller *ObjController) FindByName(ctx *fiber.Ctx) error {
 	}
 	name := nameJson.Name
 	objets, err := controller.objService.FindByName(name)
-	if err != nil || objets.ID == 0 {
+	if err != nil {
 		return ctx.Status(fiber.StatusBadRequest).SendString("the article not found")
 	}
 
 	webResponse := map[string]interface{}{
-		"code":    200,
-		"status":  "ok",
-		"article": objets,
+		"code":     200,
+		"status":   "ok",
+		"articles": objets,
 	}
 	return ctx.Status(fiber.StatusOK).JSON(webResponse)
 }
