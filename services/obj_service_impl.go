@@ -177,3 +177,11 @@ func (o *ObjServiceImpl) FindByName(name string) ([]objets.Objects, error) {
 	}
 	return objets, nil
 }
+
+func (o *ObjServiceImpl) FindByCategId(id int) ([]objets.Objects, error) {
+	Object, err := o.ObjRepository.FindByCategId(uint(id))
+	if err != nil {
+		return []objets.Objects{}, err
+	}
+	return Object, nil
+}

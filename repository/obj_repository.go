@@ -12,6 +12,7 @@ type ObjectRepository interface {
 	ObjByArticleID(CID uint) (objets.Objects, error)
 	GetArticles(CID uint, status string) ([]objets.Objects, error)
 	FindByName(name string) ([]objets.Objects, error)
+	FindByCategId(id uint) ([]objets.Objects, error)
 }
 
 type StatusRepository interface {

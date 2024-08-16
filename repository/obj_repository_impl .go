@@ -126,3 +126,17 @@ func (o *ObjRepositoryImpl) FindByName(name string) ([]objets.Objects, error) {
 	}
 	return obj, nil
 }
+
+func (o *ObjRepositoryImpl) FindByCategId(id uint) ([]objets.Objects, error) {
+	var obj []objets.Objects
+	var result *gorm.DB
+	if id == 0 {
+		result = o.Db.Where("category_id = ?", 1).Find(&obj)
+	} else {
+		result = o.Db.Where("category_id = ?", id).Find(&obj)
+	}
+	if result.Error != nil {
+		return obj, result.Error
+	}
+	return obj, nil
+}

@@ -241,3 +241,13 @@ func (controller *ObjController) FindByName(ctx *fiber.Ctx) error {
 	}
 	return ctx.Status(fiber.StatusOK).JSON(webResponse)
 }
+
+func (oc *ObjController) FindByCategId(c *fiber.Ctx) error {
+	stringId := c.Params("id")
+	id, err := strconv.Atoi(stringId)
+	objets, err := oc.objService.FindByCategId(id)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString("Internal Server Error")
+	}
+	return c.Status(fiber.StatusOK).JSON(objets)
+}

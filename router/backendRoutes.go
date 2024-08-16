@@ -21,6 +21,7 @@ func BackendRoutes(userController *controller.UserController, ObjController *con
 	router.Post("/validate-2fa/:id", userController.GetValidate2FA)
 	router.Post("/articles/verify", ObjController.AdminResponceNewArticle) //presque bon
 	router.Post("/article/by-name", ObjController.FindByName)
+	router.Get("/article/categID/:id", ObjController.FindByCategId)
 
 	router.Route("/messenger", func(router fiber.Router) {
 		router.Post("/create", messController.CreateConversation)
