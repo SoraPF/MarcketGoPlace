@@ -7,50 +7,52 @@
         <span class="text-sm text-gray-400">
             <i class="fa-solid fa-chevron-right"></i>
         </span>
-        <p class="text-gray-600 font-medium">Product</p>
     </div>
     <!-- ./breadcrumb -->
 
     <!-- product-detail -->
-    <div class="container grid grid-cols-2 gap-6 border bg-blue-400">
-        <div>
-            <img src="{{article.Img[0]}}" alt="image product" class="w-full">
-            <div class="grid grid-cols-5 gap-4 mt-4">
+    <div class="container grid grid-cols-2 gap-6 shadow-lg">
+        <div class="border-r-2 border-gray-300 pr-6 ">
+            <img src="{{article.Img[0]}}" class="w-full mb-4">
+            <div class="grid grid-cols-5 gap-4">
                 {%for img in article.Img%}
                 <img src="{{img}}" alt="product" class="w-full cursor-pointer border border-primary">
                 {%endfor%}
             </div>
         </div>
-
+    
         <div>
             <h2 class="text-3xl font-medium uppercase mb-2">{{article.Title}}</h2>
             <div class="space-y-2">
                 <p class="space-x-2">
                     <span class="text-gray-800 font-semibold">Category: </span>
-                    <span class="text-gray-600">{{categories.Title}}</span>
+                    <span class="text-gray-600">{{article.categories.Title}}</span>
                 </p>
                 <p class="space-x-2">
                     <span class="text-gray-800 font-semibold">Tags: </span>
                     {%for tag in article.Tags%}
-                    <span class="text-gray-600">{{Tag.Title}}</span><!--foreach-->
+                    <span class="text-gray-600">{{tag.Title}}</span>
                     {% endfor %}
                 </p>
             </div>
             <div class="flex items-baseline mb-1 space-x-2 font-roboto mt-4">
-                <p class="text-xl text-primary font-semibold">{{article.Price}}XPF</p>
+                <p class="text-xl text-primary font-semibold">{{article.Price}} XPF</p>
             </div>
-
+    
             <p class="mt-4 text-gray-600">Description: {{article.Desc}}</p>
             
             <div class="mt-6 flex gap-3 pb-5 pt-5">
+                <input type="number" id="proposePrice" placeholder="proposer un prix">
+                <input type="submit" onclick=""
+                    class="border border-gray-300 text-gray-600 px-8 py-2 font-medium rounded uppercase flex items-center gap-2 hover:text-primary transition">
                 <button onclick="checkiscreated()"
                     class="border border-gray-300 text-gray-600 px-8 py-2 font-medium rounded uppercase flex items-center gap-2 hover:text-primary transition">
                     <i class="fa-solid fa-heart">Message</i>
-            </button>
+                </button>
             </div>
-
         </div>
     </div>
+    
     <!-- ./product-detail -->
 
     <!-- map -->
@@ -122,5 +124,28 @@
             alert("un problème est survenue lord de la création de conversation")
         }
 
+    }
+
+    async function proposePrice(){        
+        const pPrice = document.getElementById('proposePrice').value
+        try{
+            const response = await fetch('/api/article/proposePrice', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body:  JSON.stringify(pPrice),
+            });
+
+            const jdata = await response.json();
+
+            if(response.ok){
+                console.log("data:",jdata)
+            }else{
+                alert("Un problème serveur est survenu");
+            }
+        }catch{
+            alert("Un problème serveur est survenu");
+        }
     }
 </script>
