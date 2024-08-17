@@ -148,3 +148,8 @@ func (mc MessageController) CheckMessenger(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusCreated).JSON(webResponse)
 
 }
+
+func ProposePrice(c *fiber.Ctx) error {
+	//
+	return c.SendStatus(fiber.StatusOK)
+}

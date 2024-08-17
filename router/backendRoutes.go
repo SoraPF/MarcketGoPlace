@@ -22,6 +22,7 @@ func BackendRoutes(userController *controller.UserController, ObjController *con
 	router.Post("/articles/verify", ObjController.AdminResponceNewArticle) //presque bon
 	router.Post("/article/by-name", ObjController.FindByName)
 	router.Get("/article/categID/:id", ObjController.FindByCategId)
+	router.Get("/article/proposePrice", controller.ProposePrice)
 
 	router.Route("/messenger", func(router fiber.Router) {
 		router.Post("/create", messController.CreateConversation)
