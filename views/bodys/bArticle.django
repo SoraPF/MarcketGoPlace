@@ -42,13 +42,16 @@
             <p class="mt-4 text-gray-600">Description: {{article.Desc}}</p>
             
             <div class="mt-6 flex gap-3 pb-5 pt-5">
-                <input type="number" id="proposePrice" placeholder="proposer un prix">
-                <input type="submit" onclick=""
-                    class="border border-gray-300 text-gray-600 px-8 py-2 font-medium rounded uppercase flex items-center gap-2 hover:text-primary transition">
-                <button onclick="checkiscreated()"
-                    class="border border-gray-300 text-gray-600 px-8 py-2 font-medium rounded uppercase flex items-center gap-2 hover:text-primary transition">
-                    <i class="fa-solid fa-heart">Message</i>
-                </button>
+                {%if userID == article.IdVendeur%}
+                    <button onclick="checkiscreated()"
+                        class="border border-gray-300 text-gray-600 px-8 py-2 font-medium rounded uppercase flex items-center gap-2 hover:text-primary transition">
+                        <i class="fa-solid fa-heart">Message</i>
+                    </button>
+                {%else%}
+                    <input type="number" id="proposePrice" placeholder="proposer un prix">
+                    <input type="submit" onclick="proposePrice()"
+                        class="border border-gray-300 text-gray-600 px-8 py-2 font-medium rounded uppercase flex items-center gap-2 hover:text-primary transition">
+                {%endif%}
             </div>
         </div>
     </div>
@@ -126,7 +129,7 @@
 
     }
 
-    async function proposePrice(){        
+    async function proposePrice(){
         const pPrice = document.getElementById('proposePrice').value
         try{
             const response = await fetch('/api/article/proposePrice', {

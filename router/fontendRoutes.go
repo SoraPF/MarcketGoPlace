@@ -83,10 +83,12 @@ func Robject(ObjController *controller.ObjController, categories []response.Cate
 				"Categories": categories,
 			})
 		}
+		userID := c.Cookies("user_id")
 		return c.Render("article", fiber.Map{
 			"Title":      "categorie",
 			"Categories": categories,
 			"article":    article,
+			"userID":     userID,
 		})
 	})
 
