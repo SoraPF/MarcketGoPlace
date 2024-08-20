@@ -1,41 +1,16 @@
 {% include "partials/head.django"%}
+
 <style>
-    .box {
-        width: 100%;
-        height: 100px;
-        position: relative;
-        overflow: hidden;
-        background-color: #f0f0f0;
-    }
-
-    .moving-text {
-        width: 100px;
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        font-size: 24px;
-        background-color: #3498db;
-        color: white;
-        text-align: center;
-        border-radius: 10px;
-        padding: 10px;
-        animation: bounce 20s infinite;
-    }
-
-    @keyframes bounce {
-        0% {
-            left: 0;
-        }
-        50% {
-            left: calc(100% - 100px);
-        }
-        100% {
-            left: 0;
-        }
+    .custom-width {
+        width: 60%;
+        background-image: url("../public/img/pub.jpg");
+        background-position: center 30%; 
+        background-repeat: no-repeat;
     }
 </style>
-<!-- ads -->
-<div class="box">
-    <div class="moving-text">pub</div>
+
+
+<div class="flex-grow flex items-center justify-center">
+    <div class="h-24 custom-width bg-blue-500 text-white flex items-center justify-center rounded-lg shadow-lg mt-4">
+    </div>
 </div>
-<!-- ./ads -->

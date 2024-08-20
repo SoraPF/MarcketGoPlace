@@ -1,4 +1,3 @@
-</body>
     <!-- footer -->
     <footer class="bg-orange-100 pt-16 pb-12 border-t border-gray-100">
         <div class="container grid grid-cols-3 ml-4">
@@ -80,3 +79,4 @@
         </div>
     </div>
     <!-- ./copyright -->
+</body>
