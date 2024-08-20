@@ -25,6 +25,7 @@
             <h2 class="text-3xl font-medium uppercase mb-2">{{article.Title}}</h2>
             <div class="space-y-2">
                 <p class="space-x-2">
+                    <span class="text-gray-600">{{article.IdVendeur}}</span>
                     <span class="text-gray-800 font-semibold">Category: </span>
                     <span class="text-gray-600">{{article.categories.Title}}</span>
                 </p>
@@ -49,7 +50,7 @@
                     </button>
                 {%else%}
                     <input type="number" id="proposePrice" placeholder="proposer un prix">
-                    <input type="submit" onclick="proposePrice()"
+                    <input type="submit" onclick="proposPrice()"
                         class="border border-gray-300 text-gray-600 px-8 py-2 font-medium rounded uppercase flex items-center gap-2 hover:text-primary transition">
                 {%endif%}
             </div>
@@ -129,26 +130,32 @@
 
     }
 
-    async function proposePrice(){
+    async function proposPrice(){
         const pPrice = document.getElementById('proposePrice').value
-        try{
-            const response = await fetch('/api/article/proposePrice', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body:  JSON.stringify(pPrice),
-            });
+        const userID = {{userID}}
+        const data = {
+            "pPrice": parseInt(pPrice, 10),
+            "vendeur": parseInt(userID, 10),
+        };
+        console.log(data)
+        if(pPrice != null && userID != null){
+            try{
+                const response = await fetch('/api/article/proposePrice', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body:  JSON.stringify(data),
+                });
 
-            const jdata = await response.json();
-
-            if(response.ok){
-                console.log("data:",jdata)
-            }else{
+                if(response.ok){
+                    console.log("responce ok")
+                }else{
+                    alert("Un problème serveur est survenu");
+                }
+            }catch{
                 alert("Un problème serveur est survenu");
             }
-        }catch{
-            alert("Un problème serveur est survenu");
-        }
+        }        
     }
 </script>

@@ -150,6 +150,24 @@ func (mc MessageController) CheckMessenger(c *fiber.Ctx) error {
 }
 
 func ProposePrice(c *fiber.Ctx) error {
-	//
+	type proposePrice struct {
+		Price   int `json:"pPrice"`
+		Vendeur int `json:"vendeur"`
+	}
+
+	var pp proposePrice
+	if err := c.BodyParser(&pp); err != nil {
+		return c.Status(fiber.StatusBadRequest).SendString("Invalid request body")
+	}
+	println("test", pp.Price, "v:", pp.Vendeur)
+	notification := Message{
+		Type:    "notification",
+		UserID:  strconv.Itoa(pp.Vendeur),
+		Content: "Vous avez reçu une nouvelle offre.",
+		Price:   pp.Price,
+	}
+
+	broadcast <- notification
+
 	return c.SendStatus(fiber.StatusOK)
 }

@@ -16,6 +16,7 @@ type Message struct {
 	Type    string `json:"type"`    // "chat" ou "notification"
 	UserID  string `json:"user_id"` // ID de l'utilisateur (pour les messages de chat)
 	Content string `json:"content"` // Contenu du message ou de la notification
+	Price   int    `json:"price"`   // Prix proposé pour les notifications
 }
 
 func HandleConnections(c *websocket.Conn) {

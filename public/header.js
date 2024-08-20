@@ -24,17 +24,40 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-const svgNotification = function () {
+const ws = new WebSocket('ws://127.0.0.1:3000/ws'); // Connecter au serveur WebSocket
+
+ws.onmessage = function(event) {
+    const message = JSON.parse(event.data);
+
+    if (message.Type === 'notification') {
+        addNotification(message);
+        svgNotification();
+    }
+};
+
+function addNotification(message) {
+    const notificationContainer = document.getElementById('notification-container');
+    const notification = document.createElement('div');
+    notification.className = 'bg-white border border-gray-300 p-4 rounded-lg shadow-md mb-2';
+    notification.innerHTML = `
+        <p><strong>Notification:</strong> ${message.Content}</p>
+        <p><strong>Price:</strong> ${message.Price}</p>
+    `;
+    notificationContainer.appendChild(notification);
+}
+
+function svgNotification() {
     const notificationContainer = document.getElementById('notification-container');
     const imageContainer = document.getElementById('image-container');
     let img = document.createElement('img');
     
     if (notificationContainer.children.length === 0) {
-      img.src = '../public/img/svg/notification-bell.svg';
+        img.src = '../public/img/svg/notification-bell.svg';
     } else {
-      img.src = '../public/img/svg/notification-alert.svg';
+        img.src = '../public/img/svg/notification-alert.svg';
     }
     img.className ="w-12 h-12";
+    imageContainer.innerHTML = ''; // Clear previous image
     imageContainer.appendChild(img);
 }
 
