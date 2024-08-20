@@ -1,17 +1,31 @@
 {% include "partials/head.django" %}
 <script src="../public/header.js"></script>
+<style>
+    .icon {
+        width: 24px;
+        height: 24px;
+        color: #ffffff; /* Couleur des SVG */
+    }
+</style>
 
-<header class="py-4 shadow-sm">
-   
-<nav class="bg-gray-600">
-    <div class="container flex">
-        <div class="dropdown px-8 py-4 bg-primary flex items-center cursor-pointer relative group">
-            <span class="text-white">
-                <i class="fa-solid fa-bars"></i>
-            </span>
+<header class="bg-gray-800 text-white flex items-center justify-between p-4">
+    <div class="flex items-center space-x-4">
+        <div class="logo">
+            <img src="../public/img/logo.jpg" alt="Logo" class="h-16">
+        </div>
+        <nav>
+            <ul class="flex space-x-6">
+                <li>
+                    <a href="/" class="text-gray-200 hover:text-white transition">Home</a>
+                </li>
+                <li>
+                    <a href="/createSell" class="text-gray-200 hover:text-white transition"
+                    id="createArticle" style="display: none;">Faire une annonce</a>
+                </li>
+            </ul>
+        </nav>
+        <div class="dropdown px-8 py-4 bg-primary flex items-center cursor-pointer relative group w-64 ml-4">            
             <span class="capitalize ml-2 text-white">All Categories</span>
-
-            <!-- dropdown -->
             <div
                 class="absolute z-20 w-full left-0 top-full bg-white shadow-md py-3 divide-y divide-gray-300 divide-dashed opacity-0 group-hover:opacity-100 transition duration-300 invisible group-hover:visible max-h-60 overflow-y-auto">
                 {% for category in Categories %}
@@ -22,28 +36,24 @@
                 {% endfor %}
             </div>
         </div>
-
-        <div class="flex items-center justify-between flex-grow pl-12">
-            <div class="flex items-center space-x-6 capitalize">
-                <a href="/" class="text-gray-200 hover:text-white transition">Home</a>
-                <a href="/createSell" class="text-gray-200 hover:text-white transition"
-                    id="createArticle" style="display: none;">Faire une annonce</a>
-            </div>  
-
-            <div class="flex w-full max-w-md">
-                <input type="text" name="search" id="search" onkeydown="searchKey(event)"
-                    class="w-full border border-primary border-r-0 pl-4 py-3 pr-3 rounded-l-md focus:outline-none"
-                    placeholder="Search">
-                <button onclick="searchBar()"
-                    class="bg-primary border border-primary text-white px-4 py-3 rounded-r-md hover:bg-transparent hover:text-primary transition">Search</button>
-            </div>
-
-            <div id="image-container"></div>
-            <div id="notification-container"></div>
-            
-            <a href="/login" class="text-gray-200 hover:text-white transition" style="display: block;" id="login"> Login </a>
-            <a class="text-gray-200 hover:text-white transition cursor" style="display: none;" id="logout" onclick="logout()"> logout </a>
+    </div>
+    <div class="flex-grow">
+        <div class="relative mx-auto w-full max-w-lg">
+            <input type="text" placeholder="Rechercher..." class="w-full rounded bg-gray-700 text-white px-4 py-2 border-none focus:ring-2 focus:ring-blue-500 focus:outline-none">
         </div>
     </div>
-</nav>
+    <div class="flex items-center space-x-4">
+        <div class="flex items-center space-x-4">
+            <div class="notification" id="image-container">
+            </div>
+            <div id="notification-container"></div>
+            <div class="profile">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-8 w-8 icon">
+                    <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clip-rule="evenodd" />
+                </svg>                  
+            </div>
+        </div>
+        <a href="/login"style="display: block;" id="login"><button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Login</button></a>
+        <a style="display: none;" id="logout" onclick="logout()"><button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">logout</button> </a>
+    </div>
 </header>

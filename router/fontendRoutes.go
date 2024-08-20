@@ -49,6 +49,7 @@ func Robject(ObjController *controller.ObjController, categories []response.Cate
 			return c.Render("categories", fiber.Map{
 				"Title":      "categorie",
 				"Categories": categories,
+				"tags":       tags,
 			})
 		}
 		cid := uint(id)
@@ -57,6 +58,7 @@ func Robject(ObjController *controller.ObjController, categories []response.Cate
 			return c.Render("categories", fiber.Map{
 				"Title":      "categorie",
 				"Categories": categories,
+				"tags":       tags,
 			})
 		}
 		return c.Render("categories", fiber.Map{
@@ -86,7 +88,12 @@ func Robject(ObjController *controller.ObjController, categories []response.Cate
 		}
 		userID := c.Cookies("user_id")
 		uid, err := strconv.Atoi(userID)
-
+		if err != nil {
+			return c.Render("article", fiber.Map{
+				"Title":      "categorie",
+				"Categories": categories,
+			})
+		}
 		return c.Render("article", fiber.Map{
 			"Title":      "categorie",
 			"Categories": categories,
