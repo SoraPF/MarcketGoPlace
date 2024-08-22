@@ -96,10 +96,12 @@ function searchKey(event) {
 
 
 async function logout(){
-    
+        const userId = document.cookie.split('; ').find(row => row.startsWith('user_id=')).split('=')[1];
         const response = await fetch("http://127.0.0.1:3000/api/authent/logout",{
-            method: 'GET'
+            method: 'POST',
+            body: JSON.stringify({"userID": userId })
         });
+        
         if (response.ok){
             document.getElementById('login').style.display = 'block';
             document.getElementById('logout').style.display = 'none';

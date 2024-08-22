@@ -345,20 +345,20 @@ func IsLogin(c *fiber.Ctx) error {
 
 func (uc *UserController) Logout(c *fiber.Ctx) error {
 	type logout struct {
-		Username string `json:"username"`
+		userId string `json:"userID"`
 	}
-	var username logout
-	if err := c.BodyParser(username); err != nil {
+	var user logout
+	if err := c.BodyParser(user); err != nil {
 		return c.SendStatus(fiber.StatusBadRequest)
 	}
-	uname := username.Username
+	uid := user.userId
 	c.Cookie(&fiber.Cookie{
-		Name:    "captcha" + uname,
+		Name:    "captcha" + uid,
 		Expires: time.Unix(0, 0),
 		MaxAge:  -1,
 	})
 	c.Cookie(&fiber.Cookie{
-		Name:    "jwt" + uname,
+		Name:    "jwt" + uid,
 		Expires: time.Unix(0, 0),
 		MaxAge:  -1,
 	})
