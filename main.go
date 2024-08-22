@@ -32,6 +32,7 @@ func main() {
 
 	//config.InsertObject(db)
 	/* config.InsertImages(db) */
+	/*config.AutoIncrement(db)*/
 
 	fmt.Println("Database migration successful")
 
