@@ -57,17 +57,17 @@
             
             // Crée la div de chaque item
             const itemDiv = document.createElement('div');
-            itemDiv.className = 'h-80 bg-gray-200 border border-gray-300 rounded-lg shadow-lg relative flex flex-col items-center justify-center p-4';
-    
+            itemDiv.className = 'bg-white p-4 rounded-lg shadow-lg flex flex-col items-center justify-center w-64 h-80 mt-4 bg-gray-100';
+
             // Image (affiche une image par défaut si elle est manquante)
             const img = document.createElement('img');
             img.src = item.Img && item.Img.length > 0 ? item.Img[0] : 'https://via.placeholder.com/192'; // Remplacez par le chemin de votre image par défaut
             img.alt = 'Image';
-            img.className = 'absolute top-0 left-0 right-0 mx-auto w-48 h-48 object-cover border-2 border-gray-300';
+            img.className = ' top-0 left-0 right-0 mx-auto w-48 h-48 object-cover border-2 border-gray-300';
 
             // Catégorie (affiche 'Unknown category' si elle est manquante)
             const categorySpan = document.createElement('span');
-            categorySpan.className = 'text-lg font-semibold mt-40';
+            categorySpan.className = 'text-lg font-semibold mt-2';
             categorySpan.textContent = item.Category && item.Category.name ? item.Category.name : 'Unknown category';
     
             // Titre (affiche 'Untitled' si le titre est manquant)
@@ -77,7 +77,7 @@
     
             // Prix (affiche 'N/A' si le prix est manquant)
             const priceSpan = document.createElement('span');
-            priceSpan.className = 'text-md text-gray-700 mt-1';
+            priceSpan.className = 'text-md text-gray-700 mt-2';
             priceSpan.textContent = item.Price !== undefined ? `$${item.Price}` : 'N/A';
     
             // Assemble les éléments dans l'itemDiv
@@ -93,28 +93,23 @@
             grid.appendChild(itemLink);
         });
     }
-    
 </script>
-<div class="flex flex-col md:flex-row w-full p-4 space-x-4">
-    <!-- Partie gauche : Liste de catégories avec défilement -->
-    <div class="w-full md:w-1/3 h-96 overflow-y-scroll border border-gray-300 rounded-lg p-2">
+<div class="mx-10">
+<div class="flex flex-col md:flex-row w-full p-4 gap-4">
+    <!-- Section des catégories -->
+    <div class="flex-shrink-0 w-full md:w-1/4 h-auto md:h-96 overflow-y-auto border border-gray-300 rounded-lg p-2 bg-white">
         {% for category in Categories %}
-            <div class="flex items-center text-gray-700 bg-gray-100 border border-gray-300 rounded-lg p-2 shadow-lg h-20 mb-2 cursor-pointer" onclick="getItems({{ category.ID }})">
+            <div class="flex items-center text-gray-700 bg-gray-100 border border-gray-300 rounded-lg p-2 shadow-lg mb-2 cursor-pointer" onclick="getItems({{ category.ID }})">
                 <img src="{{ category.Img }}" alt="Category Image" class="w-16 h-16 object-cover rounded-full">
                 <span class="ml-4">{{ category.Title }}</span>
             </div>
         {% endfor %}
     </div>
 
-    <div id="item-container" class="w-full md:w-2/3 h-96 border border-gray-300 rounded-lg p-2 overflow-y-auto">
-        <div id="grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+    <!-- Section des éléments -->
+    <div id="item-container" class="flex-grow w-full md:w-3/4 h-auto md:h-96 border border-gray-300 rounded-lg p-2 bg-white overflow-y-auto">
+        <div id="grid" class="flex flex-wrap gap-4 ml-5">
         </div>
     </div>
 </div>
-<div class="w-full p-4">
-    <h2> nouveau article article</h2>
-    <div id="item-container" class="w-full h-64 border border-gray-300 rounded-lg p-2 overflow-y-auto">
-        <div id="grid2" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        </div>
-    </div>   
 </div>

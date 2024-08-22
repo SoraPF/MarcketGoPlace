@@ -46,7 +46,7 @@ func (controller *UserController) UserCreate(ctx *fiber.Ctx) error {
 		})
 	}
 
-	captchaValue := ctx.Cookies("captcha")
+	captchaValue := ctx.Cookies("captcha" + user.Username)
 	if captchaValue == "" || createUserRequest.Captcha != captchaValue {
 		return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"error": "Invalid CAPTCHA",
@@ -146,18 +146,18 @@ func (uc *UserController) Login(ctx *fiber.Ctx) error {
 		})
 	}
 
-	captchaValue := ctx.Cookies("captcha")
-	if captchaValue == "" || req.Captcha != captchaValue {
-		return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-			"error": "Invalid CAPTCHA",
-		})
-	}
-
 	valid, user, err := uc.UserService.AuthenticateUser(req.Email, req.Password)
 	if err != nil || !valid {
 		return ctx.Status(fiber.StatusUnauthorized).Render("layouts/login", fiber.Map{
 			"Title": "Login",
 			"Error": "Invalid email or password",
+		})
+	}
+
+	captchaValue := ctx.Cookies("captcha" + user.Username)
+	if captchaValue == "" || req.Captcha != captchaValue {
+		return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"error": "Invalid CAPTCHA",
 		})
 	}
 
@@ -182,7 +182,7 @@ func (uc *UserController) Login(ctx *fiber.Ctx) error {
 	}
 
 	ctx.Cookie(&fiber.Cookie{
-		Name:    "jwt",
+		Name:    "jwt" + user.Username,
 		Value:   tokenString,
 		Expires: time.Now().Add(time.Hour * 72),
 	})
@@ -315,7 +315,7 @@ func (uc *UserController) GetValidate2FA(c *fiber.Ctx) error {
 		}
 
 		c.Cookie(&fiber.Cookie{
-			Name:    "jwt",
+			Name:    "jwt" + user.Username,
 			Value:   tokenString,
 			Expires: time.Now().Add(time.Hour * 72),
 		})
@@ -344,13 +344,21 @@ func IsLogin(c *fiber.Ctx) error {
 }
 
 func (uc *UserController) Logout(c *fiber.Ctx) error {
+	type logout struct {
+		Username string `json:"username"`
+	}
+	var username logout
+	if err := c.BodyParser(username); err != nil {
+		return c.SendStatus(fiber.StatusBadRequest)
+	}
+	uname := username.Username
 	c.Cookie(&fiber.Cookie{
-		Name:    "captcha",
+		Name:    "captcha" + uname,
 		Expires: time.Unix(0, 0),
 		MaxAge:  -1,
 	})
 	c.Cookie(&fiber.Cookie{
-		Name:    "jwt",
+		Name:    "jwt" + uname,
 		Expires: time.Unix(0, 0),
 		MaxAge:  -1,
 	})
