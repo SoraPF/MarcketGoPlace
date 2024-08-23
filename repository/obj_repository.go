@@ -1,6 +1,9 @@
 package repository
 
-import "Marcketplace/model/objets"
+import (
+	"Marcketplace/data/response"
+	"Marcketplace/model/objets"
+)
 
 type ObjectRepository interface {
 	Save(object objets.Objects)
@@ -9,7 +12,7 @@ type ObjectRepository interface {
 	FindById(objectId int) (objets.Objects, error)
 	FindAll() []objets.Objects
 	ObjByCategID(CID uint) ([]objets.Objects, error)
-	ObjByArticleID(CID uint) (objets.Objects, error)
+	ObjByArticleID(CID uint) (response.ArticleResponse, error)
 	GetArticles(CID uint, status string) ([]objets.Objects, error)
 	FindByName(name string) ([]objets.Objects, error)
 	FindByCategId(id uint) ([]objets.Objects, error)

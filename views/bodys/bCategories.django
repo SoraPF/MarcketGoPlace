@@ -1,6 +1,6 @@
 {% include "partials/head.django"%}
 <!-- drawer component -->
-<div class="container grid md:grid-cols-4 grid-cols-2 gap-6 pt-4 pb-16 items-start">
+<div class="container grid md:grid-cols-4 grid-cols-2 gap-6 pt-4 pr-4 pb-16 items-start">
     <!-- ./sidebar -->
     <div class="col-span-1 bg-white px-4 pb-6 shadow rounded overflow-hiddenb hidden md:block">
         <div class="divide-y divide-gray-200 space-y-5">
@@ -46,33 +46,23 @@
         <!-- sorting -->
         <div class="col-span-3">
             <div class="flex items-center mb-4">
+                <label for="sort" class="text-sm text-gray-600 mr-3">Sort by:</label>
                 <select name="sort" id="sort"
-                    class="w-44 text-sm text-gray-600 py-3 px-4 border-gray-300 shadow-sm rounded focus:ring-primary focus:border-primary">
-                    <option value="">Default sorting</option>
+                    class="w-44 text-sm text-gray-600 py-2 px-4 border-gray-300 shadow-sm rounded focus:ring-primary focus:border-primary">
+                    <option value="default">Default sorting</option>
                     <option value="price-low-to-high">Price low to high</option>
                     <option value="price-high-to-low">Price high to low</option>
                     <option value="latest">Latest product</option>
                 </select>
-
-                <div class="flex gap-2 ml-auto">
-                    <div
-                        class="border border-primary w-10 h-9 flex items-center justify-center text-white bg-primary rounded cursor-pointer">
-                        <i class="fa-solid fa-grip-vertical"></i>
-                    </div>
-                    <div
-                        class="border border-gray-300 w-10 h-9 flex items-center justify-center text-gray-600 rounded cursor-pointer">
-                        <i class="fa-solid fa-list"></i>
-                    </div>
-                </div>
-        </div>
+            </div>
         <!-- products -->
-        <div class="grid md:grid-cols-3 grid-cols-2 gap-6">
+        <div id="products-container" class="grid md:grid-cols-3 grid-cols-2 gap-6">
             {% if articles %}
             {% for article in articles %}
-            <div class="bg-white shadow rounded overflow-hidden group">
+            <div class="bg-white shadow rounded overflow-hidden group" data-price="{{article.Price}}" data-date="{{article.Date}}">
                 <div class="relative flex justify-center">
                     <a href="/article/{{article.ID}}">
-                        <img src="{{article.Img[0]}}" alt="{{article.Title}}" class="h-40">
+                        <img src="{{article.Img[0]}}" alt="{{article.Title}}" class="h-40 object-cover w-full">
                     </a>
                 </div>
                 <div class="pt-4 pb-3 px-4">
@@ -86,15 +76,107 @@
                     </div>
                 </div>
             </div>
-            
             {% endfor %}
             {% else %}
-                <p> il n'a aucun article ne possède cette categorie</p>
+            <p>Il n'y a aucun article dans cette catégorie.</p>
             {% endif %}
         </div>
 
     </div>
-
     <!-- ./products -->
 </div>
+<div id="pagination" class="flex justify-center gap-2 mt-6 mr-6">
+    <button id="prev-page" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg shadow-md hover:bg-gray-400 focus:outline-none" disabled>Previous</button>
+    <div id="page-numbers" class="flex gap-2">
+        <!-- Page numbers will be inserted here by JavaScript -->
+    </div>
+    <button id="next-page" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg shadow-md hover:bg-gray-400 focus:outline-none">Next</button>
+</div>
 <!-- ./shop wrapper -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const itemsPerPage = 6; // Nombre d'articles par page
+        const productsContainer = document.getElementById('products-container');
+        const items = Array.from(productsContainer.children);
+        const totalPages = Math.ceil(items.length / itemsPerPage);
+        let currentPage = 1;
+
+        const showPage = (page) => {
+            items.forEach((item, index) => {
+                item.style.display = (index >= (page - 1) * itemsPerPage && index < page * itemsPerPage) ? 'block' : 'none';
+            });
+            document.getElementById('prev-page').disabled = page === 1;
+            document.getElementById('next-page').disabled = page === totalPages;
+            const pageNumbers = document.getElementById('page-numbers');
+            pageNumbers.innerHTML = '';
+            for (let i = 1; i <= totalPages; i++) {
+                const pageNumber = document.createElement('button');
+                pageNumber.textContent = i;
+                pageNumber.className = `px-4 py-2 border rounded-lg ${i === page ? 'bg-primary text-white' : 'bg-gray-300 text-gray-700'} hover:bg-primary hover:text-white focus:outline-none`;
+                pageNumber.addEventListener('click', () => {
+                    currentPage = i;
+                    showPage(currentPage);
+                });
+                pageNumbers.appendChild(pageNumber);
+            }
+        };
+
+        document.getElementById('prev-page').addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                showPage(currentPage);
+            }
+        });
+
+        document.getElementById('next-page').addEventListener('click', () => {
+            if (currentPage < totalPages) {
+                currentPage++;
+                showPage(currentPage);
+            }
+        });
+
+        // Initial display
+        showPage(currentPage);
+    });
+    document.getElementById('sort').addEventListener('change', function() {
+        const sortValue = this.value;
+        const productsContainer = document.getElementById('products-container');
+        const products = Array.from(productsContainer.children);
+
+        let sortedProducts;
+
+        switch (sortValue) {
+            case 'price-low-to-high':
+                sortedProducts = products.sort((a, b) => {
+                    const priceA = parseFloat(a.getAttribute('data-price'));
+                    const priceB = parseFloat(b.getAttribute('data-price'));
+                    return priceA - priceB;
+                });
+                break;
+
+            case 'price-high-to-low':
+                sortedProducts = products.sort((a, b) => {
+                    const priceA = parseFloat(a.getAttribute('data-price'));
+                    const priceB = parseFloat(b.getAttribute('data-price'));
+                    return priceB - priceA;
+                });
+                break;
+
+            case 'latest':
+                sortedProducts = products.sort((a, b) => {
+                    const dateA = new Date(a.getAttribute('data-date'));
+                    const dateB = new Date(b.getAttribute('data-date'));
+                    return dateB - dateA;
+                });
+                break;
+
+            default:
+                sortedProducts = products; // Default sorting, no change
+                break;
+        }
+
+        // Append sorted products back to the container
+        productsContainer.innerHTML = '';
+        sortedProducts.forEach(product => productsContainer.appendChild(product));
+    });
+</script>

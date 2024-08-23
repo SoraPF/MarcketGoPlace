@@ -183,10 +183,10 @@ func (controller *ObjController) ObjByCategID(CID uint) []objets.Objects {
 	return LObject
 }
 
-func (controller *ObjController) ObjByArticleID(CID uint) (objets.Objects, error) {
+func (controller *ObjController) ObjByArticleID(CID uint) (response.ArticleResponse, error) {
 	Object, err := controller.objService.ObjByArticleID(CID)
 	if err != nil {
-		return objets.Objects{}, err
+		return response.ArticleResponse{}, err
 	}
 	return Object, nil
 }

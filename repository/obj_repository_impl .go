@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"Marcketplace/data/response"
 	"Marcketplace/helper"
 	"Marcketplace/model/objets"
 	"errors"
@@ -86,15 +87,40 @@ func (o *ObjRepositoryImpl) ObjByCategID(CID uint) ([]objets.Objects, error) {
 	return obj, nil
 }
 
-func (o *ObjRepositoryImpl) ObjByArticleID(CID uint) (objets.Objects, error) {
+func (o *ObjRepositoryImpl) ObjByArticleID(CID uint) (response.ArticleResponse, error) {
+	var ar response.ArticleResponse
 	var obj objets.Objects
-	result := o.Db.Joins("JOIN statuses ON statuses.id = objects.status_id").
+	resultArticle := o.Db.Joins("JOIN statuses ON statuses.id = objects.status_id").
 		Where("Objects.id = ? AND statuses.title = ?", CID, "in sale").
 		Find(&obj)
-	if result.Error != nil {
-		return obj, result.Error
+	if resultArticle.Error != nil {
+		return ar, resultArticle.Error
 	}
-	return obj, nil
+	ar.IdVendeur = obj.IdVendeur
+	ar.Title = obj.Title
+	ar.Price = obj.Price
+	ar.Desc = obj.Desc
+	ar.Status = obj.StatusID
+	ar.Img = obj.Img
+
+	var tags []objets.Tags
+	resultTags := o.Db.Joins("JOIN object_tags ON object_tags.tags_id = tags.id").
+		Where("object_tags.objects_id = ?", CID).
+		Find(&tags)
+	if resultTags.Error != nil {
+		return ar, resultTags.Error
+	}
+	for _, tag := range tags {
+		ar.Tags = append(ar.Tags, tag.Title)
+	}
+	var categorie objets.Categories
+	resultCategorie := o.Db.Where("id = ?", CID).Find(&categorie)
+	if resultCategorie.Error != nil {
+		return ar, resultCategorie.Error
+	}
+	ar.Category = categorie.Title
+
+	return ar, nil
 }
 
 func (o *ObjRepositoryImpl) GetArticles(CID uint, status string) ([]objets.Objects, error) {
