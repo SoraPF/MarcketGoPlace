@@ -131,9 +131,13 @@ func (o *ObjRepositoryImpl) FindByCategId(id uint) ([]objets.Objects, error) {
 	var obj []objets.Objects
 	var result *gorm.DB
 	if id == 0 {
-		result = o.Db.Where("category_id = ?", 1).Find(&obj)
+		result = o.Db.Joins("JOIN statuses ON statuses.id = objects.status_id").
+			Where("category_id = ? AND statuses.title = ?", 1, "in sale").
+			Find(&obj)
 	} else {
-		result = o.Db.Where("category_id = ?", id).Find(&obj)
+		result = o.Db.Joins("JOIN statuses ON statuses.id = objects.status_id").
+			Where("category_id = ? AND statuses.title = ?", id, "in sale").
+			Find(&obj)
 	}
 	if result.Error != nil {
 		return obj, result.Error
