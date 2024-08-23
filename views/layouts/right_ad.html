@@ -1,0 +1,32 @@
+<style>
+    .custom-right-pub {
+        background-image: url("../public/img/rightPub.jpg");
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+</style>
+<div id="right-ad" 
+class="fixed top-28 right-2 w-32 h-2/3 bg-yellow-400 text-black p-4 rounded-lg shadow-lg z-10 custom-right-pub">
+</div>
+
+<script>
+    document.addEventListener('scroll', function() {
+        const rightAd = document.getElementById('right-ad');
+        const footer = document.getElementById('footer');
+        const footerRect = footer.getBoundingClientRect();
+        const adRect = rightAd.getBoundingClientRect();
+        
+        // Calculate the position where the ad should stop
+        const stopPosition = footerRect.top - adRect.height - 10; // 10px padding
+
+        // Fix the advertisement position to stay within view
+        if (window.scrollY > stopPosition) {
+            rightAd.style.position = 'absolute';
+            rightAd.style.top = `${stopPosition}px`;
+        } else {
+            rightAd.style.position = 'fixed';
+            rightAd.style.top = '7rem'; // Adjust this value as needed
+        }
+    });
+</script>

@@ -1,0 +1,32 @@
+<style>
+    .custom-left-pub {
+        background-image: url("../public/img/leftPub.jpg");
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+</style>
+<div id="left-ad" 
+class="fixed top-28 left-2 w-32 h-2/3 bg-yellow-400 text-black p-4 rounded-lg shadow-lg z-10 custom-left-pub">
+</div>
+
+<script>
+    document.addEventListener('scroll', function() {
+        const leftAd = document.getElementById('left-ad');
+        const footer = document.getElementById('footer');
+        const footerRect = footer.getBoundingClientRect();
+        const adRect = leftAd.getBoundingClientRect();
+        
+        // Calculate the position where the ad should stop
+        const stopPosition = footerRect.top - adRect.height - 10; // 10px padding
+
+        // Fix the advertisement position to stay within view
+        if (window.scrollY > stopPosition) {
+            leftAd.style.position = 'absolute';
+            leftAd.style.top = `${stopPosition}px`;
+        } else {
+            leftAd.style.position = 'fixed';
+            leftAd.style.top = '7rem'; // Adjust this value as needed
+        }
+    });
+</script>

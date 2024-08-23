@@ -1,75 +1,143 @@
 {% include "partials/head.django" %}
-    <!-- breadcrumb -->
-    <div class="container py-4 flex items-center gap-3">
-        <a href="/" class="text-primary text-base">
-            <i class="fa-solid fa-house"></i>
-        </a>
-        <span class="text-sm text-gray-400">
-            <i class="fa-solid fa-chevron-right"></i>
-        </span>
-    </div>
-    <!-- ./breadcrumb -->
+{% include "layouts/ads.django"%}
 
-    <!-- product-detail -->
-    <div class="container grid grid-cols-2 gap-6 shadow-lg">
-        <div class="border-r-2 border-gray-300 pr-6 ">
-            <img src="{{article.Img[0]}}" class="w-full mb-4">
-            <div class="grid grid-cols-5 gap-4">
-                {%for img in article.Img%}
-                <img src="{{img}}" alt="product" class="w-full cursor-pointer border border-primary">
-                {%endfor%}
-            </div>
+<!-- Container principal -->
+<div class="relative">
+    {% include "layouts/left_ad.html"%}
+    <!-- Contenu principal -->
+    <div class="ml-40 mr-40 py-6">
+        <!-- Breadcrumb -->
+        <div class="container mx-auto py-4 flex items-center gap-3">
+            <a href="/" class="text-primary text-base">
+                <i class="fa-solid fa-house"></i>
+            </a>
+            <span class="text-sm text-gray-400">
+                <i class="fa-solid fa-chevron-right"></i>
+            </span>
         </div>
-    
-        <div>
-            <h2 class="text-3xl font-medium uppercase mb-2">{{article.Title}}</h2>
-            <div class="space-y-2">
-                <p class="space-x-2">
-                    <span class="text-gray-600">{{article.IdVendeur}}</span>
-                    <span class="text-gray-800 font-semibold">Category: </span>
-                    <span class="text-gray-600">{{article.categories.Title}}</span>
-                </p>
-                <p class="space-x-2">
-                    <span class="text-gray-800 font-semibold">Tags: </span>
-                    {%for tag in article.Tags%}
-                    <span class="text-gray-600">{{tag.Title}}</span>
-                    {% endfor %}
-                </p>
-            </div>
-            <div class="flex items-baseline mb-1 space-x-2 font-roboto mt-4">
-                <p class="text-xl text-primary font-semibold">{{article.Price}} XPF</p>
-            </div>
-    
-            <p class="mt-4 text-gray-600">Description: {{article.Desc}}</p>
-            
-            <div class="mt-6 flex gap-3 pb-5 pt-5">
-                {%if userID == article.IdVendeur%}
-                    <button onclick="checkiscreated()"
-                        class="border border-gray-300 text-gray-600 px-8 py-2 font-medium rounded uppercase flex items-center gap-2 hover:text-primary transition">
-                        <i class="fa-solid fa-heart">Message</i>
-                    </button>
-                {% elif not userID %}
-                <a href="/login"> login </a> si interesser
-                {%else%}
-                    <input type="number" id="proposePrice" placeholder="proposer un prix">
-                    <input type="submit" onclick="proposPrice()"
-                        class="border border-gray-300 text-gray-600 px-8 py-2 font-medium rounded uppercase flex items-center gap-2 hover:text-primary transition">
-                {%endif%}
+
+        <!-- Détail du produit -->
+        <div class="container mx-auto py-6 bg-white rounded-lg shadow-lg">
+            <div class="grid grid-cols-2 gap-6 max-w-screen-lg mx-auto rounded-lg">
+                <div class="border-r-2 border-gray-300 pr-6 relative">
+                    <!-- Image principale et boutons de défilement -->
+                    <div class="relative items-center ml-5">
+                        <img id="mainImage" src="{{article.Img[0]}}" class="w-full h-auto mb-4 mx-auto">
+                        <!-- Boutons de défilement -->
+                        <button id="scroll-left" class="absolute top-1/2 left-2 transform -translate-y-1/2 bg-gray-700 text-white p-2 rounded-full shadow-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-400 hidden">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                            </svg>
+                        </button>
+                        <button id="scroll-right" class="absolute top-1/2 right-2 transform -translate-y-1/2 bg-gray-700 text-white p-2 rounded-full shadow-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-400 hidden">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                            </svg>
+                        </button>
+                    </div>
+                    <!-- Miniatures d'images -->
+                    <div id="thumbnails" class="grid grid-cols-5 gap-4 mt-4">
+                        {% for img in article.Img %}
+                        <img src="{{img}}" alt="product" class="w-full cursor-pointer border border-primary secondary-image">
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="ml-5">
+                    <h2 class="text-3xl font-medium uppercase mb-2"><b>{{article.Title}}</b></h2>
+                    <div class="space-y-2">
+                        <p class="space-x-2">
+                            <span class="text-gray-800 font-semibold">Category: </span>
+                            <span class="text-gray-600">{{article.categories.Title}}</span>
+                        </p>
+                        <p class="space-x-2">
+                            <span class="text-gray-800 font-semibold">Tags: </span>
+                            {% for tag in article.Tags %}
+                            <span class="text-gray-600">{{tag.Title}}</span>
+                            {% endfor %}
+                        </p>
+                    </div>
+                    <div class="flex items-baseline mb-1 space-x-2 font-roboto mt-4">
+                        <p class="text-xl text-primary font-semibold">{{article.Price}} XPF</p>
+                    </div>
+
+                    <p class="mt-4 text-gray-600">Description: {{article.Desc}}</p>
+
+                    <div class="mt-6 flex gap-3 pb-5 pt-5">
+                        {% if userID == article.IdVendeur %}
+                        <button onclick="checkiscreated()"
+                            class="border border-gray-300 text-gray-600 px-8 py-2 font-medium rounded uppercase flex items-center gap-2 hover:text-primary transition">
+                            <i class="fa-solid fa-heart">Message</i>
+                        </button>
+                        {% elif not userID %}
+                        <a href="/login" class="text-blue-500 hover:underline">Login si intéressé</a>
+                        {% else %}
+                        <input type="number" id="proposePrice" placeholder="proposer un prix">
+                        <input type="submit" onclick="proposPrice()"
+                            class="border border-gray-300 text-gray-600 px-8 py-2 font-medium rounded uppercase flex items-center gap-2 hover:text-primary transition">
+                        {% endif %}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    
-    <!-- ./product-detail -->
+
+    <!-- Publicité droite fixe -->
+    {% include "layouts/right_ad.html"%}
+</div>
+
+
+<!-- ./product-detail -->
 
     <!-- map -->
     <div class="container pb-16">
        
     </div>
     <!-- ./map -->
-
+    
     
 <script>
-    console.log({{article.Title}})
+    document.addEventListener('DOMContentLoaded', () => {
+        const mainImage = document.getElementById('mainImage');
+        const thumbnails = document.querySelectorAll('.secondary-image');
+        const scrollLeftButton = document.getElementById('scroll-left');
+        const scrollRightButton = document.getElementById('scroll-right');
+
+        let currentImageIndex = 0;
+        const images = Array.from(thumbnails).map(img => img.src);
+
+        // Fonction pour mettre à jour l'image principale
+        const updateMainImage = (index) => {
+            mainImage.src = images[index];
+        };
+
+        // Afficher les boutons de défilement si plus d'une image est présente
+        if (images.length > 1) {
+            scrollLeftButton.classList.remove('hidden');
+            scrollRightButton.classList.remove('hidden');
+        }
+
+        // Gestion des clics sur les miniatures
+        thumbnails.forEach((thumbnail, index) => {
+            thumbnail.addEventListener('click', () => {
+                currentImageIndex = index;
+                updateMainImage(index);
+            });
+        });
+
+        // Fonction pour défiler à gauche
+        scrollLeftButton.addEventListener('click', () => {
+            currentImageIndex = (currentImageIndex > 0) ? currentImageIndex - 1 : images.length - 1;
+            updateMainImage(currentImageIndex);
+        });
+
+        // Fonction pour défiler à droite
+        scrollRightButton.addEventListener('click', () => {
+            currentImageIndex = (currentImageIndex < images.length - 1) ? currentImageIndex + 1 : 0;
+            updateMainImage(currentImageIndex);
+        });
+    });
+
     //verifi si deja creer entre les 2 utilisateur sinon retourner vers la page de messagerie
     async function checkiscreated(){
         const userID = document.cookie.split('; ').find(row => row.startsWith('user_id=')).split('=')[1];
