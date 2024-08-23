@@ -48,6 +48,8 @@
                         class="border border-gray-300 text-gray-600 px-8 py-2 font-medium rounded uppercase flex items-center gap-2 hover:text-primary transition">
                         <i class="fa-solid fa-heart">Message</i>
                     </button>
+                {% elif not userID %}
+                <a href="/login"> login </a> si interesser
                 {%else%}
                     <input type="number" id="proposePrice" placeholder="proposer un prix">
                     <input type="submit" onclick="proposPrice()"
@@ -67,8 +69,9 @@
 
     
 <script>
+    console.log({{article.Title}})
     //verifi si deja creer entre les 2 utilisateur sinon retourner vers la page de messagerie
-    async function checkiscreated(){        
+    async function checkiscreated(){
         const userID = document.cookie.split('; ').find(row => row.startsWith('user_id=')).split('=')[1];
         const sellerID = {{article.IdVendeur}};
         let name =" ";
@@ -132,7 +135,7 @@
 
     async function proposPrice(){
         const pPrice = document.getElementById('proposePrice').value
-        const userID = {{userID}}
+        const userID = {{ userID | default: 'null' }};
         const data = {
             "pPrice": parseInt(pPrice, 10),
             "vendeur": parseInt(userID, 10),
@@ -156,6 +159,6 @@
             }catch{
                 alert("Un problème serveur est survenu");
             }
-        }        
+        }
     }
 </script>

@@ -1,5 +1,6 @@
 {% include "partials/head.django"%}
 {% include "layouts/ads.django"%}
+
 <script>
     document.addEventListener('DOMContentLoaded', async () => {
         try {
@@ -19,7 +20,7 @@
         }
     });
 
-    async function getItems(id){
+    async function getItems(id) {
         try {
             const response = await fetch(`/api/article/categID/${id}`, {
                 method: 'GET',
@@ -41,75 +42,127 @@
         const grid = document.getElementById('grid');
         grid.innerHTML = '';
     
-        // Vérifie s'il y a des items à afficher
-        if (!items || items.length === 0) {
-            const emptyMessage = document.createElement('p');
-            emptyMessage.textContent = 'No items available.';
-            emptyMessage.className = 'text-center text-gray-500';
-            grid.appendChild(emptyMessage);
-            return;
-        }
-    
+        // Grouper les articles par catégorie
+        const itemsByCategory = {};
         items.forEach(item => {
-            // Crée un lien pour chaque item
-            const itemLink = document.createElement('a');
-            itemLink.href = `/article/${item.ID}`;
-            
-            // Crée la div de chaque item
-            const itemDiv = document.createElement('div');
-            itemDiv.className = 'bg-white p-4 rounded-lg shadow-lg flex flex-col items-center justify-center w-64 h-80 mt-4 bg-gray-100';
-
-            // Image (affiche une image par défaut si elle est manquante)
-            const img = document.createElement('img');
-            img.src = item.Img && item.Img.length > 0 ? item.Img[0] : 'https://via.placeholder.com/192'; // Remplacez par le chemin de votre image par défaut
-            img.alt = 'Image';
-            img.className = ' top-0 left-0 right-0 mx-auto w-48 h-48 object-cover border-2 border-gray-300';
-
-            // Catégorie (affiche 'Unknown category' si elle est manquante)
-            const categorySpan = document.createElement('span');
-            categorySpan.className = 'text-lg font-semibold mt-2';
-            categorySpan.textContent = item.Category && item.Category.name ? item.Category.name : 'Unknown category';
-    
-            // Titre (affiche 'Untitled' si le titre est manquant)
-            const titleSpan = document.createElement('span');
-            titleSpan.className = 'text-xl font-bold mt-2';
-            titleSpan.textContent = item.Title ? item.Title : 'Untitled';
-    
-            // Prix (affiche 'N/A' si le prix est manquant)
-            const priceSpan = document.createElement('span');
-            priceSpan.className = 'text-md text-gray-700 mt-2';
-            priceSpan.textContent = item.Price !== undefined ? `$${item.Price}` : 'N/A';
-    
-            // Assemble les éléments dans l'itemDiv
-            itemDiv.appendChild(img);
-            itemDiv.appendChild(categorySpan);
-            itemDiv.appendChild(titleSpan);
-            itemDiv.appendChild(priceSpan);
-    
-            // Ajoute l'itemDiv au lien
-            itemLink.appendChild(itemDiv);
-    
-            // Ajoute l'item au grid
-            grid.appendChild(itemLink);
+            const categoryName = item.Category && item.Category.name ? item.Category.name : 'Unknown category';
+            if (!itemsByCategory[categoryName]) {
+                itemsByCategory[categoryName] = [];
+            }
+            // Ajouter l'article à sa catégorie
+            if (itemsByCategory[categoryName].length < 5) {
+                itemsByCategory[categoryName].push(item);
+            }
         });
-    }
-</script>
-<div class="mx-10">
-<div class="flex flex-col md:flex-row w-full p-4 gap-4">
-    <!-- Section des catégories -->
-    <div class="flex-shrink-0 w-full md:w-1/4 h-auto md:h-96 overflow-y-auto border border-gray-300 rounded-lg p-2 bg-white">
-        {% for category in Categories %}
-            <div class="flex items-center text-gray-700 bg-gray-100 border border-gray-300 rounded-lg p-2 shadow-lg mb-2 cursor-pointer" onclick="getItems({{ category.ID }})">
-                <img src="{{ category.Img }}" alt="Category Image" class="w-16 h-16 object-cover rounded-full">
-                <span class="ml-4">{{ category.Title }}</span>
-            </div>
-        {% endfor %}
-    </div>
+    
+        // Afficher les articles par catégorie
+        for (const [categoryName, categoryItems] of Object.entries(itemsByCategory)) {
+            // Créer un conteneur pour chaque catégorie
+            const categoryContainer = document.createElement('div');
+            categoryContainer.className = 'category-container mb-4';
 
-    <!-- Section des éléments -->
-    <div id="item-container" class="flex-grow w-full md:w-3/4 h-auto md:h-96 border border-gray-300 rounded-lg p-2 bg-white overflow-y-auto">
-        <div id="grid" class="flex flex-wrap gap-4 ml-5">
+            // Grille pour les articles de cette catégorie
+            const categoryGrid = document.createElement('div');
+            categoryGrid.className = 'flex flex-nowrap gap-4 overflow-x-auto';
+    
+            categoryItems.forEach(item => {
+                // Crée un lien pour chaque article
+                const itemLink = document.createElement('a');
+                itemLink.href = `/article/${item.ID}`;
+                
+                // Crée la div de chaque article
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'bg-white p-4 rounded-lg shadow-lg flex flex-col items-center justify-center w-64 h-80 mt-4 bg-gray-100';
+    
+                // Image (affiche une image par défaut si elle est manquante)
+                const img = document.createElement('img');
+                img.src = item.Img && item.Img.length > 0 ? item.Img[0] : 'https://via.placeholder.com/192'; // Remplacez par le chemin de votre image par défaut
+                img.alt = 'Image';
+                img.className = 'top-0 left-0 right-0 mx-auto w-48 h-48 object-cover border-2 border-gray-300';
+    
+                // Titre de l'article
+                const titleSpan = document.createElement('span');
+                titleSpan.className = 'text-xl font-bold mt-2';
+                titleSpan.textContent = item.Title ? item.Title : 'Untitled';
+    
+                // Prix
+                const priceSpan = document.createElement('span');
+                priceSpan.className = 'text-md text-gray-700 mt-2';
+                priceSpan.textContent = item.Price !== undefined ? `${item.Price} XFP` : 'N/A';
+    
+                // Assemble les éléments dans l'itemDiv
+                itemDiv.appendChild(img);
+                itemDiv.appendChild(titleSpan);
+                itemDiv.appendChild(priceSpan);
+    
+                // Ajoute l'itemDiv au lien
+                itemLink.appendChild(itemDiv);
+    
+                // Ajoute l'item au categoryGrid
+                categoryGrid.appendChild(itemLink);
+            });
+    
+            // Ajoute la grille des articles au conteneur de la catégorie
+            categoryContainer.appendChild(categoryGrid);
+    
+            // Ajoute le conteneur de la catégorie à la grille principale
+            grid.appendChild(categoryContainer);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const scrollLeftButton = document.getElementById('scroll-left');
+        const scrollRightButton = document.getElementById('scroll-right');
+        const grid = document.getElementById('grid');
+    
+        // Ajouter un écouteur d'événements pour le bouton de défilement vers la gauche
+        scrollLeftButton.addEventListener('click', () => {
+            grid.scrollBy({
+                left: -300,
+                behavior: 'smooth' 
+            });
+        });
+    
+        // Ajouter un écouteur d'événements pour le bouton de défilement vers la droite
+        scrollRightButton.addEventListener('click', () => {
+            grid.scrollBy({
+                left: 300, 
+                behavior: 'smooth'
+            });
+        });
+    });
+    
+    
+
+</script>
+
+<div class="mx-10">
+    <div class="flex flex-col md:flex-row w-full p-4 gap-4">
+        <!-- Section des catégories -->
+        <div class="flex-shrink-0 w-full md:w-1/4 h-auto md:h-96 overflow-y-auto border border-gray-300 rounded-lg p-2 bg-white">
+            {% for category in Categories %}
+                <div class="flex items-center text-gray-700 bg-gray-100 border border-gray-300 rounded-lg p-2 shadow-lg mb-2 cursor-pointer" onclick="getItems({{ category.ID }})">
+                    <img src="{{ category.Img }}" alt="Category Image" class="w-16 h-16 object-cover rounded-full">
+                    <span class="ml-4">{{ category.Title }}</span>
+                </div>
+            {% endfor %}
         </div>
-    </div>
-</div>
+
+        <!-- Section des éléments -->
+        <div id="item-container" class="relative flex-grow w-full md:w-3/4 h-auto md:h-96 border border-gray-300 rounded-lg p-2 bg-white overflow-hidden">
+            <button id="scroll-left" class="absolute top-1/2 left-2 transform -translate-y-1/2 bg-gray-700 text-white p-2 rounded-full shadow-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-400">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                </svg>
+            </button>
+            <button id="scroll-right" class="absolute top-1/2 right-2 transform -translate-y-1/2 bg-gray-700 text-white p-2 rounded-full shadow-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-400">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                </svg>
+            </button>
+            <div id="grid" class="flex flex-nowrap gap-4 overflow-x-auto">
+                <!-- Les éléments seront injectés ici -->
+            </div>
+        </div>   
+    </div>    
 </div>

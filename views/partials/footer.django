@@ -1,8 +1,36 @@
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+    const scrollToTopButton = document.getElementById('scroll-to-top');
+
+    // Affiche ou cache le bouton selon le défilement
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 200) { // Affiche le bouton si la page est défilée de plus de 200px
+            scrollToTopButton.classList.remove('hidden');
+        } else {
+            scrollToTopButton.classList.add('hidden');
+        }
+    });
+
+    // Défile vers le haut lorsque le bouton est cliqué
+    scrollToTopButton.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth' // Pour un défilement fluide
+        });
+    });
+});
+</script>
+    <button id="scroll-to-top" class="fixed bottom-4 right-4 bg-gray-700 text-white p-3 rounded-full shadow-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-400">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 15l-7.5-7.5L4.5 15" />
+        </svg>
+    </button>
+    </body>
     <!-- footer -->
-    <footer class="bg-orange-100 pt-16 pb-12 border-t border-gray-100">
+    <footer class="bg-gray-200 pt-16 pb-12 border-t border-gray-100">
         <div class="container grid grid-cols-3 ml-4">
-            <div class="col-span-1 space-y-8 mr-2">
-                <img src="../assets/images/logo.svg" alt="logo" class="w-30">
+            <div class="col-span-1 space-y-8 mr-2 ml-4">
+                <img src="../public/img/logo.jpg" alt="Logo" class="h-32">
                 <div class="mr-2">
                     <p class="text-gray-500">
                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, hic?
@@ -73,10 +101,11 @@
     <div class="bg-gray-800 py-4">
         <div class="container flex items-center justify-between ml-4">
             <p class="text-white">&copy; TailCommerce - All Right Reserved</p>
+            <!-- 
             <div>
                 <img src="../assets/images/methods.png" alt="methods" class="h-5">
             </div>
+            -->
         </div>
     </div>
     <!-- ./copyright -->
-</body>

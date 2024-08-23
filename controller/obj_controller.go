@@ -245,6 +245,9 @@ func (controller *ObjController) FindByName(ctx *fiber.Ctx) error {
 func (oc *ObjController) FindByCategId(c *fiber.Ctx) error {
 	stringId := c.Params("id")
 	id, err := strconv.Atoi(stringId)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).SendString("Internal Server Error")
+	}
 	objets, err := oc.objService.FindByCategId(id)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).SendString("Internal Server Error")

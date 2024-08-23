@@ -72,9 +72,9 @@
             {% if articles %}
             {% for article in articles %}
             <div class="bg-white shadow rounded overflow-hidden group">
-                <div class="relative">
+                <div class="relative flex justify-center">
                     <a href="/article/{{article.ID}}">
-                        <img src="{{article.Img[1]}}" alt=" {{article.Title}}" class="w-full">
+                        <img src="{{article.Img[0]}}" alt="{{article.Title}}" class="h-40">
                     </a>
                 </div>
                 <div class="pt-4 pb-3 px-4">
@@ -84,13 +84,11 @@
                         </h4>
                     </a>
                     <div class="flex items-baseline mb-1 space-x-2">
-                        <p class="text-xl text-primary font-semibold">{{article.Price}}XPF</p>
+                        <p class="text-xl text-primary font-semibold">{{article.Price}} XPF</p>
                     </div>
                 </div>
-                <a href="#"
-                    class="block w-full py-1 bg-red text-center text-white border rounded-b hover:bg-transparent hover:text-primary transition">Add
-                    to cart</a>
             </div>
+            
             {% endfor %}
             {% else %}
                 <p> il n'a aucun article ne possède cette categorie</p>

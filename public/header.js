@@ -1,22 +1,28 @@
 document.addEventListener('DOMContentLoaded', async () => {
     try {
-        const token = document.cookie.split('; ').find(row => row.startsWith('jwt=')).split('=')[1];
+        const token = null
+        const jwtCookie = document.cookie.split('; ').find(row => row.startsWith('jwt='));
+        if (jwtCookie) {
+            token = jwtCookie.split('=')[1];
+        }
         console.log(token)
-        const response = await fetch('/api/authent/isLogin', {
-            method: 'GET',
-            headers: {
-                'Authorization': token,
-                'Content-Type': 'application/json'
-            },
-        });
-        if (response.ok) {
-            console.log("test")
-            document.getElementById('createArticle').style.display = 'block';
-            document.getElementById('login').style.display = 'none';
-            document.getElementById('logout').style.display = 'block';
-        } else {
-            console.error('Error:', data.message);
-            document.getElementById('createArticle').style.display = 'none';
+        if (token){
+            const response = await fetch('/api/authent/isLogin', {
+                method: 'GET',
+                headers: {
+                    'Authorization': token,
+                    'Content-Type': 'application/json'
+                },
+            });
+            if (response.ok) {
+                console.log("test")
+                document.getElementById('createArticle').style.display = 'block';
+                document.getElementById('login').style.display = 'none';
+                document.getElementById('logout').style.display = 'block';
+            } else {
+                console.error('Error:', data.message);
+                document.getElementById('createArticle').style.display = 'none';
+            }
         }
     } catch (error) {
         console.error('Error:', error);

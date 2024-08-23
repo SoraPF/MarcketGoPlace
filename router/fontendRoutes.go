@@ -74,7 +74,7 @@ func Robject(ObjController *controller.ObjController, categories []response.Cate
 		id, err := strconv.Atoi(CID)
 		if err != nil {
 			return c.Render("article", fiber.Map{
-				"Title":      "categorie",
+				"Title":      "article",
 				"Categories": categories,
 			})
 		}
@@ -82,20 +82,25 @@ func Robject(ObjController *controller.ObjController, categories []response.Cate
 		article, err := ObjController.ObjByArticleID(cid)
 		if err != nil {
 			return c.Render("article", fiber.Map{
-				"Title":      "categorie",
+				"Title":      "article",
 				"Categories": categories,
 			})
 		}
+		println(article.Title)
 		userID := c.Cookies("user_id")
 		uid, err := strconv.Atoi(userID)
 		if err != nil {
+			println("bien mais pas bon")
 			return c.Render("article", fiber.Map{
-				"Title":      "categorie",
+				"Title":      "article",
 				"Categories": categories,
+				"article":    article,
+				"userID":     nil,
 			})
 		}
+		println("bien mais pas bon")
 		return c.Render("article", fiber.Map{
-			"Title":      "categorie",
+			"Title":      "article",
 			"Categories": categories,
 			"article":    article,
 			"userID":     uid,

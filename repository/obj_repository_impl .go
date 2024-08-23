@@ -89,7 +89,7 @@ func (o *ObjRepositoryImpl) ObjByCategID(CID uint) ([]objets.Objects, error) {
 func (o *ObjRepositoryImpl) ObjByArticleID(CID uint) (objets.Objects, error) {
 	var obj objets.Objects
 	result := o.Db.Joins("JOIN statuses ON statuses.id = objects.status_id").
-		Where("status_id = ? AND statuses.title = ?", CID, "in sale").
+		Where("Objects.id = ? AND statuses.title = ?", CID, "in sale").
 		Find(&obj)
 	if result.Error != nil {
 		return obj, result.Error
