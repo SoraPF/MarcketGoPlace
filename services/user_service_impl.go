@@ -62,13 +62,13 @@ func (u *UserServiceImpl) FindById(userId uint) response.UserResponse {
 	result, err := u.userRepository.FindById(userId)
 	helper.ErrorPanic(err)
 	user := response.UserResponse{
-		ID:    result.Id,
-		Name:  result.Username,
-		Email: result.Email,
-		NFAID: result.NFAID,
-		//BirthDay: ,
-		//Address: result.NFAID,
-		//Phone: result.NFAID,
+		ID:       result.Id,
+		Name:     result.Username,
+		Email:    result.Email,
+		NFAID:    result.NFAID,
+		BirthDay: result.BirthDay,
+		Address:  result.Address,
+		Phone:    result.Phone,
 	}
 	return user
 }
