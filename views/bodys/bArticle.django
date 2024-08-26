@@ -44,25 +44,31 @@
                 </div>
 
                 <div class="ml-5">
-                    <div class="flex justify-end items-baseline mb-1 space-x-2 font-roboto mt-4">
+                    
+                    <div class="flex justify-end items-baseline mb-1 space-x-2 font-roboto">
                         <p class="text-3xl mr-4 text-primary font-semibold">{{article.Price}} XPF</p>
                     </div>
-                    <h2 class=" text-3xl font-medium uppercase mb-2"><b>{{article.Title}}</b></h2>
-                    <div class="space-y-2">
+                
+                    <!-- Titre de l'article avec plus de margin-top -->
+                    <h2 class="text-3xl font-medium uppercase mb-2"><b>{{article.Title}}</b></h2>
+                
+                    <!-- Catégorie avec plus de margin-top -->
+                    <div class="space-y-2 mt-6">
                         <p class="space-x-2">
                             <span class="text-2xl font-semibold">{{article.categories.Title}}</span>
                         </p>
-                        <p class="space-x-2"><!--liste de bulle sinon rien-->
+                
+                        <!-- Liste de tags avec plus de margin-top pour chaque tag -->
+                        <p class="space-x-2 mt-6">
                             {% for tag in article.Tags %}
-                                <div class="mt-4"></div>
-                                <span class="bg-blue-500 text-white px-3 py-1 mt-1 rounded-full text-sm font-medium">
+                                <span class="bg-blue-500 text-white px-3 py-1 mt-2 rounded-full text-sm font-medium">
                                     {{tag}}
                                 </span>
                             {% endfor %}
                         </p>
                     </div>
                     
-                    <p class="mt-4 text-gray-500">{{article.Desc}}</p> <!--obliger une description grande-->
+                    <p class="mt-4 text-gray-500 mt-4">{{article.Desc}}</p> <!--obliger une description grande-->
 
                     <div class="mt-6 flex gap-3 pb-5 pt-5">
                         {% if userID == article.IdVendeur %}

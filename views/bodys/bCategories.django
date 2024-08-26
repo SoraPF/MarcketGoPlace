@@ -85,13 +85,15 @@
     </div>
     <!-- ./products -->
 </div>
-<div id="pagination" class="flex justify-center gap-2 mt-6 mr-6">
+<div id="pagination" class="flex justify-center gap-2 mt-4 mb-4">
     <button id="prev-page" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg shadow-md hover:bg-gray-400 focus:outline-none" disabled>Previous</button>
     <div id="page-numbers" class="flex gap-2">
-        <!-- Page numbers will be inserted here by JavaScript -->
+        <!-- Les numéros de page seront insérés ici par JavaScript -->
     </div>
     <button id="next-page" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg shadow-md hover:bg-gray-400 focus:outline-none">Next</button>
 </div>
+
+
 <!-- ./shop wrapper -->
 <script>
     document.addEventListener('DOMContentLoaded', () => {

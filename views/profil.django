@@ -1,0 +1,3 @@
+{% include "partials/header.django"%}
+{% include "bodys/bprofile.html" %}
+{% include "partials/footer.django"%}
