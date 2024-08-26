@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         var token = null
         const jwtCookie = document.cookie.split('; ').find(row => row.startsWith('jwt-'));
+        const linkElement = document.getElementById('profiLink');
         console.log(jwtCookie)
         if (jwtCookie) {
             token = jwtCookie.split('=')[1];
@@ -15,11 +16,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                     'Content-Type': 'application/json'
                 },
             });
+
             if (response.ok) {
-                console.log("test")
+                const jdata = await response.json();
                 document.getElementById('createArticle').style.display = 'block';
                 document.getElementById('login').style.display = 'none';
                 document.getElementById('logout').style.display = 'block';
+                linkElement.href = "/profil/"+jdata;
             } else {
                 console.error('Error:', data.message);
                 document.getElementById('createArticle').style.display = 'none';

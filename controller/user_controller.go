@@ -339,8 +339,14 @@ func IsLogin(c *fiber.Ctx) error {
 		println("error:", err)
 		return c.SendStatus(fiber.StatusInternalServerError)
 	}
-	println("no error")
-	return c.SendStatus(fiber.StatusOK)
+	userIDStr := c.Cookies("user_id")
+	userID, err := strconv.Atoi(userIDStr)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Invalid user ID",
+		})
+	}
+	return c.Status(fiber.StatusOK).JSON(userID)
 }
 
 func (uc *UserController) Logout(c *fiber.Ctx) error {
