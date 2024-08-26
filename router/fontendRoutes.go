@@ -36,6 +36,23 @@ func AuthentRoutes(userController *controller.UserController, categories []respo
 			"Title": "double authentification validate",
 		})
 	})
+	router.Get("/profil", func(c *fiber.Ctx) error {
+		var profil response.UserResponse
+		uid := c.Params("is")
+		id, err := strconv.Atoi(uid)
+		if err != nil {
+			return c.Render("main", fiber.Map{
+				"Title":      "marcket place",
+				"Categories": categories,
+			})
+		}
+		profil = userController.UserService.FindById(uint(id))
+		return c.Render("profil", fiber.Map{
+			"Title":      "profil",
+			"Categories": categories,
+			"profil":     profil,
+		})
+	})
 	return router
 }
 
@@ -164,6 +181,7 @@ func Robject(ObjController *controller.ObjController, categories []response.Cate
 			"tags":       tags,
 			"Article":    articles[0],
 		})
+
 	})
 
 	router.Get("/createOk", func(c *fiber.Ctx) error {

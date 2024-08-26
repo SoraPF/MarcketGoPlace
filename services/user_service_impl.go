@@ -49,8 +49,8 @@ func (u *UserServiceImpl) FindAll() []response.UserResponse {
 	var users []response.UserResponse
 	for _, value := range result {
 		user := response.UserResponse{
-			Username: value.Username,
-			Email:    value.Email,
+			Name:  value.Username,
+			Email: value.Email,
 		}
 		users = append(users, user)
 	}
@@ -62,10 +62,13 @@ func (u *UserServiceImpl) FindById(userId uint) response.UserResponse {
 	result, err := u.userRepository.FindById(userId)
 	helper.ErrorPanic(err)
 	user := response.UserResponse{
-		ID:       result.Id,
-		Username: result.Username,
-		Email:    result.Email,
-		NFAID:    result.NFAID,
+		ID:    result.Id,
+		Name:  result.Username,
+		Email: result.Email,
+		NFAID: result.NFAID,
+		//BirthDay: ,
+		//Address: result.NFAID,
+		//Phone: result.NFAID,
 	}
 	return user
 }

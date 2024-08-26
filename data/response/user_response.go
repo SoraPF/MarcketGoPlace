@@ -1,10 +1,13 @@
 package response
 
 type UserResponse struct {
-	ID       uint   `json:"id"`
-	Username string `json:"username"`
-	Email    string `json:"email"`
-	NFAID    *uint  `json:"nfaID"`
+	ID       uint `json:"id"`
+	Name     string
+	Email    string
+	BirthDay string
+	Address  string
+	Phone    string
+	NFAID    *uint `json:"nfaID"`
 }
 
 type NFAResponse struct {

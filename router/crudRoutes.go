@@ -60,7 +60,7 @@ func UserRoute(userController *controller.UserController) *fiber.App {
 	router.Route("/user", func(router fiber.Router) {
 		router.Post("/create", userController.UserCreate)
 		router.Get("/list", userController.UserFindAll)
-		router.Route("/:noteId", func(router fiber.Router) {
+		router.Route("/:id", func(router fiber.Router) {
 			router.Delete("/delete", userController.UserDelete)
 			router.Get("/find", userController.UserFindById)
 			router.Patch("/update", userController.UserUpdate)

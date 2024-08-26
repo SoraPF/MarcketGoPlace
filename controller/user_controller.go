@@ -72,7 +72,7 @@ func (controller *UserController) UserUpdate(ctx *fiber.Ctx) error {
 	err := ctx.BodyParser(&updateUserRequest)
 	helper.ErrorPanic(err)
 
-	UserId := ctx.Params("objId")
+	UserId := ctx.Params("id")
 	id, err := strconv.ParseUint(UserId, 10, 32)
 	helper.ErrorPanic(err)
 
@@ -90,7 +90,7 @@ func (controller *UserController) UserUpdate(ctx *fiber.Ctx) error {
 }
 
 func (controller *UserController) UserDelete(ctx *fiber.Ctx) error {
-	UserId := ctx.Params("UserId")
+	UserId := ctx.Params("id")
 	id, err := strconv.Atoi(UserId)
 	helper.ErrorPanic(err)
 	controller.UserService.Delete(id)
@@ -105,7 +105,7 @@ func (controller *UserController) UserDelete(ctx *fiber.Ctx) error {
 }
 
 func (controller *UserController) UserFindById(ctx *fiber.Ctx) error {
-	UserId := ctx.Params("noteId")
+	UserId := ctx.Params("id")
 	id, err := strconv.Atoi(UserId)
 	helper.ErrorPanic(err)
 	uid := uint(id)
