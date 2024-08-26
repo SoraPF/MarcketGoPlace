@@ -36,12 +36,12 @@ func AuthentRoutes(userController *controller.UserController, categories []respo
 			"Title": "double authentification validate",
 		})
 	})
-	router.Get("/profil", func(c *fiber.Ctx) error {
+	router.Get("/profil/:id", func(c *fiber.Ctx) error {
 		var profil response.UserResponse
-		uid := c.Params("is")
+		uid := c.Params("id")
 		id, err := strconv.Atoi(uid)
 		if err != nil {
-			return c.Render("main", fiber.Map{
+			return c.Render("index", fiber.Map{
 				"Title":      "marcket place",
 				"Categories": categories,
 			})

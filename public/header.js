@@ -1,11 +1,12 @@
 document.addEventListener('DOMContentLoaded', async () => {
     try {
-        const token = null
-        const jwtCookie = document.cookie.split('; ').find(row => row.startsWith('jwt='));
+        var token = null
+        const jwtCookie = document.cookie.split('; ').find(row => row.startsWith('jwt-'));
+        console.log(jwtCookie)
         if (jwtCookie) {
             token = jwtCookie.split('=')[1];
         }
-        console.log(token)
+        console.log("token",token)
         if (token){
             const response = await fetch('/api/authent/isLogin', {
                 method: 'GET',
@@ -51,22 +52,6 @@ function addNotification(message) {
     `;
     notificationContainer.appendChild(notification);
 }
-/*
-function svgNotification() {
-    const notificationContainer = document.getElementById('notification-container');
-    const imageContainer = document.getElementById('image-container');
-    let img = document.createElement('img');
-    
-    if (notificationContainer.children.length === 0) {
-        img.src = '../public/img/svg/notification-bell.svg';
-    } else {
-        img.src = '../public/img/svg/notification-alert.svg';
-    }
-    img.className ="h-5 cursor-pointer";
-    imageContainer.innerHTML = ''; // Clear previous image
-    imageContainer.appendChild(img);
-}
-*/
 function svgNotification() {
     const notificationContainer = document.getElementById('notification-container');
     const imageContainer = document.getElementById('image-container');

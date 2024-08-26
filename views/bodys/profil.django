@@ -11,9 +11,9 @@
                     alt="Profile Picture">
                 <div>
                     <!-- Nom de l'utilisateur -->
-                    <h1 class="text-3xl font-semibold text-gray-700">Nom d'utilisateur</h1>
+                    <h1 class="text-3xl font-semibold text-gray-700">{{profil.Name}}</h1>
                     <!-- Adresse email -->
-                    <p class="text-gray-500 mt-1">email@example.com</p>
+                    <p class="text-gray-500 mt-1">{{profil.Email}}</p>
                 </div>
             </div>
             <!-- Boutons d'action -->
@@ -36,17 +36,17 @@
                 <!-- Date de naissance -->
                 <div>
                     <label class="text-gray-700 font-semibold">Date de Naissance</label>
-                    <p class="mt-2 text-gray-900">08/08/08</p>
+                    <p class="mt-2 text-gray-900">{{profil.BirthDay}}</p>
                 </div>
                 <!-- Numéro de téléphone -->
                 <div>
                     <label class="text-gray-700 font-semibold">Numéro de Téléphone</label>
-                    <p class="mt-2 text-gray-900">+88 88 88 88</p>
+                    <p class="mt-2 text-gray-900">{{profil.Phone}}</p>
                 </div>
                 <!-- Adresse -->
                 <div>
                     <label class="text-gray-700 font-semibold">Adresse</label>
-                    <p class="mt-2 text-gray-900">papeete</p>
+                    <p class="mt-2 text-gray-900">{{profil.Address}}</p>
                 </div>
             </div>
         </div>

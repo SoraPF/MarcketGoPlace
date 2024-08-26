@@ -46,7 +46,7 @@ func (controller *UserController) UserCreate(ctx *fiber.Ctx) error {
 		})
 	}
 
-	captchaValue := ctx.Cookies("captcha" + user.Username)
+	captchaValue := ctx.Cookies("captcha")
 	if captchaValue == "" || createUserRequest.Captcha != captchaValue {
 		return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"error": "Invalid CAPTCHA",
@@ -55,7 +55,7 @@ func (controller *UserController) UserCreate(ctx *fiber.Ctx) error {
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"user_id": user.Id,
-		"exp":     time.Now().Add(time.Hour * 72).Unix(),
+		"exp":     time.Now().Add(time.Hour * 1).Unix(),
 	})
 	webResponse := map[string]interface{}{
 		"code":         200,
@@ -154,7 +154,7 @@ func (uc *UserController) Login(ctx *fiber.Ctx) error {
 		})
 	}
 
-	captchaValue := ctx.Cookies("captcha" + user.Username)
+	captchaValue := ctx.Cookies("captcha")
 	if captchaValue == "" || req.Captcha != captchaValue {
 		return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"error": "Invalid CAPTCHA",
@@ -182,15 +182,15 @@ func (uc *UserController) Login(ctx *fiber.Ctx) error {
 	}
 
 	ctx.Cookie(&fiber.Cookie{
-		Name:    "jwt" + user.Username,
+		Name:    "jwt-" + string(user.ID),
 		Value:   tokenString,
-		Expires: time.Now().Add(time.Hour * 72),
+		Expires: time.Now().Add(time.Hour * 1),
 	})
 
 	ctx.Cookie(&fiber.Cookie{
 		Name:    "user_id",
 		Value:   fmt.Sprintf("%d", user.Id),
-		Expires: time.Now().Add(time.Hour * 72),
+		Expires: time.Now().Add(time.Hour * 1),
 	})
 
 	webResponse := map[string]interface{}{
@@ -315,9 +315,9 @@ func (uc *UserController) GetValidate2FA(c *fiber.Ctx) error {
 		}
 
 		c.Cookie(&fiber.Cookie{
-			Name:    "jwt" + user.Username,
+			Name:    "jwt-" + string(user.ID),
 			Value:   tokenString,
-			Expires: time.Now().Add(time.Hour * 72),
+			Expires: time.Now().Add(time.Hour * 1),
 		})
 
 		webResponse := map[string]interface{}{
@@ -348,17 +348,17 @@ func (uc *UserController) Logout(c *fiber.Ctx) error {
 		UserId string `json:"userID"`
 	}
 	var user logout
-	if err := c.BodyParser(user); err != nil {
+	if err := c.BodyParser(&user); err != nil {
 		return c.SendStatus(fiber.StatusBadRequest)
 	}
 	uid := user.UserId
 	c.Cookie(&fiber.Cookie{
-		Name:    "captcha" + uid,
+		Name:    "captcha",
 		Expires: time.Unix(0, 0),
 		MaxAge:  -1,
 	})
 	c.Cookie(&fiber.Cookie{
-		Name:    "jwt" + uid,
+		Name:    "jwt-" + uid,
 		Expires: time.Unix(0, 0),
 		MaxAge:  -1,
 	})
