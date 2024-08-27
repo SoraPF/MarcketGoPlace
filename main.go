@@ -30,10 +30,6 @@ func main() {
 		log.Fatal("Failed to migrate database", err)
 	}
 
-	//config.InsertObject(db)
-	/* config.InsertImages(db)*/
-	/*config.AutoIncrement(db)*/
-
 	fmt.Println("Database migration successful")
 
 	fmt.Println("loading needs for templates")
@@ -44,6 +40,7 @@ func main() {
 	engine.Debug(true)
 
 	engine.AddFunc("lower", helper.ToLower)
+	engine.AddFunc("capitalize", helper.CapitalizeFirstLetter)
 
 	// Créer une nouvelle instance de l'application Fiber en utilisant le moteur de templates
 	app := fiber.New(fiber.Config{

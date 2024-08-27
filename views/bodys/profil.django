@@ -7,13 +7,13 @@
         <div class="flex items-center justify-between mb-6">
             <!-- Photo de profil -->
             <div class="flex items-center">
-                <img class="w-32 h-32 rounded-full object-cover mr-6" src="https://via.placeholder.com/150"
+                <img class="w-40 h-40 rounded-full object-cover mr-6" src="https://via.placeholder.com/150"
                     alt="Profile Picture">
                 <div>
                     <!-- Nom de l'utilisateur -->
-                    <h1 class="text-3xl font-semibold text-gray-700">{{profil.Name}}</h1>
+                    <h1 class="text-5xl font-semibold text-gray-700">{{capitalize(profil.Name)}}</h1>
                     <!-- Adresse email -->
-                    <p class="text-gray-500 mt-1">{{profil.Email}}</p>
+                    <p class="text-gray-500 text-xl mt-1">{{profil.Email}}</p>
                 </div>
             </div>
             <!-- Boutons d'action -->
@@ -46,7 +46,7 @@
                 <!-- Adresse -->
                 <div>
                     <label class="text-gray-700 font-semibold">Adresse</label>
-                    <p class="mt-2 text-gray-900">{{profil.Address}}</p>
+                    <p class="mt-2 text-gray-900">{{capitalize(profil.Address)}}</p>
                 </div>
             </div>
         </div>
