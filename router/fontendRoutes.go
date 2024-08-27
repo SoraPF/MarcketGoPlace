@@ -128,6 +128,7 @@ func Robject(ObjController *controller.ObjController, categories []response.Cate
 		return c.Render("article", fiber.Map{
 			"Title":      "categorie",
 			"Categories": categories,
+			"tags":       tags,
 		})
 	})
 
