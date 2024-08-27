@@ -73,15 +73,18 @@
                     <div class="mt-6 flex gap-3 pb-5 pt-5">
                         {% if userID == article.IdVendeur %}
                         <button onclick="checkiscreated()"
-                            class="border border-gray-300 text-white px-8 py-2 font-medium rounded uppercase flex items-center gap-2 hover:text-primary transition">
+                            class="border border-gray-300 text-black px-8 py-2 font-medium rounded uppercase flex items-center gap-2 hover:text-primary transition">
                             <i class="fa-solid fa-heart">Message</i>
                         </button>
                         {% elif not userID %}
-                        <a href="/login" class="text-white hover:underline"><button class="bg-green-500 rounded h-10 w-36"> Ce login si intéressé</button></a>
+                        <a href="/login" class="text-black hover:underline"><button class="bg-green-500 rounded h-10 w-36"> Ce login si intéressé</button></a>
                         {% else %}
                         <input type="number" id="proposePrice" placeholder="proposer un prix">
-                        <input type="submit" onclick="proposPrice()"
-                            class="border border-gray-300 text-white px-8 py-2 font-medium rounded uppercase flex items-center gap-2 hover:text-primary transition">
+                        <button 
+                            onclick="proposPrice()"
+                            class="border border-gray-300 text-black px-8 py-2 font-medium rounded uppercase flex items-center gap-2 hover:text-primary transition duration-300">
+                            Submit
+                        </button>
                         {% endif %}
                     </div>
                 </div>

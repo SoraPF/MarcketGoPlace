@@ -1,103 +1,32 @@
-<script>
-window.onload = function() {
-    // Récupérer les articles depuis sessionStorage
-    const searchResults = JSON.parse(sessionStorage.getItem('searchResults'));
-
-    if (searchResults) {
-        console.log('Articles trouvés:', searchResults);
-        const articleList = document.getElementById('article-list');
-
-        searchResults.forEach(article => {
-            const articleContainer = document.createElement('div');
-            articleContainer.classList.add('bg-white', 'shadow', 'rounded', 'overflow-hidden', 'group');
-
-            const imageContainer = document.createElement('div');
-            imageContainer.classList.add('relative');
-
-            const articleLink = document.createElement('a');
-            articleLink.href = `/article/${article.ID}`;
-
-            const articleImage = document.createElement('img');
-            if (articleImage.length > 0){
-                articleImage.src = article.Img[1];
-                articleImage.alt = article.Title;
-                articleImage.classList.add('w-full');
-            }            
-
-            articleLink.appendChild(articleImage);
-            imageContainer.appendChild(articleLink);
-            articleContainer.appendChild(imageContainer);
-
-            const articleInfo = document.createElement('div');
-            articleInfo.classList.add('pt-4', 'pb-3', 'px-4');
-
-            const titleLink = document.createElement('a');
-            titleLink.href = `/article/${article.ID}`;
-
-            const articleTitle = document.createElement('h4');
-            articleTitle.classList.add('uppercase', 'font-medium', 'text-xl', 'mb-2', 'text-gray-800', 'hover:text-primary', 'transition');
-            articleTitle.textContent = article.Title;
-
-            titleLink.appendChild(articleTitle);
-            articleInfo.appendChild(titleLink);
-
-            const priceContainer = document.createElement('div');
-            priceContainer.classList.add('flex', 'items-baseline', 'mb-1', 'space-x-2');
-
-            const articlePrice = document.createElement('p');
-            articlePrice.classList.add('text-xl', 'text-primary', 'font-semibold');
-            articlePrice.textContent = `${article.Price} XPF`;
-
-            priceContainer.appendChild(articlePrice);
-            articleInfo.appendChild(priceContainer);
-
-            articleContainer.appendChild(articleInfo);
-
-            const addToCartButton = document.createElement('a');
-            addToCartButton.href = "#";
-            addToCartButton.classList.add('block', 'w-full', 'py-1', 'bg-red', 'text-center', 'text-white', 'border', 'rounded-b', 'hover:bg-transparent', 'hover:text-primary', 'transition');
-            addToCartButton.textContent = "Add to cart";
-
-            articleContainer.appendChild(addToCartButton);
-
-            articleList.appendChild(articleContainer);
-        });
-
-        // Nettoyer sessionStorage si tu n'en as plus besoin
-        sessionStorage.removeItem('searchResults');
-    }
-};
-</script>
-
-<!-- drawer component -->
 <div class="container grid md:grid-cols-4 grid-cols-2 gap-6 pt-4 pb-16 items-start">
-    <!-- ./sidebar -->
-    <div class="col-span-1 bg-white px-4 pb-6 shadow rounded overflow-hiddenb hidden md:block">
+    <!-- Sidebar -->
+    <div class="col-span-1 bg-white px-4 pb-6 shadow rounded overflow-hidden hidden md:block">
         <div class="divide-y divide-gray-200 space-y-5">
+            <!-- Tags -->
             <div>
                 <h3 class="text-xl text-gray-800 mb-3 uppercase font-medium">Tags</h3>
                 <div class="space-y-2">
                     <div class="flex items-center">
                         <input type="checkbox" name="cat-1" id="cat-1"
                             class="text-primary focus:ring-0 rounded-sm cursor-pointer">
-                        <label for="cat-1" class="text-gray-600 ml-3 cusror-pointer">Bedroom</label>
+                        <label for="cat-1" class="text-gray-600 ml-3 cursor-pointer">Bedroom</label>
                         <div class="ml-auto text-gray-600 text-sm">(15)</div>
                     </div>
                 </div>
             </div>
-
+            <!-- Brands -->
             <div class="pt-4">
                 <h3 class="text-xl text-gray-800 mb-3 uppercase font-medium">Brands</h3>
                 <div class="space-y-2">
                     <div class="flex items-center">
                         <input type="checkbox" name="brand-1" id="brand-1"
                             class="text-primary focus:ring-0 rounded-sm cursor-pointer">
-                        <label for="brand-1" class="text-gray-600 ml-3 cusror-pointer">Cooking Color</label>
-                    <div class="ml-auto text-gray-600 text-sm">(15)</div>
+                        <label for="brand-1" class="text-gray-600 ml-3 cursor-pointer">Cooking Color</label>
+                        <div class="ml-auto text-gray-600 text-sm">(15)</div>
+                    </div>
                 </div>
             </div>
-        </div>
-
+            <!-- Price -->
             <div class="pt-4">
                 <h3 class="text-xl text-gray-800 mb-3 uppercase font-medium">Price</h3>
                 <div class="mt-4 flex items-center">
@@ -112,36 +41,206 @@ window.onload = function() {
             </div>
         </div>
     </div>
-        <!-- products side -->
-        <!-- sorting -->
-        <div class="col-span-3">
-            <div class="flex items-center mb-4">
-                <select name="sort" id="sort"
-                    class="w-44 text-sm text-gray-600 py-3 px-4 border-gray-300 shadow-sm rounded focus:ring-primary focus:border-primary">
-                    <option value="">Default sorting</option>
-                    <option value="price-low-to-high">Price low to high</option>
-                    <option value="price-high-to-low">Price high to low</option>
-                    <option value="latest">Latest product</option>
-                </select>
 
-                <div class="flex gap-2 ml-auto">
-                    <div
-                        class="border border-primary w-10 h-9 flex items-center justify-center text-white bg-primary rounded cursor-pointer">
-                        <i class="fa-solid fa-grip-vertical"></i>
-                    </div>
-                    <div
-                        class="border border-gray-300 w-10 h-9 flex items-center justify-center text-gray-600 rounded cursor-pointer">
-                        <i class="fa-solid fa-list"></i>
-                    </div>
+    <!-- Products Section -->
+    <div class="col-span-3">
+        <!-- Sorting -->
+        <div class="flex items-center mb-4">
+            <select name="sort" id="sort"
+                class="w-44 text-sm text-gray-600 py-3 px-4 border-gray-300 shadow-sm rounded focus:ring-primary focus:border-primary">
+                <option value="">Default sorting</option>
+                <option value="price-low-to-high">Price low to high</option>
+                <option value="price-high-to-low">Price high to low</option>
+                <option value="latest">Latest product</option>
+            </select>
+            <div class="flex gap-2 ml-auto">
+                <div class="border border-primary w-10 h-9 flex items-center justify-center text-white bg-primary rounded cursor-pointer">
+                    <i class="fa-solid fa-grip-vertical"></i>
                 </div>
+                <div class="border border-gray-300 w-10 h-9 flex items-center justify-center text-gray-600 rounded cursor-pointer">
+                    <i class="fa-solid fa-list"></i>
+                </div>
+            </div>
         </div>
-        <!-- products -->
+        <!-- Products Grid -->
         <div class="grid md:grid-cols-3 grid-cols-2 gap-6" id="article-list">
-            
         </div>
-
     </div>
-
-    <!-- ./products -->
 </div>
-<!-- ./shop wrapper -->
+
+<!-- Pagination -->
+<div id="pagination" class="flex justify-center gap-2 mt-4 mb-4">
+    <button id="prev-page" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg shadow-md hover:bg-gray-400 focus:outline-none" disabled>Previous</button>
+    <div id="page-numbers" class="flex gap-2"></div>
+    <button id="next-page" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg shadow-md hover:bg-gray-400 focus:outline-none">Next</button>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        let itemsPerPage = 6;
+        let currentPage = 1;
+        const articleList = document.getElementById('article-list');
+        const pagination = document.getElementById('pagination');
+
+        function loadArticles() {
+            const searchResults = JSON.parse(sessionStorage.getItem('searchResults')) || [];
+            if (searchResults.length === 0) {
+                articleList.innerHTML = '<p>No articles found.</p>';
+                pagination.style.display = 'none';
+                return;
+            }
+
+            articleList.innerHTML = '';
+            searchResults.forEach(article => {
+                const articleContainer = document.createElement('div');
+                articleContainer.classList.add('bg-white', 'shadow', 'rounded', 'overflow-hidden', 'group');
+                articleContainer.setAttribute('data-price', article.Price);
+                articleContainer.setAttribute('data-date', article.Date);
+
+                const imageContainer = document.createElement('div');
+                imageContainer.classList.add('relative');
+
+                const articleLink = document.createElement('a');
+                articleLink.href = `/article/${article.ID}`;
+
+                const articleImage = document.createElement('img');
+                if (article.Img.length > 0){
+                    articleImage.src = article.Img[0];
+                    articleImage.alt = article.Title;
+                    articleImage.classList.add('h-40', 'object-cover', 'w-full');
+                }            
+
+                articleLink.appendChild(articleImage);
+                imageContainer.appendChild(articleLink);
+                articleContainer.appendChild(imageContainer);
+
+                const articleInfo = document.createElement('div');
+                articleInfo.classList.add('pt-4', 'pb-3', 'px-4');
+
+                const titleLink = document.createElement('a');
+                titleLink.href = `/article/${article.ID}`;
+
+                const articleTitle = document.createElement('h4');
+                articleTitle.classList.add('uppercase', 'font-medium', 'text-xl', 'mb-2', 'text-gray-800', 'hover:text-primary', 'transition');
+                articleTitle.textContent = article.Title;
+
+                titleLink.appendChild(articleTitle);
+                articleInfo.appendChild(titleLink);
+
+                const priceContainer = document.createElement('div');
+                priceContainer.classList.add('flex', 'items-baseline', 'mb-1', 'space-x-2');
+
+                const articlePrice = document.createElement('p');
+                articlePrice.classList.add('text-xl', 'text-primary', 'font-semibold');
+                articlePrice.textContent = `${article.Price} XPF`;
+
+                priceContainer.appendChild(articlePrice);
+                articleInfo.appendChild(priceContainer);
+
+                articleContainer.appendChild(articleInfo);
+
+                const addToCartButton = document.createElement('a');
+                addToCartButton.href = "#";
+                addToCartButton.classList.add('block', 'w-full', 'py-1', 'bg-red', 'text-center', 'text-white', 'border', 'rounded-b', 'hover:bg-transparent', 'hover:text-primary', 'transition');
+                addToCartButton.textContent = "Add to cart";
+
+                articleContainer.appendChild(addToCartButton);
+
+                articleList.appendChild(articleContainer);
+            });
+
+            paginateArticles();
+        }
+
+        function paginateArticles() {
+            const items = Array.from(articleList.children);
+            const totalPages = Math.ceil(items.length / itemsPerPage);
+
+            function showPage(page) {
+                items.forEach((item, index) => {
+                    item.style.display = (index >= (page - 1) * itemsPerPage && index < page * itemsPerPage) ? 'block' : 'none';
+                });
+                document.getElementById('prev-page').disabled = page === 1;
+                document.getElementById('next-page').disabled = page === totalPages;
+                renderPageNumbers(totalPages, page);
+            }
+
+            function renderPageNumbers(totalPages, currentPage) {
+                const pageNumbers = document.getElementById('page-numbers');
+                pageNumbers.innerHTML = '';
+                for (let i = 1; i <= totalPages; i++) {
+                    const pageNumber = document.createElement('button');
+                    pageNumber.textContent = i;
+                    pageNumber.className = `px-4 py-2 border rounded-lg ${i === currentPage ? 'bg-primary text-white' : 'bg-gray-300 text-gray-700'} hover:bg-primary hover:text-white focus:outline-none`;
+                    pageNumber.addEventListener('click', () => {
+                        currentPage = i;
+                        showPage(currentPage);
+                    });
+                    pageNumbers.appendChild(pageNumber);
+                }
+            }
+
+            document.getElementById('prev-page').addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    showPage(currentPage);
+                }
+            });
+
+            document.getElementById('next-page').addEventListener('click', () => {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    showPage(currentPage);
+                }
+            });
+
+            showPage(currentPage);
+        }
+
+        function sortArticles(sortValue) {
+            const products = Array.from(articleList.children);
+            let sortedProducts;
+
+            switch (sortValue) {
+                case 'price-low-to-high':
+                    sortedProducts = products.sort((a, b) => {
+                        const priceA = parseFloat(a.getAttribute('data-price'));
+                        const priceB = parseFloat(b.getAttribute('data-price'));
+                        return priceA - priceB;
+                    });
+                    break;
+
+                case 'price-high-to-low':
+                    sortedProducts = products.sort((a, b) => {
+                        const priceA = parseFloat(a.getAttribute('data-price'));
+                        const priceB = parseFloat(b.getAttribute('data-price'));
+                        return priceB - priceA;
+                    });
+                    break;
+
+                case 'latest':
+                    sortedProducts = products.sort((a, b) => {
+                        const dateA = new Date(a.getAttribute('data-date'));
+                        const dateB = new Date(b.getAttribute('data-date'));
+                        return dateB - dateA;
+                    });
+                    break;
+
+                default:
+                    sortedProducts = products; // Default sorting, no change
+                    break;
+            }
+
+            articleList.innerHTML = '';
+            sortedProducts.forEach(product => articleList.appendChild(product));
+
+            paginateArticles();
+        }
+
+        document.getElementById('sort').addEventListener('change', function() {
+            sortArticles(this.value);
+        });
+
+        loadArticles();
+    });
+</script>
