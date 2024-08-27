@@ -13,9 +13,7 @@
             },
             body: JSON.stringify({ email, password, captcha }),
         });
-
         const data = await response.json();
-
        if (response.ok) {
             if (data.redirect_url) {
                 window.location.href = data.redirect_url;

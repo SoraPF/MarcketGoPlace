@@ -3,7 +3,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         var token = null
         const jwtCookie = document.cookie.split('; ').find(row => row.startsWith('jwt-'));
         const linkElement = document.getElementById('profiLink');
-        console.log(jwtCookie)
         if (jwtCookie) {
             token = jwtCookie.split('=')[1];
         }
@@ -89,17 +88,24 @@ function searchKey(event) {
 }
 
 
-async function logout(){
-        const userId = document.cookie.split('; ').find(row => row.startsWith('user_id=')).split('=')[1];
-        const response = await fetch("http://127.0.0.1:3000/api/authent/logout",{
-            method: 'POST',
-            body: JSON.stringify({"userID": userId })
-        });
-        
-        if (response.ok){
-            document.getElementById('login').style.display = 'block';
-            document.getElementById('logout').style.display = 'none';
-        }
+async function logout() {
+    const userId = document.cookie.split('; ').find(row => row.startsWith('user_id=')).split('=')[1];
+    console.log(userId);
+
+    const response = await fetch("/api/authent/logout", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ "userID": userId })
+    });
+
+    if (response.ok) {
+        document.getElementById('login').style.display = 'block';
+        document.getElementById('logout').style.display = 'none';
+    } else {
+        console.error('Logout failed:', response.statusText);
+    }
 }
 
 async function searchBar() {

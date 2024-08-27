@@ -181,8 +181,10 @@ func (uc *UserController) Login(ctx *fiber.Ctx) error {
 		})
 	}
 
+	userIDStr := strconv.FormatUint(uint64(user.Id), 10)
+
 	ctx.Cookie(&fiber.Cookie{
-		Name:    "jwt-" + string(user.ID),
+		Name:    "jwt-" + string(userIDStr),
 		Value:   tokenString,
 		Expires: time.Now().Add(time.Hour * 1),
 	})
@@ -200,6 +202,7 @@ func (uc *UserController) Login(ctx *fiber.Ctx) error {
 		"token":        tokenString, // Notez qu'on retourne le token sous forme de string
 		"redirect_url": "/",         // URL de redirection après connexion
 	}
+	println("login")
 	return ctx.Status(fiber.StatusOK).JSON(webResponse)
 }
 
@@ -350,13 +353,14 @@ func IsLogin(c *fiber.Ctx) error {
 }
 
 func (uc *UserController) Logout(c *fiber.Ctx) error {
-	type logout struct {
+	type Logout struct {
 		UserId string `json:"userID"`
 	}
-	var user logout
+	var user Logout
 	if err := c.BodyParser(&user); err != nil {
 		return c.SendStatus(fiber.StatusBadRequest)
 	}
+	println(user.UserId)
 	uid := user.UserId
 	c.Cookie(&fiber.Cookie{
 		Name:    "captcha",
@@ -365,6 +369,11 @@ func (uc *UserController) Logout(c *fiber.Ctx) error {
 	})
 	c.Cookie(&fiber.Cookie{
 		Name:    "jwt-" + uid,
+		Expires: time.Unix(0, 0),
+		MaxAge:  -1,
+	})
+	c.Cookie(&fiber.Cookie{
+		Name:    "user_id",
 		Expires: time.Unix(0, 0),
 		MaxAge:  -1,
 	})
