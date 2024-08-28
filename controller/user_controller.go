@@ -72,12 +72,6 @@ func (controller *UserController) UserUpdate(ctx *fiber.Ctx) error {
 	err := ctx.BodyParser(&updateUserRequest)
 	helper.ErrorPanic(err)
 
-	UserId := ctx.Params("id")
-	id, err := strconv.ParseUint(UserId, 10, 32)
-	helper.ErrorPanic(err)
-
-	updateUserRequest.ID = uint(id)
-
 	controller.UserService.Update(updateUserRequest)
 
 	webResponse := response.Response{
@@ -257,7 +251,7 @@ func (uc *UserController) GetGenerate2FA(c *fiber.Ctx) error {
 
 	user.NFAID = &nfa.ID
 	updateRequest := request.UpdateUserRequest{
-		ID:       user.Id,
+		ID:       int(user.Id),
 		Username: user.Username,
 		Email:    user.Email,
 		Password: user.Password, // Keep the existing password

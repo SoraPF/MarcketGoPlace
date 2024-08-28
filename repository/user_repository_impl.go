@@ -54,7 +54,7 @@ func (u *UserRepositoryImpl) Save(user entities.User) {
 // Update implements userRepository.
 func (u *UserRepositoryImpl) Update(user entities.User) {
 	var updateUser = request.UpdateUserRequest{
-		ID:       user.ID,
+		ID:       int(user.ID),
 		Username: user.Username,
 		Email:    user.Email,
 		Password: user.Password,

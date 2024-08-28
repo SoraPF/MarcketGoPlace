@@ -1,8 +1,9 @@
 {% include "layouts/ads.django"%}
 {% include "layouts/left_ad.html"%}
 {% include "layouts/right_ad.html"%}
- <!-- Profil Container -->
- <div class="container mx-auto p-6 max-w-5xl">
+
+<!-- Profil Container -->
+<div class="container mx-auto p-6 max-w-5xl">
     <div class="bg-white shadow rounded-lg p-8">
         <div class="flex items-center justify-between mb-6">
             <!-- Photo de profil -->
@@ -11,7 +12,7 @@
                     alt="Profile Picture">
                 <div>
                     <!-- Nom de l'utilisateur -->
-                    <h1 class="text-5xl font-semibold text-gray-700">{{capitalize(profil.Name)}}</h1>
+                    <h1 id="user-name" class="text-5xl font-semibold text-gray-700">{{capitalize(profil.Name)}}</h1>
                     <!-- Adresse email -->
                     <p class="text-gray-500 text-xl mt-1">{{profil.Email}}</p>
                 </div>
@@ -19,10 +20,12 @@
             <!-- Boutons d'action -->
             <div>
                 <button
+                    onclick="toggleEditMode()"
                     class="bg-white py-2 px-6 rounded-lg shadow-md hover:bg-gray-200 transition duration-200">
                     Modifier le Profil
                 </button>
                 <button
+                    onclick="logout()"
                     class="ml-4 bg-red-500 text-white py-2 px-6 rounded-lg shadow-md hover:bg-red-600 transition duration-200">
                     Déconnexion
                 </button>
@@ -36,21 +39,98 @@
                 <!-- Date de naissance -->
                 <div>
                     <label class="text-gray-700 font-semibold">Date de Naissance</label>
-                    <p class="mt-2 text-gray-900">{{profil.BirthDay}}</p>
+                    <p id="user-birthdate" class="mt-2 text-gray-900">{{profil.BirthDay}}</p>
+                    <input id="edit-birthdate" type="date" class="mt-2 p-2 border rounded-md hidden" value="{{profil.BirthDay}}">
                 </div>
                 <!-- Numéro de téléphone -->
                 <div>
                     <label class="text-gray-700 font-semibold">Numéro de Téléphone</label>
-                    <p class="mt-2 text-gray-900">{{profil.Phone}}</p>
+                    <p id="user-phone" class="mt-2 text-gray-900">{{profil.Phone}}</p>
+                    <input id="edit-phone" type="text" class="mt-2 p-2 border rounded-md hidden" value="{{profil.Phone}}">
                 </div>
                 <!-- Adresse -->
                 <div>
                     <label class="text-gray-700 font-semibold">Adresse</label>
-                    <p class="mt-2 text-gray-900">{{capitalize(profil.Address)}}</p>
+                    <p id="user-address" class="mt-2 text-gray-900">{{capitalize(profil.Address)}}</p>
+                    <input id="edit-address" type="text" class="mt-2 p-2 border rounded-md hidden" value="{{profil.Address}}">
                 </div>
             </div>
         </div>
 
+        <!-- Boutons d'enregistrement et d'annulation -->
+        <div id="edit-buttons" class="mt-6 hidden">
+            <button onclick="saveProfileChanges()" class="bg-green-500 text-white py-2 px-6 rounded-lg shadow-md hover:bg-green-600 transition duration-200">
+                Enregistrer les modifications
+            </button>
+            <button onclick="toggleEditMode()" class="ml-4 bg-gray-500 text-white py-2 px-6 rounded-lg shadow-md hover:bg-gray-600 transition duration-200">
+                Annuler
+            </button>
+        </div>
     </div>
 </div>
+
+<script>
+    // Toggle between view and edit mode
+    function toggleEditMode() {
+        const editModeElements = ['edit-birthdate', 'edit-phone', 'edit-address', 'edit-buttons'];
+        const viewModeElements = ['user-birthdate', 'user-phone', 'user-address'];
+
+        editModeElements.forEach(id => document.getElementById(id).classList.toggle('hidden'));
+        viewModeElements.forEach(id => document.getElementById(id).classList.toggle('hidden'));
+    }
+
+    // Save profile changes
+    async function saveProfileChanges() {
+        const userId = parseInt(document.cookie.split('; ').find(row => row.startsWith('user_id=')).split('=')[1],10);
+        const newBirthdate = document.getElementById('edit-birthdate').value;
+        const newPhone = document.getElementById('edit-phone').value;
+        const newAddress = document.getElementById('edit-address').value;
     
+        //console.log(newBirthdate);
+        //console.log(typeof userId);
+        const response = await fetch("/api/user/1/update", {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "userID": userId,
+                "BirthDay": newBirthdate,
+                "Phone": newPhone,
+                "Address": newAddress
+            })
+        });
+
+        if (response.ok) {
+            // Update the displayed information
+            document.getElementById('user-birthdate').textContent = newBirthdate;
+            document.getElementById('user-phone').textContent = newPhone;
+            document.getElementById('user-address').textContent = newAddress.charAt(0).toUpperCase() + newAddress.slice(1);
+            
+            toggleEditMode();
+        } else {
+            console.error('Profile update failed:', response.statusText);
+        }
+            
+    }
+
+    // Logout function
+    async function logout() {
+        const userId = document.cookie.split('; ').find(row => row.startsWith('user_id=')).split('=')[1];
+        console.log(userId);
+    
+        const response = await fetch("/api/authent/logout", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ "userID": userId })
+        });
+    
+        if (response.ok) {
+            window.location.href = "/";
+        } else {
+            console.error('Logout failed:', response.statusText);
+        }
+    }
+</script>

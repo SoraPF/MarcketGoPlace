@@ -8,10 +8,13 @@ type CreateUserRequest struct {
 }
 
 type UpdateUserRequest struct {
-	ID       uint   `validate:"required,min=2,max=100" json:"userID"`
-	Username string `validate:"required,min=2,max=100" json:"username"`
-	Email    string `validate:"required" json:"email"`
-	Password string `validate:"required,min=2,max=255" json:"password"`
+	ID       int    `validate:"min=2,max=100" json:"userID"`
+	Username string `validate:"min=2,max=100" json:"username"`
+	Email    string `json:"email"`
+	Password string `validate:"min=2,max=255" json:"password"`
+	BirthDay string `validate:"min=5,max=30" json:"BirthDay"`
+	Phone    string `validate:"min=10,max=15" json:"Phone"`
+	Address  string `validate:"min=5,max=100" json:"Address"`
 	NFAID    *uint  `json:"nfaID"`
 }
 

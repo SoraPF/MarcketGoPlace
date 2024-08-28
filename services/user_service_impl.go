@@ -76,7 +76,7 @@ func (u *UserServiceImpl) FindById(userId uint) response.UserResponse {
 // Update implements UserService.
 func (u *UserServiceImpl) Update(user request.UpdateUserRequest) {
 
-	userData, err := u.userRepository.FindById(user.ID)
+	userData, err := u.userRepository.FindById(uint(user.ID))
 	helper.ErrorPanic(err)
 
 	if user.Username != "" {
@@ -92,6 +92,15 @@ func (u *UserServiceImpl) Update(user request.UpdateUserRequest) {
 	}
 	if user.NFAID != nil {
 		userData.NFAID = user.NFAID
+	}
+	if user.BirthDay != "" {
+		userData.BirthDay = user.BirthDay
+	}
+	if user.Phone != "" {
+		userData.Phone = user.Phone
+	}
+	if user.Address != "" {
+		userData.Address = user.Address
 	}
 	u.userRepository.Update(userData)
 }
