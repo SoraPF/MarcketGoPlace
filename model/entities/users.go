@@ -11,6 +11,7 @@ type User struct {
 	BirthDay string
 	Address  string
 	Phone    string
+	Img      string
 	NFAID    *uint
 	NFA      *NFA `gorm:"foreignKey:NFAID;references:ID"`
 	//Verified bool `gorm:"default:false"`

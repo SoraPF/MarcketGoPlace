@@ -15,6 +15,7 @@ type UpdateUserRequest struct {
 	BirthDay string `validate:"min=5,max=30" json:"BirthDay"`
 	Phone    string `validate:"min=10,max=15" json:"Phone"`
 	Address  string `validate:"min=5,max=100" json:"Address"`
+	Img      string `json:"Img"`
 	NFAID    *uint  `json:"nfaID"`
 }
 

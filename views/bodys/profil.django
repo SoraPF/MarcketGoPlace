@@ -8,8 +8,16 @@
         <div class="flex items-center justify-between mb-6">
             <!-- Photo de profil -->
             <div class="flex items-center">
-                <img class="w-40 h-40 rounded-full object-cover mr-6" src="https://via.placeholder.com/150"
+                <div>
+                {% if profile.Img %}
+                <img id="user_img" class="w-40 h-40 rounded-full object-cover mr-6" src="https://via.placeholder.com/150"
                     alt="Profile Picture">
+                {% else %}
+                <img id="user_img" class="w-40 h-40 rounded-full object-cover mr-6" src="../public/img/user.png"
+                    alt="Profile Picture">
+                {% endif %}
+                    <input id="edit_img" type="file" id="imageUpload" class="hidden" accept="image/*" class="mt-4">
+                </div>
                 <div>
                     <!-- Nom de l'utilisateur -->
                     <h1 id="user-name" class="text-5xl font-semibold text-gray-700">{{capitalize(profil.Name)}}</h1>
@@ -72,7 +80,7 @@
 <script>
     // Toggle between view and edit mode
     function toggleEditMode() {
-        const editModeElements = ['edit-birthdate', 'edit-phone', 'edit-address', 'edit-buttons'];
+        const editModeElements = ['edit-birthdate', 'edit-phone', 'edit-address', 'edit-buttons','edit_img'];
         const viewModeElements = ['user-birthdate', 'user-phone', 'user-address'];
 
         editModeElements.forEach(id => document.getElementById(id).classList.toggle('hidden'));
@@ -81,28 +89,31 @@
 
     // Save profile changes
     async function saveProfileChanges() {
+        
         const userId = parseInt(document.cookie.split('; ').find(row => row.startsWith('user_id=')).split('=')[1],10);
         const newBirthdate = document.getElementById('edit-birthdate').value;
         const newPhone = document.getElementById('edit-phone').value;
         const newAddress = document.getElementById('edit-address').value;
-    
-        //console.log(newBirthdate);
-        //console.log(typeof userId);
+        const fileInput = document.getElementById('edit_img');
+        const file = fileInput.files[0];
+
+    /*
+        console.log(file);
+        console.log(typeof file);
+    */
+        const formData = new FormData();
+        formData.append('Img', file);
+        formData.append("userID", userId);
+        formData.append("BirthDay", newBirthdate);
+        formData.append("Phone", newPhone);
+        formData.append("Address", newAddress);
+
         const response = await fetch("/api/user/1/update", {
             method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                "userID": userId,
-                "BirthDay": newBirthdate,
-                "Phone": newPhone,
-                "Address": newAddress
-            })
+            body: formData
         });
 
         if (response.ok) {
-            // Update the displayed information
             document.getElementById('user-birthdate').textContent = newBirthdate;
             document.getElementById('user-phone').textContent = newPhone;
             document.getElementById('user-address').textContent = newAddress.charAt(0).toUpperCase() + newAddress.slice(1);
@@ -111,7 +122,7 @@
         } else {
             console.error('Profile update failed:', response.statusText);
         }
-            
+        
     }
 
     // Logout function

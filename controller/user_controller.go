@@ -55,7 +55,7 @@ func (controller *UserController) UserCreate(ctx *fiber.Ctx) error {
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"user_id": user.Id,
-		"exp":     time.Now().Add(time.Hour * 1).Unix(),
+		"exp":     time.Now().Add(time.Hour * 4).Unix(),
 	})
 	webResponse := map[string]interface{}{
 		"code":         200,
@@ -180,13 +180,13 @@ func (uc *UserController) Login(ctx *fiber.Ctx) error {
 	ctx.Cookie(&fiber.Cookie{
 		Name:    "jwt-" + string(userIDStr),
 		Value:   tokenString,
-		Expires: time.Now().Add(time.Hour * 1),
+		Expires: time.Now().Add(time.Hour * 4),
 	})
 
 	ctx.Cookie(&fiber.Cookie{
 		Name:    "user_id",
 		Value:   fmt.Sprintf("%d", user.Id),
-		Expires: time.Now().Add(time.Hour * 1),
+		Expires: time.Now().Add(time.Hour * 4),
 	})
 
 	webResponse := map[string]interface{}{
@@ -314,7 +314,7 @@ func (uc *UserController) GetValidate2FA(c *fiber.Ctx) error {
 		c.Cookie(&fiber.Cookie{
 			Name:    "jwt-" + string(user.ID),
 			Value:   tokenString,
-			Expires: time.Now().Add(time.Hour * 1),
+			Expires: time.Now().Add(time.Hour * 4),
 		})
 
 		webResponse := map[string]interface{}{

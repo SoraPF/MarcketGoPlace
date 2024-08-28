@@ -102,6 +102,7 @@ func (u *UserServiceImpl) Update(user request.UpdateUserRequest) {
 	if user.Address != "" {
 		userData.Address = user.Address
 	}
+	//ajouter l'image
 	u.userRepository.Update(userData)
 }
 
