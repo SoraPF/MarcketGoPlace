@@ -58,6 +58,9 @@ func (u *UserRepositoryImpl) Update(user entities.User) {
 		Username: user.Username,
 		Email:    user.Email,
 		Password: user.Password,
+		BirthDay: user.BirthDay,
+		Phone:    user.Phone,
+		Address:  user.Address,
 		NFAID:    user.NFAID,
 	}
 	result := u.Db.Model(&user).Updates(updateUser)
