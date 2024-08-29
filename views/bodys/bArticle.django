@@ -216,7 +216,9 @@
         const userID = {{ article.IdVendeur | default: 'null' }};
         const data = {
             "pPrice": parseInt(pPrice, 10),
+            "oPrice": parseInt({{article.Price}}, 10),
             "vendeur": parseInt(userID, 10),
+            "Aname": "{{article.Title}}",            
         };
         console.log(data)
         if(pPrice != null && userID != null){

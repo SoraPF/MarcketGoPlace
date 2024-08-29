@@ -24,7 +24,7 @@
                 </li>
             </ul>
         </nav>
-        <div class="dropdown px-8 py-4 bg-primary flex items-center cursor-pointer relative group w-64 ml-4">            
+        <div class="dropdown px-8 py-4 bg-primary flex items-center cursor-pointer relative group w-64 ml-4"> <!---->
             <span class="capitalize ml-2 text-white">All Categories</span>
             <div
                 class="absolute z-20 w-full left-0 top-full bg-white shadow-md py-3 divide-y divide-gray-300 divide-dashed opacity-0 group-hover:opacity-100 transition duration-300 invisible group-hover:visible max-h-60 overflow-y-auto">
@@ -49,9 +49,13 @@
     </div>
     <div class="flex items-center space-x-4">
         <div class="flex items-center space-x-4">
-            <div class="notification" id="image-container">
+            <div class="relative">
+                <div class="notification" id="image-container" onclick="displaynotif()"> </div>
+                <div id="notification-container" class="absolute bg-gray-500 rounded h-full min-h-screen z-10 right-0 mt-8 py-3 divide-y divide-gray-300 max-h-60 overflow-y-auto opacity-0 invisible transition-opacity duration-300 w-80">
+                    <h1 class="text-3xl font-bold">Notification</h1>
+                </div>
+                
             </div>
-            <div id="notification-container"></div>
             <div class="profile">
                 <a href="#" id="profiLink">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-8 w-8 icon">
@@ -64,3 +68,7 @@
         <a style="display: none;" id="logout" onclick="logout()"><button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">logout</button> </a>
     </div>
 </header>
+
+<div name="alert-notification" class="bg-green-500">
+
+</div>

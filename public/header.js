@@ -74,10 +74,16 @@ connectWebSocket();
 function addNotification(message) {
     const notificationContainer = document.getElementById('notification-container');
     const notification = document.createElement('div');
-    notification.className = 'bg-white border border-gray-300 p-4 rounded-lg shadow-md mb-2';
+    notification.className = 'bg-gray-500 hover:bg-gray-300 p-4 rounded-lg';
     notification.innerHTML = `
-        <p><strong>Notification:</strong> ${message.Content}</p>
-        <p><strong>Price:</strong> ${message.Price}</p>
+    <div class="last-content">
+        <p class="text-black">${message.content}</p>
+        <p class="text-black"><strong>Price:</strong> ${message.price}</p>
+        <div class="flex justify-end space-x-2 mt-2">
+            <button class="bg-green-300 px-3 py-1 rounded">Accept</button>
+            <button class="bg-red-300 px-3 py-1 rounded">Refuse</button>
+        </div>
+    </div>
     `;
     notificationContainer.appendChild(notification);
 }
@@ -98,7 +104,7 @@ function svgNotification() {
 
     let svgContent;
 
-    if (notificationContainer.children.length === 0) {
+    if (notificationContainer.children.length <= 1 ) {
         svgContent = svg1;
     } else {
         svgContent = svg2;
@@ -163,5 +169,18 @@ async function searchBar() {
     } catch (error) {
         console.error("Erreur lors de la recherche de l'article:", error);
         alert("Une erreur est survenue. Veuillez réessayer plus tard.");
+    }
+}
+
+
+function displaynotif() {
+    const notification = document.getElementById('image-container');
+    const notificationContainer = document.getElementById('notification-container');
+    if(notificationContainer.classList.contains('opacity-0')){
+        notificationContainer.classList.remove('opacity-0', 'invisible');
+        notificationContainer.classList.add('opacity-100', 'visible');
+    }else{
+        notificationContainer.classList.add('opacity-0', 'invisible');
+        notificationContainer.classList.remove('opacity-100', 'visible');
     }
 }

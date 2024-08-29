@@ -22,7 +22,7 @@ func BackendRoutes(userController *controller.UserController, ObjController *con
 	router.Post("/articles/verify", ObjController.AdminResponceNewArticle) //presque bon
 	router.Post("/article/by-name", ObjController.FindByName)
 	router.Get("/article/categID/:id", ObjController.FindByCategId)
-	router.Post("/article/proposePrice", controller.ProposePrice)
+	router.Post("/article/proposePrice", userController.ProposePrice)
 
 	router.Route("/messenger", func(router fiber.Router) {
 		router.Post("/create", messController.CreateConversation)

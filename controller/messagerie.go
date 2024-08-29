@@ -149,22 +149,28 @@ func (mc MessageController) CheckMessenger(c *fiber.Ctx) error {
 
 }
 
-func ProposePrice(c *fiber.Ctx) error {
+func (u UserController) ProposePrice(c *fiber.Ctx) error {
 	type proposePrice struct {
-		Price   int `json:"pPrice"`
-		Vendeur int `json:"vendeur"`
+		Pprice  int    `json:"pPrice"`
+		Oprice  int    `json:"oPrice"`
+		Vendeur int    `json:"vendeur"`
+		Aname   string `json:"Aname"`
 	}
 
 	var pp proposePrice
 	if err := c.BodyParser(&pp); err != nil {
 		return c.Status(fiber.StatusBadRequest).SendString("Invalid request body")
 	}
-	println("test", pp.Price, "v:", pp.Vendeur)
+	user := u.UserService.FindById(uint(pp.Vendeur))
+	println("test", pp.Pprice, pp.Oprice, "v:", user.Name)
+	pPriceStr := strconv.Itoa(pp.Pprice)
+	oPriceStr := strconv.Itoa(pp.Oprice)
 	notification := Message{
-		Type:    "notification",
-		UserID:  strconv.Itoa(pp.Vendeur),
-		Content: "Vous avez reçu une nouvelle offre.",
-		Price:   pp.Price,
+		Type:   "notification",
+		UserID: strconv.Itoa(pp.Vendeur),
+		Content: user.Name + " propose une offre de <strong>" + pPriceStr + "</strong> à la place de " +
+			oPriceStr + " sur l'article " + pp.Aname + ".",
+		Price: pp.Pprice,
 	}
 
 	broadcast <- notification
