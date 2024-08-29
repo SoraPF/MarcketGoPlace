@@ -87,7 +87,7 @@
     
                 // Prix
                 const priceSpan = document.createElement('span');
-                priceSpan.className = 'text-md text-gray-700 mt-2';
+                priceSpan.className = 'text-md text-XL font-bold text-gray-700 mt-2';
                 priceSpan.textContent = item.Price !== undefined ? `${item.Price} XFP` : 'N/A';
     
                 // Assemble les éléments dans l'itemDiv

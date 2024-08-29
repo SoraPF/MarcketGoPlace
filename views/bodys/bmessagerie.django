@@ -18,7 +18,6 @@
             "SenderID": parseInt(sender,10),
             "Content": content
         };
-        console.log(data);
     
         const response = await fetch('/api/messenger/newMesage', {
             method: 'POST',
@@ -66,7 +65,7 @@
             content: messageContent
         };
         socket.send(JSON.stringify(message));
-        input.value = ''; // Clear the input field
+        input.value = '';
     }
     
     function displayMessage(userID, content) {

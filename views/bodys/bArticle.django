@@ -213,7 +213,7 @@
 
     async function proposPrice(){
         const pPrice = document.getElementById('proposePrice').value
-        const userID = {{ userID | default: 'null' }};
+        const userID = {{ article.IdVendeur | default: 'null' }};
         const data = {
             "pPrice": parseInt(pPrice, 10),
             "vendeur": parseInt(userID, 10),
