@@ -74,14 +74,18 @@ connectWebSocket();
 function addNotification(message) {
     const notificationContainer = document.getElementById('notification-container');
     const notification = document.createElement('div');
-    notification.className = 'bg-gray-500 hover:bg-gray-300 p-4 rounded-lg';
+    const numberOfChildren = notificationContainer.childElementCount;
+    let id = `child-${numberOfChildren + 1}`
+    console.log(id);
+    notification.id = id;
+    notification.className = 'bg-gray-500 hover:bg-gray-400 p-4 rounded-lg mt-5';
     notification.innerHTML = `
     <div class="last-content">
         <p class="text-black">${message.content}</p>
         <p class="text-black"><strong>Price:</strong> ${message.price}</p>
-        <div class="flex justify-end space-x-2 mt-2">
-            <button class="bg-green-300 px-3 py-1 rounded">Accept</button>
-            <button class="bg-red-300 px-3 py-1 rounded">Refuse</button>
+        <div class="flex justify-center space-x-2 mt-2">
+            <button onclick="decideOffer('accept')" class="bg-green-300 px-3 py-1 rounded">Accept</button>
+            <button onclick="decideOffer('${id}')" class="bg-red-300 px-3 py-1 rounded">Refuse</button>
         </div>
     </div>
     `;
@@ -182,5 +186,19 @@ function displaynotif() {
     }else{
         notificationContainer.classList.add('opacity-0', 'invisible');
         notificationContainer.classList.remove('opacity-100', 'visible');
+    }
+}
+
+function decideOffer(choice) {
+    if (choice == "accept") {
+        console.log("create message");
+        //ajouter la notif de messagerie ouvert
+        //ajouter la creation de messagerie
+    } else {
+        const element = document.getElementById(choice);
+        if (element) {
+            element.remove();
+            //ajouter la notif de refus
+        }
     }
 }

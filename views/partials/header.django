@@ -52,7 +52,7 @@
             <div class="relative">
                 <div class="notification" id="image-container" onclick="displaynotif()"> </div>
                 <div id="notification-container" class="absolute bg-gray-500 rounded h-full min-h-screen z-10 right-0 mt-8 py-3 divide-y divide-gray-300 max-h-60 overflow-y-auto opacity-0 invisible transition-opacity duration-300 w-80">
-                    <h1 class="text-3xl font-bold">Notification</h1>
+                    <h1 class="text-3xl text-center font-bold">Notification</h1>
                 </div>
                 
             </div>
