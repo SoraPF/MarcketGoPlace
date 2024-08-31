@@ -13,10 +13,11 @@ var (
 )
 
 type Message struct {
-	Type    string `json:"type"`    // "chat" ou "notification"
-	UserID  string `json:"user_id"` // ID de l'utilisateur (pour les messages de chat)
-	Content string `json:"content"` // Contenu du message ou de la notification
-	Price   int    `json:"price"`   // Prix proposé pour les notifications
+	Type        string `json:"type"`    // "chat" ou "notification"
+	UserID      string `json:"user_id"` // ID de l'utilisateur (pour les messages de chat)
+	Uidnotifier string `json:"notif_uid"`
+	Content     string `json:"content"` // Contenu du message ou de la notification
+	Price       int    `json:"price"`   // Prix proposé pour les notifications
 }
 
 func HandleConnections(c *websocket.Conn) {
@@ -55,10 +56,3 @@ func HandleMessages() {
 		mu.Unlock()
 	}
 }
-
-/*
-func messageNotification(ctx *fiber.Ctx, userNotified uint) error {
-	//la fonction doit prevenir les participant d'un tout nouveau message
-
-}
-*/

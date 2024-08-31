@@ -35,7 +35,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-
 let ws;
 function connectWebSocket() {
     ws = new WebSocket('ws://127.0.0.1:3000/ws');
@@ -70,7 +69,6 @@ function connectWebSocket() {
 }
 
 connectWebSocket();
-
 function addNotification(message) {
     const notificationContainer = document.getElementById('notification-container');
     const notification = document.createElement('div');
@@ -84,8 +82,8 @@ function addNotification(message) {
         <p class="text-black">${message.content}</p>
         <p class="text-black"><strong>Price:</strong> ${message.price}</p>
         <div class="flex justify-center space-x-2 mt-2">
-            <button onclick="decideOffer('accept')" class="bg-green-300 px-3 py-1 rounded">Accept</button>
-            <button onclick="decideOffer('${id}')" class="bg-red-300 px-3 py-1 rounded">Refuse</button>
+            <button onclick="decideOffer('accept','${message.user_id}')" class="bg-green-300 px-3 py-1 rounded">Accept</button>
+            <button onclick="decideOffer('${id}',null)" class="bg-red-300 px-3 py-1 rounded">Refuse</button>
         </div>
     </div>
     `;
@@ -176,7 +174,6 @@ async function searchBar() {
     }
 }
 
-
 function displaynotif() {
     const notification = document.getElementById('image-container');
     const notificationContainer = document.getElementById('notification-container');
@@ -189,16 +186,46 @@ function displaynotif() {
     }
 }
 
-function decideOffer(choice) {
-    if (choice == "accept") {
+function decideOffer(action, userId) {
+    if (action == "accept") {
         console.log("create message");
         //ajouter la notif de messagerie ouvert
         //ajouter la creation de messagerie
+        NotificationCreateMessage(userId)
     } else {
-        const element = document.getElementById(choice);
+        const element = document.getElementById(action);
         if (element) {
             element.remove();
             //ajouter la notif de refus
+            
         }
+    }
+}
+
+async function NotificationCreateMessage(id){
+    const bid = userId;
+    const sid = id;
+    
+    const data = {
+        "idBuyer": bid,
+        "idSeller": sid,
+    };
+    console.log(data)
+    try{
+        const response = await fetch('/api/create/message', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body:  JSON.stringify(data),
+        });
+        
+        if(response.ok){
+            console.log("responce ok")
+        }else{
+            alert("Un problème serveur est survenu");
+        }
+    }catch{
+        alert("Un problème serveur est survenu");
     }
 }

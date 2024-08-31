@@ -24,7 +24,7 @@ func (mc MessageController) CreateConversation(c *fiber.Ctx) error {
 	if err := c.BodyParser(&convo); err != nil {
 		return c.Status(fiber.StatusBadRequest).SendString("the body wasnt correct")
 	}
-	id, err := mc.ms.CreateConversation(convo) //need a modification and shoul be created service
+	id, err := mc.ms.CreateConversation(convo)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).SendString("insternal error the conversation couldnt be created")
 	}
@@ -33,7 +33,7 @@ func (mc MessageController) CreateConversation(c *fiber.Ctx) error {
 		"code":    200,
 		"status":  "ok",
 		"message": "Login successful!",
-		"id":      id, // Notez qu'on retourne le token sous forme de string
+		"id":      id,
 	}
 	return c.Status(fiber.StatusCreated).JSON(webResponse)
 }
@@ -151,29 +151,47 @@ func (mc MessageController) CheckMessenger(c *fiber.Ctx) error {
 
 func (u UserController) ProposePrice(c *fiber.Ctx) error {
 	type proposePrice struct {
-		Pprice  int    `json:"pPrice"`
-		Oprice  int    `json:"oPrice"`
-		Vendeur int    `json:"vendeur"`
-		Aname   string `json:"Aname"`
+		Pprice   int    `json:"pPrice"`
+		Oprice   int    `json:"oPrice"`
+		Acheteur int    `json:"acheteur"`
+		Vendeur  int    `json:"vendeur"`
+		Aname    string `json:"Aname"`
 	}
 
 	var pp proposePrice
 	if err := c.BodyParser(&pp); err != nil {
 		return c.Status(fiber.StatusBadRequest).SendString("Invalid request body")
 	}
-	user := u.UserService.FindById(uint(pp.Vendeur))
+	user := u.UserService.FindById(uint(pp.Acheteur))
 	println("test", pp.Pprice, pp.Oprice, "v:", user.Name)
 	pPriceStr := strconv.Itoa(pp.Pprice)
-	oPriceStr := strconv.Itoa(pp.Oprice)
-	notification := Message{
-		Type:   "notification",
-		UserID: strconv.Itoa(pp.Vendeur),
-		Content: user.Name + " propose une offre de <strong>" + pPriceStr + "</strong> à la place de " +
-			oPriceStr + " sur l'article " + pp.Aname + ".",
-		Price: pp.Pprice,
-	}
+	oPriceStr := strconv.Itoa(pp.Vendeur)
+	aPriceStr := strconv.Itoa(pp.Acheteur)
 
-	broadcast <- notification
+	content := user.Name + " propose une offre de <strong>" + pPriceStr + "</strong> à la place de " +
+		oPriceStr + " sur l'article " + pp.Aname + "."
+	Notification("notification", oPriceStr, aPriceStr, content, pp.Pprice)
 
 	return c.SendStatus(fiber.StatusOK)
+}
+
+func Notification(t string, uid string, nuid string, content string, price int) {
+	if price != 0 {
+		notification := Message{
+			Type:        t,
+			UserID:      uid,
+			Uidnotifier: nuid,
+			Content:     content,
+			Price:       price,
+		}
+		broadcast <- notification
+	} else {
+		notification := Message{
+			Type:        t,
+			UserID:      uid,
+			Uidnotifier: nuid,
+			Content:     content,
+		}
+		broadcast <- notification
+	}
 }

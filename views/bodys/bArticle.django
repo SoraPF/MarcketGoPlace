@@ -213,15 +213,17 @@
 
     async function proposPrice(){
         const pPrice = document.getElementById('proposePrice').value
-        const userID = {{ article.IdVendeur | default: 'null' }};
+        const sellerID = {{ article.IdVendeur | default: 'null' }};
+        const userId = document.cookie.split('; ').find(row => row.startsWith('user_id=')).split('=')[1];
         const data = {
             "pPrice": parseInt(pPrice, 10),
             "oPrice": parseInt({{article.Price}}, 10),
-            "vendeur": parseInt(userID, 10),
-            "Aname": "{{article.Title}}",            
+            "acheteur": parseInt(userId,10) ,
+            "vendeur": parseInt(sellerID, 10),
+            "Aname": "{{article.Title}}",
         };
         console.log(data)
-        if(pPrice != null && userID != null){
+        if(pPrice != null && sellerID != null){
             try{
                 const response = await fetch('/api/article/proposePrice', {
                     method: 'POST',
