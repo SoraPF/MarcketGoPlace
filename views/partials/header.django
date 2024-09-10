@@ -18,12 +18,22 @@
                 <li>
                     <a href="/" class="text-gray-200 hover:text-white transition">Home</a>
                 </li>
-                <li>
-                    <a href="/createSell" class="text-gray-200 hover:text-white transition"
-                    id="createArticle" style="display: none;">Faire une annonce</a>
-                </li>
             </ul>
         </nav>
+        <div class="dropdown px-8 py-4 bg-primary flex items-center cursor-pointer relative group w-36 ml-4"
+        id="action"  style="display: none;">
+            <span> actions</span>
+            <div
+                class="absolute z-20 w-full left-0 top-full bg-white shadow-md py-3 divide-y divide-gray-300 divide-dashed opacity-0 group-hover:opacity-100 transition duration-300 invisible group-hover:visible max-h-60 overflow-y-auto">
+                <a href="/createSell" class="text-gray-600 hover:text-gray-400 transition"
+                id="createArticle">
+                    Faire une annonce
+                </a>
+                <a href="" class="text-gray-600 hover:text-gray-400 transition">
+                    Messages
+                </a>
+            </div>
+        </div>
         <div class="dropdown px-8 py-4 bg-primary flex items-center cursor-pointer relative group w-64 ml-4"> <!---->
             <span class="capitalize ml-2 text-white">All Categories</span>
             <div

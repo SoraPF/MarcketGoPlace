@@ -18,20 +18,21 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
 
             if (response.ok) {
+                console.log("test login")
                 const jdata = await response.json();
-                document.getElementById('createArticle').style.display = 'block';
+                document.getElementById('action').style.display = 'block';
                 document.getElementById('login').style.display = 'none';
                 document.getElementById('logout').style.display = 'block';
                 userId = document.cookie.split('; ').find(row => row.startsWith('user_id=')).split('=')[1];
                 linkElement.href = "/profil/"+jdata;
             } else {
                 console.error('Error:', data.message);
-                document.getElementById('createArticle').style.display = 'none';
+                document.getElementById('action').style.display = 'none';
             }
         }
     } catch (error) {
         console.error('Error:', error);
-        document.getElementById('createArticle').style.display = 'none';
+        document.getElementById('action').style.display = 'none';
     }
 });
 

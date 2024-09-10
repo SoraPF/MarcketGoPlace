@@ -102,9 +102,9 @@
     }
 </script>
 
-<div class="flex items-center justify-center min-h-screen">
-    <div class="w-full max-w-lg p-6 bg-white rounded-lg shadow-lg">
-        <div id="chat-box" class="h-64 p-4 mb-4 overflow-y-scroll border border-gray-200 rounded">
+<div class="flex mt-5 mb-5 justify-center">
+    <div class="w-full max-w-3xl p-6 bg-white rounded-lg shadow-lg">
+        <div id="chat-box" class="h-64 p-4 mb-4 h-96 overflow-y-scroll border border-gray-200 rounded">
             {% for message in messages %}
                 {% if (message.SenderID == userid) %}
                     <div class="flex justify-end mb-2">
@@ -128,7 +128,7 @@
             <button id="send-btn" class="p-2 text-white bg-blue-500 rounded-r hover:bg-blue-600" onclick="sendMessenger()">Send</button>
         </div>
         {% if (message.SenderID == userid) %}
-            <input type="text" onkeydown="priceKey(event)"  id="chat-input" class="flex-1 p-2 border border-gray-300 rounded-l" placeholder="Enter the price...">
+            <input type="text" onkeydown="priceKey(event)"  id="chat" class="flex-1 p-2 border border-gray-300 rounded-l" placeholder="Enter the price...">
             <button id="ideal_price" class="p-2 text-white bg-blue-500 rounded-r hover:bg-blue-600">hello</button>
         {% endif %}
     </div>

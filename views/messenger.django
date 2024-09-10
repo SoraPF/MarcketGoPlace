@@ -1,7 +1,9 @@
 {% include "partials/header.django"%}
-{%if messageErreur%}
-{% include "bodys/Bnotmessenger.django"%}
-{%else%}
+{% if messageErreur%}
+{% include "bodys/Bnotmessenger.django"%}%
+{% elif ListeMessages %}
+{% include "bodys/bListMessages.django" %}
+{% else %}
 {% include "bodys/bmessagerie.django"%}
-{%endif%}
+{% endif %}
 {% include "partials/footer.django"%}
