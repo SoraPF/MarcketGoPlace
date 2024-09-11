@@ -9,4 +9,5 @@ type MessageRepository interface {
 	SendMessage(message model.Message) error
 	GetMessageFromConversation(convoID uint) ([]model.Message, error)
 	FindConversationByName(name string) (*model.Conversation, error)
+	GetListeMessageries(convoID uint) ([]model.Conversation, error)
 }

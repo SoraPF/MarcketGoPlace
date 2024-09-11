@@ -25,6 +25,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 document.getElementById('logout').style.display = 'block';
                 userId = document.cookie.split('; ').find(row => row.startsWith('user_id=')).split('=')[1];
                 linkElement.href = "/profil/"+jdata;
+                document.getElementById("messages").href = "/message-liste/"+userId;
+                document.getElementById("MyListeArticles").href = "/mes-article/"+userId;
+
             } else {
                 console.error('Error:', data.message);
                 document.getElementById('action').style.display = 'none';

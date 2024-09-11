@@ -175,6 +175,16 @@ func (u UserController) ProposePrice(c *fiber.Ctx) error {
 	return c.SendStatus(fiber.StatusOK)
 }
 
+func (mc *MessageController) GetListeMessageries(id int) ([]model.Conversation, error) {
+	var ListeMessageries []model.Conversation
+	ListeMessageries, err := mc.ms.GetListeMessageries(id)
+	if err != nil {
+		return nil, err
+	}
+
+	return ListeMessageries, nil
+}
+
 func Notification(t string, uid string, nuid string, content string, price int) {
 	if price != 0 {
 		notification := Message{

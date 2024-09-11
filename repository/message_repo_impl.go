@@ -69,3 +69,13 @@ func (m *MessageRepositoryImpl) GetMessageFromConversation(convoID uint) ([]mode
 	}
 	return messages, nil
 }
+
+func (m *MessageRepositoryImpl) GetListeMessageries(convoID uint) ([]model.Conversation, error) {
+	var messages []model.Conversation
+	result := m.Db.Where("seller = ? OR buyer = ?", convoID, convoID).Find(&messages)
+	if result.Error != nil {
+		helper.ErrorPanic(result.Error)
+		return messages, result.Error
+	}
+	return messages, nil
+}

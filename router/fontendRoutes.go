@@ -194,7 +194,7 @@ func Robject(ObjController *controller.ObjController, categories []response.Cate
 	return router
 }
 
-func FrontMessenger(mc *controller.MessageController) *fiber.App {
+func FrontMessenger(mc *controller.MessageController, categories []response.CategoryResponse) *fiber.App {
 	router := fiber.New()
 
 	router.Get("/message/:id", func(c *fiber.Ctx) error {
@@ -205,6 +205,7 @@ func FrontMessenger(mc *controller.MessageController) *fiber.App {
 			return c.Render("messenger", fiber.Map{
 				"Title":         "messenger",
 				"messageErreur": erreur,
+				"Categories":    categories,
 			})
 		}
 		StringuserID := c.Cookies("user_id")
@@ -217,9 +218,38 @@ func FrontMessenger(mc *controller.MessageController) *fiber.App {
 			})
 		}
 		return c.Render("messenger", fiber.Map{
-			"Title":    "messenger",
-			"messages": conv,
-			"userid":   userID,
+			"Title":      "messenger",
+			"Categories": categories,
+			"messages":   conv,
+			"userid":     userID,
+		})
+	})
+
+	router.Get("/message-liste/:id", func(c *fiber.Ctx) error {
+		CID := c.Params("id")
+		id, err := strconv.Atoi(CID)
+		if err != nil {
+			erreur := "Il y a eu un problème lord de la vérification! veuillez réeseyer ultérieurement"
+			return c.Render("messenger", fiber.Map{
+				"Title":         "messenger",
+				"messageErreur": erreur,
+				"Categories":    categories,
+			})
+		}
+		messageries, err := mc.GetListeMessageries(id)
+		if err != nil {
+			erreur := "Il y a eu un problème lors de la recherche des messagerie il n'a pas etais trouver"
+			return c.Render("messenger", fiber.Map{
+				"Title":         "messenger",
+				"messageErreur": erreur,
+				"Categories":    categories,
+			})
+		}
+
+		return c.Render("messenger", fiber.Map{
+			"Title":         "messengers",
+			"Categories":    categories,
+			"ListeMessages": messageries,
 		})
 	})
 

@@ -101,3 +101,12 @@ func (m *MsessageImp) CheckMessenger(checks model.Checkids) (uint, error) {
 
 	return conversation.ID, nil
 }
+
+func (m *MsessageImp) GetListeMessageries(id int) ([]model.Conversation, error) {
+	uid := uint(id)
+	ListeMessageries, err := m.MessageRepository.GetListeMessageries(uid)
+	if err != nil {
+		return nil, err
+	}
+	return ListeMessageries, nil
+}

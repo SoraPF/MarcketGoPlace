@@ -29,8 +29,11 @@
                 id="createArticle">
                     Faire une annonce
                 </a>
-                <a href="" class="text-gray-600 hover:text-gray-400 transition">
+                <a id="messages" href="#" class="text-gray-600 hover:text-gray-400 transition">
                     Messages
+                </a>
+                <a id="MyListeArticles" href="#" class="text-gray-600 hover:text-gray-400 transition">
+                    mes articles
                 </a>
             </div>
         </div>
