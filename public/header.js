@@ -27,7 +27,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 linkElement.href = "/profil/"+jdata;
                 document.getElementById("messages").href = "/message-liste/"+userId;
                 document.getElementById("MyListeArticles").href = "/mes-article/"+userId;
-
             } else {
                 console.error('Error:', data.message);
                 document.getElementById('action').style.display = 'none';
@@ -191,13 +190,18 @@ function displaynotif() {
 }
 
 function decideOffer(action, userId) {
+    const element = document.getElementById(action);
     if (action == "accept") {
         console.log("create message");
         //ajouter la notif de messagerie ouvert
         //ajouter la creation de messagerie
         NotificationCreateMessage(userId)
+        //remove notification
+        if (element) {
+            element.remove();
+        }
+        //redirection to messenger
     } else {
-        const element = document.getElementById(action);
         if (element) {
             element.remove();
             //ajouter la notif de refus
@@ -209,14 +213,13 @@ function decideOffer(action, userId) {
 async function NotificationCreateMessage(id){
     const bid = userId;
     const sid = id;
-    
     const data = {
         "idBuyer": bid,
         "idSeller": sid,
     };
     console.log(data)
     try{
-        const response = await fetch('/api/create/message', {
+        const response = await fetch('/api/messenger/create', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -226,6 +229,7 @@ async function NotificationCreateMessage(id){
         
         if(response.ok){
             console.log("responce ok")
+
         }else{
             alert("Un problème serveur est survenu");
         }

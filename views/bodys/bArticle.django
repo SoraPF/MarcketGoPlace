@@ -153,9 +153,7 @@
         const userID = document.cookie.split('; ').find(row => row.startsWith('user_id=')).split('=')[1];
         const sellerID = {{article.IdVendeur}};
         let name =" ";
-        if(userID == sellerID){
-            name = "tchat between seller" + sellerID + "and%the article {{article.Title}}";
-        }else{
+        if(userID != sellerID){
             name = "tchat between seller" + sellerID + "and" + userID + "the article {{article.Title}}";
         }
         

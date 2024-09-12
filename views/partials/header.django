@@ -27,13 +27,13 @@
                 class="absolute z-20 w-full left-0 top-full bg-white shadow-md py-3 divide-y divide-gray-300 divide-dashed opacity-0 group-hover:opacity-100 transition duration-300 invisible group-hover:visible max-h-60 overflow-y-auto">
                 <a href="/createSell" class="text-gray-600 hover:text-gray-400 transition"
                 id="createArticle">
-                    Faire une annonce
+                    <span class="ml-6 text-gray-600 text-sm truncate">Faire une annonce</span>
                 </a>
                 <a id="messages" href="#" class="text-gray-600 hover:text-gray-400 transition">
-                    Messages
+                    <span class="ml-6 text-gray-600 text-sm truncate">Messages</span>
                 </a>
                 <a id="MyListeArticles" href="#" class="text-gray-600 hover:text-gray-400 transition">
-                    mes articles
+                    <span class="ml-6 text-gray-600 text-sm truncate">mes articles</span>
                 </a>
             </div>
         </div>

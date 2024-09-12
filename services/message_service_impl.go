@@ -4,6 +4,7 @@ import (
 	"Marcketplace/model"
 	"Marcketplace/repository"
 	"errors"
+	"strconv"
 
 	"github.com/go-playground/validator/v10"
 )
@@ -22,6 +23,9 @@ func NewMesServiceImpl(MessageRepository repository.MessageRepository, validate 
 
 // createConversation implements MessageService.
 func (m *MsessageImp) CreateConversation(convo model.JConversation) (uint, error) {
+	if convo.Name == "" {
+		convo.Name = "tchat between seller " + strconv.Itoa(convo.SellerID) + " and " + strconv.Itoa(convo.BuyerID)
+	}
 	conv := model.Conversation{
 		Name:   convo.Name,
 		Seller: uint(convo.SellerID),
