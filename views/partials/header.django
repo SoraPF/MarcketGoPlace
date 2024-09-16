@@ -30,10 +30,10 @@
                     <span class="ml-6 text-gray-600 text-sm truncate">Faire une annonce</span>
                 </a>
                 <a id="messages" href="#" class="text-gray-600 hover:text-gray-400 transition">
-                    <span class="ml-6 text-gray-600 text-sm truncate">Messages</span>
+                    <span class="ml-6 text-gray-600 text-sm truncate">Mes messages</span>
                 </a>
                 <a id="MyListeArticles" href="#" class="text-gray-600 hover:text-gray-400 transition">
-                    <span class="ml-6 text-gray-600 text-sm truncate">mes articles</span>
+                    <span class="ml-6 text-gray-600 text-sm truncate">Mes articles</span>
                 </a>
             </div>
         </div>

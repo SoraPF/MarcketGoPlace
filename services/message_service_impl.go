@@ -24,7 +24,7 @@ func NewMesServiceImpl(MessageRepository repository.MessageRepository, validate 
 // createConversation implements MessageService.
 func (m *MsessageImp) CreateConversation(convo model.JConversation) (uint, error) {
 	if convo.Name == "" {
-		convo.Name = "tchat between seller " + strconv.Itoa(convo.SellerID) + " and " + strconv.Itoa(convo.BuyerID)
+		convo.Name = "tchat between seller " + strconv.Itoa(convo.SellerID) + " and buyer " + strconv.Itoa(convo.BuyerID)
 	}
 	conv := model.Conversation{
 		Name:   convo.Name,

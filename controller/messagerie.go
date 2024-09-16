@@ -24,10 +24,12 @@ func (mc MessageController) CreateConversation(c *fiber.Ctx) error {
 	if err := c.BodyParser(&convo); err != nil {
 		return c.Status(fiber.StatusBadRequest).SendString("the body wasnt correct")
 	}
+	println("messenger body ok")
 	id, err := mc.ms.CreateConversation(convo)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).SendString("insternal error the conversation couldnt be created")
 	}
+	println("mensenger created")
 
 	webResponse := map[string]interface{}{
 		"code":    200,
@@ -165,12 +167,13 @@ func (u UserController) ProposePrice(c *fiber.Ctx) error {
 	user := u.UserService.FindById(uint(pp.Acheteur))
 	println("test", pp.Pprice, pp.Oprice, "v:", user.Name)
 	pPriceStr := strconv.Itoa(pp.Pprice)
-	oPriceStr := strconv.Itoa(pp.Vendeur)
+	vIdStr := strconv.Itoa(pp.Vendeur)
+	oPriceStr := strconv.Itoa(pp.Oprice)
 	aPriceStr := strconv.Itoa(pp.Acheteur)
 
 	content := user.Name + " propose une offre de <strong>" + pPriceStr + "</strong> à la place de " +
 		oPriceStr + " sur l'article " + pp.Aname + "."
-	Notification("notification", oPriceStr, aPriceStr, content, pp.Pprice)
+	Notification("notification", vIdStr, aPriceStr, content, pp.Pprice)
 
 	return c.SendStatus(fiber.StatusOK)
 }
@@ -181,7 +184,9 @@ func (mc *MessageController) GetListeMessageries(id int) ([]model.Conversation, 
 	if err != nil {
 		return nil, err
 	}
-
+	for _, lm := range ListeMessageries {
+		println(lm.Name)
+	}
 	return ListeMessageries, nil
 }
 

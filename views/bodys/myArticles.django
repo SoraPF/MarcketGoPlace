@@ -4,11 +4,11 @@
     {% for article in myArticles %}
         <div class="flex bg-yellow-500 rounded-3xl mb-4">
             <div class="p-3 rounded-3xl w-full h-full text-blue-900 font-semibold">{{article.Title}}</div>
-            <button class="bg-blue-500 p-3 rounded-2xl w-half h-full hover:bg-blue-600 text-white font-semibold" mat-menu-item>
-                preview
+            <a href="/message/"<button class="bg-blue-500 p-3 rounded-2xl w-half h-full hover:bg-blue-600 text-white font-semibold" mat-menu-item>
+                view article {{article}}
             </button>
             <button class="bg-red-500 p-3 rounded-2xl w-half h-full hover:bg-red-600 text-white font-semibold" mat-menu-item>
-                Supprimer
+                remove article
             </button>
         </div>
     {% endfor %}

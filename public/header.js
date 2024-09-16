@@ -77,19 +77,26 @@ function addNotification(message) {
     const notification = document.createElement('div');
     const numberOfChildren = notificationContainer.childElementCount;
     let id = `child-${numberOfChildren + 1}`
-    console.log(id);
+    console.log(message);
     notification.id = id;
     notification.className = 'bg-gray-500 hover:bg-gray-400 p-4 rounded-lg mt-5';
+    if(message.price){
     notification.innerHTML = `
     <div class="last-content">
         <p class="text-black">${message.content}</p>
-        <p class="text-black"><strong>Price:</strong> ${message.price}</p>
         <div class="flex justify-center space-x-2 mt-2">
-            <button onclick="decideOffer('accept','${message.user_id}')" class="bg-green-300 px-3 py-1 rounded">Accept</button>
-            <button onclick="decideOffer('${id}',null)" class="bg-red-300 px-3 py-1 rounded">Refuse</button>
+            <button onclick="decideOffer('${id}','accept','${message.notif_uid}')" class="bg-green-300 px-3 py-1 rounded">Accept</button>
+            <button onclick="decideOffer('${id}','','${message.notif_uid}')" class="bg-red-300 px-3 py-1 rounded">Refuse</button>
         </div>
     </div>
-    `;
+    `;}
+    else{
+        notification.innerHTML = `
+        <div class="last-content">
+            <p class="text-black">${message.content}</p>
+        </div>
+        `;
+    }
     notificationContainer.appendChild(notification);
 }
 function svgNotification() {
@@ -189,22 +196,18 @@ function displaynotif() {
     }
 }
 
-function decideOffer(action, userId) {
-    const element = document.getElementById(action);
+function decideOffer(divid,action, userId) {
+    const element = document.getElementById(divid);
     if (action == "accept") {
-        console.log("create message");
-        //ajouter la notif de messagerie ouvert
-        //ajouter la creation de messagerie
-        NotificationCreateMessage(userId)
-        //remove notification
+        console.log("creating tchat");
         if (element) {
             element.remove();
         }
-        //redirection to messenger
+        NotificationCreateMessage(userId)
     } else {
         if (element) {
             element.remove();
-            //ajouter la notif de refus
+            refuseConv(userId);
             
         }
     }
@@ -214,8 +217,8 @@ async function NotificationCreateMessage(id){
     const bid = userId;
     const sid = id;
     const data = {
-        "idBuyer": bid,
-        "idSeller": sid,
+        "BuyerID": parseInt(bid,10),
+        "SellerID": parseInt(sid,10),
     };
     console.log(data)
     try{
@@ -228,12 +231,26 @@ async function NotificationCreateMessage(id){
         });
         
         if(response.ok){
-            console.log("responce ok")
-
+            var jdata = await response.json();
+            console.log("responce ok"+jdata.id)
+            window.location.href = `/message/`+jdata.id;
         }else{
             alert("Un problème serveur est survenu");
         }
     }catch{
         alert("Un problème serveur est survenu");
     }
+}
+
+async function refuseConv(uid){
+    const content = "Le vendeur a refusé votre offre.";
+
+    const data = {
+        "type":"notification",
+        "user_id":uid,
+        "notif_uid":userId,
+        "content":content,
+        "price": null,
+    }
+    ws.send(JSON.stringify(data));
 }
