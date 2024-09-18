@@ -114,3 +114,19 @@ func (m *MsessageImp) GetListeMessageries(id int) ([]model.Conversation, error) 
 	}
 	return ListeMessageries, nil
 }
+
+func (m *MsessageImp) GetConversation(id uint) model.JConversation {
+	conv, err := m.MessageRepository.GetConversation(id)
+	if err != nil {
+		return model.JConversation{}
+	}
+
+	Jconv := model.JConversation{
+		ID:       int(conv.ID),
+		Name:     conv.Name,
+		SellerID: int(conv.Seller),
+		BuyerID:  int(conv.Buyer),
+	}
+
+	return Jconv
+}

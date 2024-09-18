@@ -190,6 +190,12 @@ func (mc *MessageController) GetListeMessageries(id int) ([]model.Conversation, 
 	return ListeMessageries, nil
 }
 
+func (mc *MessageController) GetConversation(id int) model.JConversation {
+	cid := uint(id)
+	conv := mc.ms.GetConversation(cid)
+	return conv
+}
+
 func Notification(t string, uid string, nuid string, content string, price int) {
 	if price != 0 {
 		notification := Message{

@@ -43,11 +43,8 @@
     
     socket.onmessage = function(event) {
         const msg = JSON.parse(event.data);
-        console.log("Notification received:", msg);
         if (msg.type === "chat") {
             displayMessage(msg.user_id, msg.content);
-        } else if (msg.type === "notification") {
-            displayMessage(msg.user_id,msg.content);
         }
     };
     
@@ -57,12 +54,23 @@
     
     function sendMessage() {
         const input = document.getElementById("chat-input");
-        const messageContent = input.value;
-        const userID = "{{ userid }}";
-        const message = {
-            type: "chat",
-            user_id: userID,
-            content: messageContent
+        var messageContent = input.value;
+        const userID = "{{ uID }}";
+        var message = {
+            "type": "chat",
+            "user_id":userId,
+            "notif_uid":userID,
+            "content":messageContent,
+            "price": null,
+        };
+        socket.send(JSON.stringify(message));
+        messageContent = "nouveau message"
+        var message = {
+            "type": "notification",
+            "user_id":userID,
+            "notif_uid":userId,
+            "content":messageContent,
+            "price": null,
         };
         socket.send(JSON.stringify(message));
         input.value = '';

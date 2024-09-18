@@ -198,8 +198,26 @@ func FrontMessenger(mc *controller.MessageController, categories []response.Cate
 	router := fiber.New()
 
 	router.Get("/message/:id", func(c *fiber.Ctx) error {
+		id := c.Params("id")
+		cvid, err := strconv.Atoi(id)
+		if err != nil {
+			println("err1")
+			return c.Render("VerifArticle", fiber.Map{
+				"Title":      "categorie",
+				"Categories": categories,
+			})
+		}
+		conv := mc.GetConversation(cvid)
+		if conv.ID == 0 {
+			erreur := "La conversation est inexistance! veuillez réeseyer ultérieurement"
+			return c.Render("messenger", fiber.Map{
+				"Title":         "messenger",
+				"messageErreur": erreur,
+				"Categories":    categories,
+			})
+		}
 
-		conv, err := mc.GetMessageFromConversation(c)
+		convmessages, err := mc.GetMessageFromConversation(c)
 		if err != nil {
 			erreur := "Il y a eu un problème lord de la vérification! veuillez réeseyer ultérieurement"
 			return c.Render("messenger", fiber.Map{
@@ -217,12 +235,24 @@ func FrontMessenger(mc *controller.MessageController, categories []response.Cate
 				"messageErreur": erreur,
 			})
 		}
-		return c.Render("messenger", fiber.Map{
-			"Title":      "messenger",
-			"Categories": categories,
-			"messages":   conv,
-			"userid":     userID,
-		})
+		if userID == conv.BuyerID {
+			return c.Render("messenger", fiber.Map{
+				"Title":      "messenger",
+				"Categories": categories,
+				"messages":   convmessages,
+				"userid":     userID,
+				"uID":        conv.SellerID,
+			})
+		} else {
+			return c.Render("messenger", fiber.Map{
+				"Title":      "messenger",
+				"Categories": categories,
+				"messages":   convmessages,
+				"userid":     userID,
+				"uID":        conv.SellerID,
+			})
+		}
+
 	})
 
 	router.Get("/message-liste/:id", func(c *fiber.Ctx) error {

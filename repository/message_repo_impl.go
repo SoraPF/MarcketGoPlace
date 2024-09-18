@@ -79,3 +79,13 @@ func (m *MessageRepositoryImpl) GetListeMessageries(convoID uint) ([]model.Conve
 	}
 	return messages, nil
 }
+
+func (m *MessageRepositoryImpl) GetConversation(id uint) (model.Conversation, error) {
+	var conv model.Conversation
+	result := m.Db.Where("id = ?", id).Find(&conv)
+	if result.Error != nil {
+		helper.ErrorPanic(result.Error)
+		return conv, result.Error
+	}
+	return conv, nil
+}

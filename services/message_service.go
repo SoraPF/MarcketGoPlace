@@ -12,4 +12,5 @@ type MessageService interface {
 
 	CheckMessenger(checks model.Checkids) (uint, error)
 	GetListeMessageries(id int) ([]model.Conversation, error)
+	GetConversation(id uint) model.JConversation
 }
